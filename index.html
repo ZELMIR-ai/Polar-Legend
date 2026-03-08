@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Polar Legend — Арктический Раннер 3D</title>
-    <meta name="description" content="Polar Legend — бесплатная 3D браузерная игра!">
-    <meta property="og:title" content="Polar Legend — Арктический Раннер 3D">
-    <meta name="theme-color" content="#0077be">
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
+    <title>Polar Legend</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- PeerJS с Google STUN серверами для надёжного глобального соединения -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -2835,11 +2830,6 @@ window.onload=()=>{ window.game=new Game(); };
 <div id="close-skins" style="display:none"></div>
 <div id="m-news-btn" style="display:none"></div>
 <div id="modes-btn" style="display:none"></div>
-<script>
-if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
-</script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});</script>
 </body>
 </html>
-
