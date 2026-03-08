@@ -1,0 +1,21 @@
+{
+  "name": "Polar Legend",
+  "short_name": "Polar Legend",
+  "start_url": "/Polar-Legend/",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#0077be",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
