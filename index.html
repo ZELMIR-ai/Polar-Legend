@@ -1029,12 +1029,20 @@ function authTab(tab){
 
 document.addEventListener('DOMContentLoaded',async()=>{
     document.getElementById('auth-submit').dataset.tab='login';
-    // Проверяем сессию
-    const {data:{session}}=await _SB.auth.getSession();
-    if(session){
-        _sbUser=session.user;
-        await _loadProfile();
-    } else {
+    // Проверяем сессию в фоне — не блокируем загрузку игры
+    try {
+        const {data:{session}}=await Promise.race([
+            _SB.auth.getSession(),
+            new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),3000))
+        ]);
+        if(session){
+            _sbUser=session.user;
+            await _loadProfile();
+        } else {
+            document.getElementById('auth-screen').style.display='flex';
+        }
+    } catch(e) {
+        // Supabase недоступен — показываем auth экран
         document.getElementById('auth-screen').style.display='flex';
     }
 
@@ -1127,10 +1135,8 @@ async function _loadProfile(){
     if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
     document.getElementById('auth-screen').style.display='none';
     document.getElementById('nick-screen').style.display='none';
-    // Запускаем игру если ещё не запущена
-    if(!window.game){
-        window.game = new Game();
-    }
+    // Обновляем данные в уже запущенной игре
+    if(window.game){ window.game._updateMenuStats(); }
 }
 
 async function _saveProfileToCloud(profileData){
@@ -3267,13 +3273,7 @@ window.addEventListener('resize',()=>{
     }
 });
 
-// Игра запускается только после авторизации через _loadProfile()
-// Если Supabase недоступен — запускаем автоматически через 4 секунды
-window.onload=()=>{
-    window._gameStartTimeout = setTimeout(()=>{
-        if(!window.game){ window.game=new Game(); }
-    }, 4000);
-};
+window.onload=()=>{ window.game=new Game(); };
 </script>
 
 <!-- Заглушки для совместимости JS -->
