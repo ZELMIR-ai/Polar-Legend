@@ -33,6 +33,11 @@
             position: fixed; inset: 0; z-index: 10000;
             background: linear-gradient(170deg,#0a1628 0%,#0d2d4d 40%,#0077be 100%);
             display: none; align-items: center; justify-content: center;
+            pointer-events: none;
+        }
+        #auth-screen.visible {
+            display: flex;
+            pointer-events: all;
         }
         #auth-screen::before {
             content:''; position:absolute; inset:0;
@@ -77,6 +82,11 @@
             position:fixed; inset:0; z-index:10001;
             background:linear-gradient(170deg,#0a1628,#0077be);
             display:none; align-items:center; justify-content:center;
+            pointer-events: none;
+        }
+        #nick-screen.visible {
+            display: flex;
+            pointer-events: all;
         }
         .nick-box {
             background:rgba(255,255,255,.07); backdrop-filter:blur(20px);
@@ -1039,11 +1049,11 @@ document.addEventListener('DOMContentLoaded',async()=>{
             _sbUser=session.user;
             await _loadProfile();
         } else {
-            document.getElementById('auth-screen').style.display='flex';
+            document.getElementById('auth-screen').classList.add('visible');
         }
     } catch(e) {
         // Supabase недоступен — показываем auth экран
-        document.getElementById('auth-screen').style.display='flex';
+        document.getElementById('auth-screen').classList.add('visible');
     }
 
     document.getElementById('auth-submit').onclick=async()=>{
@@ -1062,7 +1072,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
             if(error){errEl.textContent='❌ '+error.message;return;}
             _sbUser=data.user;
             // Показываем экран выбора ника
-            document.getElementById('auth-screen').style.display='none';
+            document.getElementById('auth-screen').classList.remove('visible');
             _showNickScreen();
         } else {
             const {data,error}=await _SB.auth.signInWithPassword({email,password:pass});
@@ -1117,7 +1127,7 @@ async function _loadProfile(){
     const {data,error}=await _SB.from('profiles').select('*').eq('id',_sbUser.id).single();
     if(error||!data){
         // Профиль не создан — показываем экран ника
-        document.getElementById('auth-screen').style.display='none';
+        document.getElementById('auth-screen').classList.remove('visible');
         _showNickScreen(); return;
     }
     _sbProfile=data;
@@ -1133,8 +1143,8 @@ async function _loadProfile(){
     localStorage.setItem('bestCycle',data.best_cycle||0);
     localStorage.setItem('totalGames',data.total_games||0);
     if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
-    document.getElementById('auth-screen').style.display='none';
-    document.getElementById('nick-screen').style.display='none';
+    document.getElementById('auth-screen').classList.remove('visible');
+    document.getElementById('nick-screen').classList.remove('visible');
     document.getElementById('loading-screen').style.display='none';
     // Показываем меню и обновляем данные
     document.getElementById('menu').style.display='flex';
