@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Polar Legend</title>
+    <title>Polar Legend — Арктический Раннер 3D</title>
+    <!-- SEO -->
+    <meta name="description" content="Polar Legend — бесплатная 3D браузерная игра. Прыгай по платформам в арктике, соревнуйся с друзьями в мультиплеере, собирай скины и попади в топ рейтинга!">
+    <meta name="keywords" content="polar legend, игра, 3D игра, раннер, платформер, арктика, медведь, мультиплеер, бесплатная игра, браузерная игра">
+    <meta name="author" content="Polar Legend">
+    <meta property="og:title" content="Polar Legend — Арктический Раннер 3D">
+    <meta property="og:description" content="Бесплатная 3D браузерная игра. Прыгай, соревнуйся, побеждай!">
+    <meta property="og:image" content="icon.png">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0077be">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- PeerJS с Google STUN серверами для надёжного глобального соединения -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <!-- Firebase для глобального онлайн МП -->
@@ -13,6 +27,99 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { overflow: hidden; font-family: 'Fredoka', sans-serif; touch-action: none; user-select: none; background: #1a3a5c; }
+
+        /* ===== AUTH SCREEN ===== */
+        #auth-screen {
+            position: fixed; inset: 0; z-index: 10000;
+            background: linear-gradient(170deg,#0a1628 0%,#0d2d4d 40%,#0077be 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        #auth-screen::before {
+            content:''; position:absolute; inset:0;
+            background-image: radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px);
+            background-size: 80px 80px; opacity:.3; animation: starsDrift 30s linear infinite;
+        }
+        .auth-box {
+            background: rgba(255,255,255,.06); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,.15); border-radius: 28px;
+            padding: 36px 32px; width: min(420px,92vw); position: relative; z-index:1;
+            color: white; font-family: 'Fredoka',sans-serif;
+        }
+        .auth-logo { text-align:center; font-size:2.8rem; font-weight:700; margin-bottom:4px;
+            text-shadow: 0 0 20px rgba(0,200,255,.5); }
+        .auth-sub { text-align:center; color:rgba(100,200,255,.7); font-size:1rem;
+            letter-spacing:3px; text-transform:uppercase; margin-bottom:28px; }
+        .auth-tabs { display:flex; gap:8px; margin-bottom:22px; }
+        .auth-tab { flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.15);
+            background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); cursor:pointer;
+            font-family:'Fredoka',sans-serif; font-size:1rem; transition:all .2s; }
+        .auth-tab.active { background:rgba(0,150,255,.3); border-color:rgba(0,200,255,.5); color:white; }
+        .auth-input {
+            width:100%; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+            border-radius:14px; padding:12px 16px; color:white; font-family:'Fredoka',sans-serif;
+            font-size:1.1rem; margin-bottom:12px; outline:none; transition:border .2s;
+        }
+        .auth-input:focus { border-color:rgba(0,200,255,.6); }
+        .auth-input::placeholder { color:rgba(255,255,255,.3); }
+        .auth-btn {
+            width:100%; padding:14px; border-radius:14px; border:none;
+            background:linear-gradient(135deg,#00c6ff,#0072ff);
+            color:white; font-family:'Fredoka',sans-serif; font-size:1.2rem;
+            cursor:pointer; font-weight:700; letter-spacing:1px;
+            box-shadow:0 5px 0 #00367a; transition:all .1s; margin-top:4px;
+        }
+        .auth-btn:active { transform:translateY(3px); box-shadow:0 2px 0 #00367a; }
+        .auth-err { color:#ff5252; font-size:.9rem; text-align:center; margin-top:8px; min-height:20px; }
+        .auth-ok  { color:#69f0ae; font-size:.9rem; text-align:center; margin-top:8px; min-height:20px; }
+
+        /* Экран выбора ника после регистрации */
+        #nick-screen {
+            position:fixed; inset:0; z-index:10001;
+            background:linear-gradient(170deg,#0a1628,#0077be);
+            display:none; align-items:center; justify-content:center;
+        }
+        .nick-box {
+            background:rgba(255,255,255,.07); backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,.15); border-radius:28px;
+            padding:36px 32px; width:min(400px,92vw); color:white;
+            font-family:'Fredoka',sans-serif; text-align:center;
+        }
+        .nick-title { font-size:2rem; font-weight:700; margin-bottom:8px; }
+        .nick-sub { color:rgba(255,255,255,.5); margin-bottom:24px; font-size:1rem; }
+        .nick-suggestions { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:18px; }
+        .nick-sug { padding:6px 14px; border-radius:20px; background:rgba(255,255,255,.08);
+            border:1px solid rgba(255,255,255,.15); cursor:pointer; font-size:.95rem; transition:all .2s; }
+        .nick-sug:hover { background:rgba(0,150,255,.3); }
+
+        /* Друзья */
+        .friends-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; max-height:300px; overflow-y:auto; }
+        .friend-row { display:flex; align-items:center; gap:10px; padding:10px 14px;
+            background:rgba(255,255,255,.05); border-radius:14px; border:1px solid rgba(255,255,255,.08); }
+        .friend-avatar { font-size:1.8rem; flex-shrink:0; }
+        .friend-info { flex:1; min-width:0; }
+        .friend-name { font-size:1rem; color:white; font-weight:600; }
+        .friend-status-line { font-size:.75rem; color:rgba(255,255,255,.4); }
+        .friend-actions { display:flex; gap:6px; }
+        .friend-btn { padding:5px 10px; border-radius:10px; border:none; cursor:pointer;
+            font-family:'Fredoka',sans-serif; font-size:.8rem; font-weight:600; transition:all .2s; }
+        .friend-btn-profile { background:rgba(255,255,255,.1); color:white; }
+        .friend-btn-invite  { background:rgba(0,200,100,.2); color:#69f0ae; border:1px solid rgba(0,200,100,.3); }
+        .friend-btn-gift    { background:rgba(255,200,0,.15); color:#ffd740; border:1px solid rgba(255,200,0,.3); }
+        .friend-btn-remove  { background:rgba(255,50,50,.15); color:#ff5252; border:1px solid rgba(255,50,50,.3); }
+        .friend-add-row { display:flex; gap:8px; margin-bottom:16px; }
+        .friend-id-input { flex:1; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
+            border-radius:12px; padding:10px 14px; color:white; font-family:'Fredoka',sans-serif;
+            font-size:1rem; outline:none; }
+        .friend-id-input::placeholder { color:rgba(255,255,255,.3); }
+        .friend-add-btn { padding:10px 18px; border-radius:12px; border:none;
+            background:linear-gradient(135deg,#00c6ff,#0072ff); color:white;
+            font-family:'Fredoka',sans-serif; font-size:.95rem; cursor:pointer; font-weight:700; }
+        /* Подарок другу */
+        .gift-select-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-height:220px; overflow-y:auto; }
+        .gift-sel-card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+            border-radius:14px; padding:10px; cursor:pointer; text-align:center; transition:all .2s; }
+        .gift-sel-card:hover { background:rgba(0,150,255,.2); border-color:rgba(0,200,255,.4); }
+        .gift-sel-card.selected { background:rgba(0,200,100,.15); border-color:#69f0ae; }
 
         #rot-warn {
             display: none; position: fixed; inset: 0;
@@ -218,6 +325,7 @@
             .sb-btn { width: 56px; min-height: 50px; font-size: .56rem; }
             .sb-btn .sb-icon { font-size: 1.2rem; }
             #menu-bear-preview { width: 90px; height: 90px; }
+            #menu-center { left:50% !important; transform:translate(-50%,-50%) !important; width:auto; }
             .menu-title h1 { font-size: 1.3rem; }
             #menu-bottom { height: 84px; padding: 8px; gap: 7px; }
             #menu-mode-card { height: 60px; padding: 0 10px; gap: 7px; }
@@ -535,6 +643,36 @@
 <body>
 
 <!-- ЗАГРУЗКА -->
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+    <div class="auth-box">
+        <div class="auth-logo">🐻‍❄️ POLAR LEGEND</div>
+        <div class="auth-sub">Arctic Runner</div>
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="auth-tab-login" onclick="authTab('login')">Войти</button>
+            <button class="auth-tab" id="auth-tab-reg" onclick="authTab('reg')">Регистрация</button>
+        </div>
+        <input class="auth-input" type="email" id="auth-email" placeholder="Email...">
+        <input class="auth-input" type="password" id="auth-pass" placeholder="Пароль...">
+        <input class="auth-input" type="password" id="auth-pass2" placeholder="Повтори пароль..." style="display:none">
+        <button class="auth-btn" id="auth-submit">▶ ВОЙТИ</button>
+        <div class="auth-err" id="auth-err"></div>
+        <div class="auth-ok"  id="auth-ok"></div>
+    </div>
+</div>
+
+<!-- NICK SCREEN -->
+<div id="nick-screen">
+    <div class="nick-box">
+        <div class="nick-title">🎉 Добро пожаловать!</div>
+        <div class="nick-sub">Выбери никнейм для игры</div>
+        <div class="nick-suggestions" id="nick-suggestions"></div>
+        <input class="auth-input" type="text" id="nick-input" placeholder="Или введи свой..." maxlength="20" style="text-align:center">
+        <button class="auth-btn" id="nick-confirm">✅ НАЧАТЬ ИГРУ</button>
+        <div class="auth-err" id="nick-err"></div>
+    </div>
+</div>
+
 <div id="loading-screen">
     <div class="loading-logo">🐻‍❄️ POLAR LEGEND</div>
     <div class="loading-bar-bg"><div class="loading-bar-fill" id="load-bar"></div></div>
@@ -588,6 +726,7 @@
     <!-- RIGHT SIDEBAR -->
     <div id="menu-sidebar-right">
         <div class="sb-btn" id="mp-btn"><span class="sb-icon">🌐</span>Мультиплеер</div>
+        <div class="sb-btn" id="friends-btn"><span class="sb-icon">👥</span>Друзья</div>
         <div class="sb-btn" id="leaderboard-btn"><span class="sb-icon">🏅</span>Рейтинг</div>
         <div class="sb-btn" id="achievements-btn"><span class="sb-icon">🏆</span>Достижения</div>
     </div>
@@ -734,9 +873,11 @@
             <div class="profile-info">
                 <div class="profile-name" id="profile-name-display">Игрок</div>
                 <div class="profile-sub" id="profile-sub-display">Уровень 1</div>
+                <div style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:3px">ID: <span id="profile-uid-display" style="font-family:monospace;cursor:pointer;color:rgba(100,200,255,.5)" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.textContent).then(()=>showToast('📋 ID скопирован!'))">—</span></div>
             </div>
             <button class="profile-edit-btn" id="edit-profile-btn">✏️ Изменить</button>
         </div>
+        <button id="logout-btn" style="display:block;margin:0 auto 14px;padding:8px 24px;border-radius:12px;border:1px solid rgba(255,80,80,.3);background:rgba(255,50,50,.1);color:#ff5252;font-family:'Fredoka',sans-serif;font-size:.95rem;cursor:pointer">🚪 Выйти из аккаунта</button>
         <div id="profile-editor" style="display:none;background:rgba(255,255,255,.04);border-radius:25px;padding:20px;margin-bottom:20px;border:1px solid rgba(255,255,255,.08)">
             <div class="field-label">👤 Никнейм</div>
             <input type="text" class="name-input" id="profile-name-input" placeholder="Введи имя..." maxlength="20">
@@ -784,6 +925,32 @@
         <h2>🏅 ТАБЛИЦА РЕКОРДОВ</h2>
         <div id="leaderboard-list"></div>
         
+    </div>
+</div>
+
+<!-- ДРУЗЬЯ -->
+<div id="friends-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('friends-modal').style.display='none'">✕</div>
+        <h2>👥 ДРУЗЬЯ</h2>
+        <div style="font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:10px;text-align:center">Твой ID: <span id="my-friend-id" style="font-family:monospace;color:#00e5ff;cursor:pointer" onclick="navigator.clipboard&&navigator.clipboard.writeText(this.textContent).then(()=>showToast('📋 ID скопирован!'))">—</span></div>
+        <div class="friend-add-row">
+            <input class="friend-id-input" id="friend-add-input" placeholder="Введи ID друга...">
+            <button class="friend-add-btn" id="friend-add-btn">➕ Добавить</button>
+        </div>
+        <div class="friends-list" id="friends-list">
+            <div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴<br>Поделись своим ID!</div>
+        </div>
+    </div>
+</div>
+
+<!-- ПОДАРОК ДРУГУ -->
+<div id="gift-friend-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:9600;align-items:center;justify-content:center">
+    <div style="background:linear-gradient(135deg,rgba(0,30,60,.98),rgba(0,10,30,.98));border:1px solid rgba(255,255,255,.15);border-radius:28px;padding:28px;max-width:380px;width:90%;color:white;font-family:'Fredoka',sans-serif;position:relative">
+        <div class="modal-close-x" style="position:absolute;top:12px;right:14px;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="document.getElementById('gift-friend-modal').style.display='none'">✕</div>
+        <h3 style="text-align:center;margin-bottom:16px">🎁 Выбери подарок для <span id="gift-friend-name">друга</span></h3>
+        <div class="gift-select-grid" id="gift-select-grid"></div>
+        <button id="gift-send-btn" style="width:100%;margin-top:14px;padding:12px;border-radius:14px;border:none;background:linear-gradient(135deg,#ffd740,#ff9500);color:#1a0;font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer">🎁 ОТПРАВИТЬ</button>
     </div>
 </div>
 
@@ -843,6 +1010,138 @@
 <div id="toast"></div>
 
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
+<script>
+// ===== SUPABASE =====
+const _SB = supabase.createClient('https://ojcdntebvofnwvmscfsq.supabase.co','sb_publishable_MTB_FWmzLpxlZfpW_ImnWA_erPuqLmM');
+let _sbUser = null;
+let _sbProfile = null;
+
+// Auth tab switch
+function authTab(tab){
+    document.getElementById('auth-tab-login').classList.toggle('active',tab==='login');
+    document.getElementById('auth-tab-reg').classList.toggle('active',tab==='reg');
+    document.getElementById('auth-pass2').style.display=tab==='reg'?'block':'none';
+    document.getElementById('auth-submit').textContent=tab==='login'?'▶ ВОЙТИ':'▶ ЗАРЕГИСТРИРОВАТЬСЯ';
+    document.getElementById('auth-err').textContent='';
+    document.getElementById('auth-ok').textContent='';
+    document.getElementById('auth-submit').dataset.tab=tab;
+}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+    document.getElementById('auth-submit').dataset.tab='login';
+    // Проверяем сессию
+    const {data:{session}}=await _SB.auth.getSession();
+    if(session){
+        _sbUser=session.user;
+        await _loadProfile();
+    } else {
+        document.getElementById('auth-screen').style.display='flex';
+    }
+
+    document.getElementById('auth-submit').onclick=async()=>{
+        const tab=document.getElementById('auth-submit').dataset.tab||'login';
+        const email=document.getElementById('auth-email').value.trim();
+        const pass=document.getElementById('auth-pass').value;
+        const pass2=document.getElementById('auth-pass2').value;
+        const errEl=document.getElementById('auth-err');
+        const okEl=document.getElementById('auth-ok');
+        errEl.textContent=''; okEl.textContent='';
+        if(!email||!pass){errEl.textContent='Заполни все поля';return;}
+        if(tab==='reg'){
+            if(pass!==pass2){errEl.textContent='Пароли не совпадают';return;}
+            if(pass.length<6){errEl.textContent='Пароль минимум 6 символов';return;}
+            const {data,error}=await _SB.auth.signUp({email,password:pass});
+            if(error){errEl.textContent='❌ '+error.message;return;}
+            _sbUser=data.user;
+            // Показываем экран выбора ника
+            document.getElementById('auth-screen').style.display='none';
+            _showNickScreen();
+        } else {
+            const {data,error}=await _SB.auth.signInWithPassword({email,password:pass});
+            if(error){errEl.textContent='❌ Неверный email или пароль';return;}
+            _sbUser=data.user;
+            await _loadProfile();
+        }
+    };
+
+    // Enter key
+    ['auth-email','auth-pass','auth-pass2'].forEach(id=>{
+        document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('auth-submit').click();});
+    });
+});
+
+function _showNickScreen(){
+    const screen=document.getElementById('nick-screen');
+    screen.style.display='flex';
+    // Генерируем предложения ников
+    const animals=['PolarBear','ArcticFox','SnowWolf','IceTiger','FrostPanda','TundraLion','ArcticKing','SnowRacer'];
+    const nums=[Math.floor(Math.random()*900)+100];
+    const sugs=document.getElementById('nick-suggestions');
+    sugs.innerHTML='';
+    animals.sort(()=>Math.random()-.5).slice(0,6).forEach(a=>{
+        const n=a+(Math.floor(Math.random()*90)+10);
+        const d=document.createElement('div'); d.className='nick-sug'; d.textContent=n;
+        d.onclick=()=>{document.getElementById('nick-input').value=n;};
+        sugs.appendChild(d);
+    });
+    document.getElementById('nick-confirm').onclick=async()=>{
+        const nick=document.getElementById('nick-input').value.trim();
+        const errEl=document.getElementById('nick-err');
+        if(!nick||nick.length<2){errEl.textContent='Минимум 2 символа';return;}
+        // Сохраняем профиль
+        const {error}=await _SB.from('profiles').upsert({
+            id:_sbUser.id, username:nick, avatar:'🐻‍❄️', skin:'polar',
+            coins:0, best_score:0, best_cycle:0, total_games:0,
+            unlocked_skins:['polar']
+        });
+        if(error){
+            if(error.code==='23505'){errEl.textContent='❌ Ник занят, выбери другой';return;}
+            errEl.textContent='❌ '+error.message; return;
+        }
+        screen.style.display='none';
+        await _loadProfile();
+    };
+    document.getElementById('nick-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('nick-confirm').click();});
+}
+
+async function _loadProfile(){
+    if(!_sbUser)return;
+    const {data,error}=await _SB.from('profiles').select('*').eq('id',_sbUser.id).single();
+    if(error||!data){
+        // Профиль не создан — показываем экран ника
+        document.getElementById('auth-screen').style.display='none';
+        _showNickScreen(); return;
+    }
+    _sbProfile=data;
+    // Синхронизируем в localStorage
+    localStorage.setItem('profileName',data.username);
+    localStorage.setItem('profileAvatar',data.avatar||'🐻‍❄️');
+    localStorage.setItem('profileBio',data.bio||'');
+    localStorage.setItem('profileStatus',data.status||'');
+    localStorage.setItem('profileColor',data.color||'#ffffff');
+    localStorage.setItem('selectedSkin',data.skin||'polar');
+    localStorage.setItem('totalCoins',data.coins||0);
+    localStorage.setItem('bestScore',data.best_score||0);
+    localStorage.setItem('bestCycle',data.best_cycle||0);
+    localStorage.setItem('totalGames',data.total_games||0);
+    if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('nick-screen').style.display='none';
+}
+
+async function _saveProfileToCloud(profileData){
+    if(!_sbUser)return;
+    await _SB.from('profiles').update(profileData).eq('id',_sbUser.id);
+}
+
+async function _syncScoreToCloud(bestScore,totalCoins,totalGames,bestCycle){
+    if(!_sbUser)return;
+    await _SB.from('profiles').update({
+        best_score:bestScore, coins:totalCoins,
+        total_games:totalGames, best_cycle:bestCycle
+    }).eq('id',_sbUser.id);
+}
+</script>
 <script type="module">
 import * as THREE from 'three';
 
@@ -959,6 +1258,130 @@ function stopBgMusic() { bgPlaying=false; clearTimeout(bgTimer); }
 
 document.addEventListener('click',()=>{ if(AC.state==='suspended') AC.resume(); },{once:true});
 document.addEventListener('click',e=>{ if(e.target.closest('button')||e.target.closest('.menu-btn')||e.target.closest('.mobile-menu-btn')||e.target.closest('.shop-tab')) playClick(); });
+
+// ===== ДРУЗЬЯ =====
+async function _loadFriends(){{
+    if(!_sbUser)return;
+    const list=document.getElementById('friends-list');
+    const myFriendId=document.getElementById('my-friend-id');
+    if(myFriendId) myFriendId.textContent=_sbUser.id.slice(0,8).toUpperCase();
+
+    // Загружаем список друзей из localStorage (ID друзей)
+    const friendIds=JSON.parse(localStorage.getItem('friendIds')||'[]');
+    if(!friendIds.length){{
+        list.innerHTML='<div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴<br>Поделись своим ID!</div>';
+        return;
+    }}
+    // Загружаем профили друзей
+    const {{data}}=await _SB.from('profiles').select('*').in('id',friendIds);
+    if(!data||!data.length){{list.innerHTML='<div style="text-align:center;opacity:.4;padding:20px">Друзья не найдены</div>';return;}}
+    list.innerHTML='';
+    data.forEach(f=>{{
+        const row=document.createElement('div'); row.className='friend-row';
+        row.innerHTML=`
+            <div class="friend-avatar">${{f.avatar||'🐻‍❄️'}}</div>
+            <div class="friend-info">
+                <div class="friend-name">${{f.username}}</div>
+                <div class="friend-status-line">${{f.status||''}} • 🏆${{f.best_score||0}}</div>
+            </div>
+            <div class="friend-actions">
+                <button class="friend-btn friend-btn-profile" onclick="_showFriendProfile(${{JSON.stringify(f).replace(/"/g,"'")}})">👤</button>
+                <button class="friend-btn friend-btn-invite" onclick="_inviteFriend('${{f.id}}','${{f.username}}')">🎮</button>
+                <button class="friend-btn friend-btn-gift" onclick="_openGiftModal('${{f.id}}','${{f.username}}')">🎁</button>
+                <button class="friend-btn friend-btn-remove" onclick="_removeFriend('${{f.id}}')">✕</button>
+            </div>`;
+        list.appendChild(row);
+    }});
+}}
+
+async function _addFriend(){{
+    const input=document.getElementById('friend-add-input');
+    const rawId=input.value.trim().toLowerCase();
+    if(!rawId)return;
+    if(!_sbUser){{showToast('❌ Войди в аккаунт',true);return;}}
+    // Ищем по короткому ID (первые 8 символов) или полному
+    const {{data,error}}=await _SB.from('profiles').select('*').ilike('id',rawId+'%').limit(1);
+    if(error||!data||!data.length){{showToast('❌ Игрок не найден',true);return;}}
+    const friend=data[0];
+    if(friend.id===_sbUser.id){{showToast('❌ Нельзя добавить себя',true);return;}}
+    const ids=JSON.parse(localStorage.getItem('friendIds')||'[]');
+    if(ids.includes(friend.id)){{showToast('⚠️ Уже в друзьях');return;}}
+    ids.push(friend.id);
+    localStorage.setItem('friendIds',JSON.stringify(ids));
+    input.value='';
+    showToast('✅ '+friend.username+' добавлен в друзья!');
+    _loadFriends();
+}}
+
+function _removeFriend(id){{
+    const ids=JSON.parse(localStorage.getItem('friendIds')||'[]');
+    localStorage.setItem('friendIds',JSON.stringify(ids.filter(i=>i!==id)));
+    _loadFriends();
+    showToast('Друг удалён');
+}}
+
+function _showFriendProfile(f){{
+    if(typeof f==='string') f=JSON.parse(f.replace(/'/g,'"'));
+    const skinEmoji=(window.SKINS||[]).find(s=>s.id===f.skin);
+    let modal=document.getElementById('lb-profile-modal');
+    if(!modal){{modal=document.createElement('div');modal.id='lb-profile-modal';modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:9500;display:flex;align-items:center;justify-content:center';document.body.appendChild(modal);}}
+    modal.innerHTML=`<div style="background:linear-gradient(135deg,rgba(0,30,60,.95),rgba(0,10,30,.98));border:1px solid rgba(255,255,255,.15);border-radius:28px;padding:32px 36px;max-width:380px;width:90%;color:white;font-family:Fredoka,sans-serif;position:relative;text-align:center">
+        <div style="position:absolute;top:12px;right:14px;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem" onclick="document.getElementById('lb-profile-modal').style.display='none'">✕</div>
+        <div style="font-size:3.5rem;margin-bottom:6px">${{f.avatar||'🐻‍❄️'}}</div>
+        <div style="font-size:1.8rem;font-weight:700;margin-bottom:4px">${{f.username}}</div>
+        <div style="font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:10px">${{f.status||''}}</div>
+        <div style="font-size:.85rem;color:rgba(255,255,255,.35);font-style:italic;margin-bottom:16px">${{f.bio||''}}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+            <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px"><div style="font-size:1.4rem;font-weight:700;color:#ffd740">${{f.best_score||0}}</div><div style="font-size:.7rem;color:rgba(255,255,255,.4)">Рекорд</div></div>
+            <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px"><div style="font-size:1.4rem;font-weight:700;color:#00e5ff">${{Math.max(1,Math.floor((f.best_score||0)/30)+1)}}</div><div style="font-size:.7rem;color:rgba(255,255,255,.4)">Уровень</div></div>
+            <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px"><div style="font-size:1.4rem">${{(skinEmoji&&skinEmoji.emoji)||'🐻‍❄️'}}</div><div style="font-size:.7rem;color:rgba(255,255,255,.4)">Скин</div></div>
+        </div>
+    </div>`;
+    modal.style.display='flex';
+}}
+
+function _inviteFriend(id,name){{
+    showToast('🎮 Приглашение отправлено '+name+'!');
+    // Сохраняем приглашение в localStorage для матчмейкинга
+    const inv={{from:_sbUser?_sbUser.id.slice(0,8):'?',name:window.game?window.game.profileName:'Игрок',ts:Date.now()}};
+    localStorage.setItem('invite_'+id,JSON.stringify(inv));
+}}
+
+function _openGiftModal(friendId,friendName){{
+    const inv=document.getElementById('gift-friend-modal');
+    const game=window.game;
+    if(!game)return;
+    document.getElementById('gift-friend-name').textContent=friendName;
+    const grid=document.getElementById('gift-select-grid');
+    grid.innerHTML='';
+    const owned=Object.entries(game.purchasedGifts||{{}}).filter(([,c])=>c>0);
+    if(!owned.length){{showToast('❌ Инвентарь пуст',true);return;}}
+    let selected=null;
+    owned.forEach(([gid,cnt])=>{{
+        const gift=(window.GIFTS||[]).find(g=>g.id===gid); if(!gift)return;
+        const card=document.createElement('div'); card.className='gift-sel-card';
+        card.innerHTML=`<div style="font-size:1.8rem">${{gift.emoji}}</div><div style="font-size:.8rem">${{gift.name}}</div><div style="font-size:.75rem;opacity:.5">×${{cnt}}</div>`;
+        card.onclick=()=>{{
+            grid.querySelectorAll('.gift-sel-card').forEach(c=>c.classList.remove('selected'));
+            card.classList.add('selected'); selected=gid;
+        }};
+        grid.appendChild(card);
+    }});
+    document.getElementById('gift-send-btn').onclick=()=>{{
+        if(!selected){{showToast('❌ Выбери подарок',true);return;}}
+        const gift=(window.GIFTS||[]).find(g=>g.id===selected);
+        game.purchasedGifts[selected]--;
+        if(!game.purchasedGifts[selected]) delete game.purchasedGifts[selected];
+        localStorage.setItem('purchasedGifts',JSON.stringify(game.purchasedGifts));
+        // Сохраняем подарок в localStorage (получатель увидит при следующем входе)
+        const gifts=JSON.parse(localStorage.getItem('gifts_for_'+friendId)||'[]');
+        gifts.push({{from:game.profileName,giftId:selected,giftName:gift.name,emoji:gift.emoji,ts:Date.now()}});
+        localStorage.setItem('gifts_for_'+friendId,JSON.stringify(gifts));
+        inv.style.display='none';
+        showToast('🎁 Подарок "'+gift.name+'" отправлен!');
+    }};
+    inv.style.display='flex';
+}}
 
 // ===== СНЕГ =====
 class Snow {
@@ -1238,7 +1661,7 @@ class Bear {
 
 
 // ===== СКИНЫ =====
-const SKINS=[
+window.SKINS=window.SKINS||[]; const SKINS=[
     {id:'polar',   name:'Белый медведь', emoji:'🐻‍❄️', body:0xfafafa, leg:0xeeeeee, price:0},
     {id:'brown',   name:'Бурый медведь', emoji:'🐻',   body:0xcc7733, leg:0xaa5522, price:500},
     {id:'panda',   name:'Панда',         emoji:'🐼',   body:0xfafafa, leg:0x111122, price:800},
@@ -1250,7 +1673,7 @@ const SKINS=[
 ];
 
 // ===== РЕЖИМЫ ИГРЫ =====
-const GAME_MODES=[
+window.SKINS=SKINS; window.GIFTS=GIFTS||[]; const GAME_MODES=[
     {id:'classic',    name:'Классика',        icon:'🎮', desc:'Стандартный режим — доходи до финала, набирай очки'},
     {id:'timeattack', name:'Гонка времени',   icon:'⏱️', desc:'2 минуты на максимальный счёт!'},
     {id:'blitz',      name:'Блиц',            icon:'⚡', desc:'60 секунд — успей набрать как можно больше'},
@@ -1259,7 +1682,7 @@ const GAME_MODES=[
 ];
 
 // ===== ДАННЫЕ =====
-const GIFTS = [
+const GIFTS = window.GIFTS = [
     {id:'tank',name:'Танк',price:220,rarity:'green',image:'gift/tank.gif',emoji:'🎁'},
     {id:'rocket',name:'Ракета',price:260,rarity:'green',image:'gift/rocket.gif',emoji:'🚀'},
     {id:'goldenring',name:'Золотое кольцо',price:330,rarity:'green',image:'gift/goldenring.gif',emoji:'💍'},
@@ -2107,6 +2530,20 @@ class Game {
         $on('close-skins','onclick',()=>document.getElementById('skins-modal').style.display='none');
         // Режимы
         $on('modes-btn','onclick',()=>{ this._renderModes(); document.getElementById('mode-modal').style.display='flex'; });
+        // Друзья
+        $on('friends-btn','onclick',()=>{ _loadFriends(); document.getElementById('friends-modal').style.display='flex'; });
+        $on('friend-add-btn','onclick',()=>_addFriend());
+        $on('friend-add-input','onkeydown',e=>{if(e.key==='Enter')_addFriend();});
+        // Выход из аккаунта
+        $on('logout-btn','onclick',async()=>{
+            if(confirm('Выйти из аккаунта?')){
+                await _SB.auth.signOut();
+                location.reload();
+            }
+        });
+        // Показать ID в профиле
+        const uidEl=document.getElementById('profile-uid-display');
+        if(uidEl&&window._sbUser) uidEl.textContent=window._sbUser.id.slice(0,8).toUpperCase();
         $on('close-mode','onclick',()=>document.getElementById('mode-modal').style.display='none');
         // Быстрый МП из меню
         $on('quickmp-btn','onclick',()=>{ if(this.mp){ this.mp.open(); this.mp._openQL(); } });
@@ -2312,8 +2749,18 @@ class Game {
         const bioIn=document.getElementById('profile-bio');
         if(bioIn) bioIn.value=this.profileBio||'';
     }
-    _renderLeaderboard() {
-        const list=document.getElementById('leaderboard-list'); list.innerHTML='';
+    async _renderLeaderboard() {
+        const list=document.getElementById('leaderboard-list');
+        list.innerHTML='<div style="text-align:center;opacity:.5;padding:20px">⏳ Загружаем...</div>';
+        // Загружаем топ из Supabase
+        let realPlayers=[];
+        try{
+            const {data}=await _SB.from('profiles').select('username,avatar,best_score,skin,status,bio,best_cycle').order('best_score',{ascending:false}).limit(50);
+            if(data&&data.length) realPlayers=data.map(p=>({name:p.username,avatar:p.avatar||'🐻‍❄️',score:p.best_score||0,skin:p.skin||'polar',status:p.status||'',bio:p.bio||'',level:Math.max(1,Math.floor((p.best_score||0)/30)+1)}));
+        }catch(e){}
+        // Если Supabase недоступен — используем FAKE_LB
+        if(!realPlayers.length) realPlayers=[...FAKE_LB];
+        list.innerHTML='';
         const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
         const me={name:this.profileName,avatar:this.profileAvatar,score:this.bestScore,
                   skin:this.selectedSkin,status:this.profileStatus,bio:this.profileBio,
@@ -2663,6 +3110,8 @@ class Game {
             document.getElementById('mp-opponent-hud').style.display='none';
         }
         this._checkAchievements();
+        // Сохраняем в Supabase
+        try{ _syncScoreToCloud(this.bestScore,this.totalCoins,this.totalGames,this.bestCycle); }catch(e){}
         document.getElementById('gameover-score').innerText=this.score;
         document.getElementById('gameover-best').innerText=this.bestScore;
         document.getElementById('gameover-coins').innerText=this.coinsCollected;
@@ -2818,6 +3267,11 @@ window.onload=()=>{ window.game=new Game(); };
 </script>
 
 <!-- Заглушки для совместимости JS -->
+<div id="friends-btn" style="display:none"></div>
+<div id="friend-add-btn" style="display:none"></div>
+<div id="friend-add-input" style="display:none"></div>
+<div id="logout-btn" style="display:none"></div>
+<div id="gift-send-btn" style="display:none"></div>
 <div id="mp-do-matchmaking" style="display:none"></div>
 <div id="profile-btn" style="display:none"></div>
 <div id="close-achievements" style="display:none"></div>
