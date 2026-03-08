@@ -17,8 +17,6 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- PeerJS с Google STUN серверами для надёжного глобального соединения -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <!-- Firebase для глобального онлайн МП -->
@@ -27,79 +25,6 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { overflow: hidden; font-family: 'Fredoka', sans-serif; touch-action: none; user-select: none; background: #1a3a5c; }
-
-        /* ===== AUTH SCREEN ===== */
-        #auth-screen {
-            position: fixed; inset: 0; z-index: 10000;
-            background: linear-gradient(170deg,#0a1628 0%,#0d2d4d 40%,#0077be 100%);
-            display: none; align-items: center; justify-content: center;
-            pointer-events: none;
-        }
-        #auth-screen.visible {
-            display: flex;
-            pointer-events: all;
-        }
-        #auth-screen::before {
-            content:''; position:absolute; inset:0;
-            background-image: radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px);
-            background-size: 80px 80px; opacity:.3; animation: starsDrift 30s linear infinite;
-        }
-        .auth-box {
-            background: rgba(255,255,255,.06); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,.15); border-radius: 28px;
-            padding: 36px 32px; width: min(420px,92vw); position: relative; z-index:1;
-            color: white; font-family: 'Fredoka',sans-serif;
-        }
-        .auth-logo { text-align:center; font-size:2.8rem; font-weight:700; margin-bottom:4px;
-            text-shadow: 0 0 20px rgba(0,200,255,.5); }
-        .auth-sub { text-align:center; color:rgba(100,200,255,.7); font-size:1rem;
-            letter-spacing:3px; text-transform:uppercase; margin-bottom:28px; }
-        .auth-tabs { display:flex; gap:8px; margin-bottom:22px; }
-        .auth-tab { flex:1; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.15);
-            background:rgba(255,255,255,.05); color:rgba(255,255,255,.5); cursor:pointer;
-            font-family:'Fredoka',sans-serif; font-size:1rem; transition:all .2s; }
-        .auth-tab.active { background:rgba(0,150,255,.3); border-color:rgba(0,200,255,.5); color:white; }
-        .auth-input {
-            width:100%; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15);
-            border-radius:14px; padding:12px 16px; color:white; font-family:'Fredoka',sans-serif;
-            font-size:1.1rem; margin-bottom:12px; outline:none; transition:border .2s;
-        }
-        .auth-input:focus { border-color:rgba(0,200,255,.6); }
-        .auth-input::placeholder { color:rgba(255,255,255,.3); }
-        .auth-btn {
-            width:100%; padding:14px; border-radius:14px; border:none;
-            background:linear-gradient(135deg,#00c6ff,#0072ff);
-            color:white; font-family:'Fredoka',sans-serif; font-size:1.2rem;
-            cursor:pointer; font-weight:700; letter-spacing:1px;
-            box-shadow:0 5px 0 #00367a; transition:all .1s; margin-top:4px;
-        }
-        .auth-btn:active { transform:translateY(3px); box-shadow:0 2px 0 #00367a; }
-        .auth-err { color:#ff5252; font-size:.9rem; text-align:center; margin-top:8px; min-height:20px; }
-        .auth-ok  { color:#69f0ae; font-size:.9rem; text-align:center; margin-top:8px; min-height:20px; }
-
-        /* Экран выбора ника после регистрации */
-        #nick-screen {
-            position:fixed; inset:0; z-index:10001;
-            background:linear-gradient(170deg,#0a1628,#0077be);
-            display:none; align-items:center; justify-content:center;
-            pointer-events: none;
-        }
-        #nick-screen.visible {
-            display: flex;
-            pointer-events: all;
-        }
-        .nick-box {
-            background:rgba(255,255,255,.07); backdrop-filter:blur(20px);
-            border:1px solid rgba(255,255,255,.15); border-radius:28px;
-            padding:36px 32px; width:min(400px,92vw); color:white;
-            font-family:'Fredoka',sans-serif; text-align:center;
-        }
-        .nick-title { font-size:2rem; font-weight:700; margin-bottom:8px; }
-        .nick-sub { color:rgba(255,255,255,.5); margin-bottom:24px; font-size:1rem; }
-        .nick-suggestions { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:18px; }
-        .nick-sug { padding:6px 14px; border-radius:20px; background:rgba(255,255,255,.08);
-            border:1px solid rgba(255,255,255,.15); cursor:pointer; font-size:.95rem; transition:all .2s; }
-        .nick-sug:hover { background:rgba(0,150,255,.3); }
 
         /* Друзья */
         .friends-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; max-height:300px; overflow-y:auto; }
@@ -653,28 +578,6 @@
 <body>
 
 <!-- ЗАГРУЗКА -->
-<!-- AUTH SCREEN -->
-<div id="auth-screen">
-    <div class="auth-box">
-        <div class="auth-logo">🐻‍❄️ POLAR LEGEND</div>
-        <div class="auth-sub">Arctic Runner</div>
-        <div class="auth-tabs">
-            <button class="auth-tab active" id="auth-tab-login" onclick="authTab('login')">Войти</button>
-            <button class="auth-tab" id="auth-tab-reg" onclick="authTab('reg')">Регистрация</button>
-        </div>
-        <input class="auth-input" type="email" id="auth-email" placeholder="Email...">
-        <input class="auth-input" type="password" id="auth-pass" placeholder="Пароль...">
-        <input class="auth-input" type="password" id="auth-pass2" placeholder="Повтори пароль..." style="display:none">
-        <button class="auth-btn" id="auth-submit">▶ ВОЙТИ</button>
-        <div class="auth-err" id="auth-err"></div>
-        <div class="auth-ok"  id="auth-ok"></div>
-    </div>
-</div>
-
-<!-- NICK SCREEN -->
-<div id="nick-screen">
-    <div class="nick-box">
-        <div class="nick-title">🎉 Добро пожаловать!</div>
         <div class="nick-sub">Выбери никнейм для игры</div>
         <div class="nick-suggestions" id="nick-suggestions"></div>
         <input class="auth-input" type="text" id="nick-input" placeholder="Или введи свой..." maxlength="20" style="text-align:center">
@@ -1020,151 +923,7 @@
 <div id="toast"></div>
 
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
-<script>
-// ===== SUPABASE =====
-const _SB = supabase.createClient('https://ojcdntebvofnwvmscfsq.supabase.co','sb_publishable_MTB_FWmzLpxlZfpW_ImnWA_erPuqLmM');
-let _sbUser = null;
-let _sbProfile = null;
 
-// Auth tab switch
-function authTab(tab){
-    document.getElementById('auth-tab-login').classList.toggle('active',tab==='login');
-    document.getElementById('auth-tab-reg').classList.toggle('active',tab==='reg');
-    document.getElementById('auth-pass2').style.display=tab==='reg'?'block':'none';
-    document.getElementById('auth-submit').textContent=tab==='login'?'▶ ВОЙТИ':'▶ ЗАРЕГИСТРИРОВАТЬСЯ';
-    document.getElementById('auth-err').textContent='';
-    document.getElementById('auth-ok').textContent='';
-    document.getElementById('auth-submit').dataset.tab=tab;
-}
-
-document.addEventListener('DOMContentLoaded',async()=>{
-    document.getElementById('auth-submit').dataset.tab='login';
-    // Проверяем сессию в фоне — не блокируем загрузку игры
-    try {
-        const {data:{session}}=await Promise.race([
-            _SB.auth.getSession(),
-            new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),3000))
-        ]);
-        if(session){
-            _sbUser=session.user;
-            await _loadProfile();
-        } else {
-            document.getElementById('auth-screen').classList.add('visible');
-        }
-    } catch(e) {
-        // Supabase недоступен — показываем auth экран
-        document.getElementById('auth-screen').classList.add('visible');
-    }
-
-    document.getElementById('auth-submit').onclick=async()=>{
-        const tab=document.getElementById('auth-submit').dataset.tab||'login';
-        const email=document.getElementById('auth-email').value.trim();
-        const pass=document.getElementById('auth-pass').value;
-        const pass2=document.getElementById('auth-pass2').value;
-        const errEl=document.getElementById('auth-err');
-        const okEl=document.getElementById('auth-ok');
-        errEl.textContent=''; okEl.textContent='';
-        if(!email||!pass){errEl.textContent='Заполни все поля';return;}
-        if(tab==='reg'){
-            if(pass!==pass2){errEl.textContent='Пароли не совпадают';return;}
-            if(pass.length<6){errEl.textContent='Пароль минимум 6 символов';return;}
-            const {data,error}=await _SB.auth.signUp({email,password:pass});
-            if(error){errEl.textContent='❌ '+error.message;return;}
-            _sbUser=data.user;
-            // Показываем экран выбора ника
-            document.getElementById('auth-screen').classList.remove('visible');
-            _showNickScreen();
-        } else {
-            const {data,error}=await _SB.auth.signInWithPassword({email,password:pass});
-            if(error){errEl.textContent='❌ Неверный email или пароль';return;}
-            _sbUser=data.user;
-            await _loadProfile();
-        }
-    };
-
-    // Enter key
-    ['auth-email','auth-pass','auth-pass2'].forEach(id=>{
-        document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('auth-submit').click();});
-    });
-});
-
-function _showNickScreen(){
-    const screen=document.getElementById('nick-screen');
-    screen.style.display='flex';
-    // Генерируем предложения ников
-    const animals=['PolarBear','ArcticFox','SnowWolf','IceTiger','FrostPanda','TundraLion','ArcticKing','SnowRacer'];
-    const nums=[Math.floor(Math.random()*900)+100];
-    const sugs=document.getElementById('nick-suggestions');
-    sugs.innerHTML='';
-    animals.sort(()=>Math.random()-.5).slice(0,6).forEach(a=>{
-        const n=a+(Math.floor(Math.random()*90)+10);
-        const d=document.createElement('div'); d.className='nick-sug'; d.textContent=n;
-        d.onclick=()=>{document.getElementById('nick-input').value=n;};
-        sugs.appendChild(d);
-    });
-    document.getElementById('nick-confirm').onclick=async()=>{
-        const nick=document.getElementById('nick-input').value.trim();
-        const errEl=document.getElementById('nick-err');
-        if(!nick||nick.length<2){errEl.textContent='Минимум 2 символа';return;}
-        // Сохраняем профиль
-        const {error}=await _SB.from('profiles').upsert({
-            id:_sbUser.id, username:nick, avatar:'🐻‍❄️', skin:'polar',
-            coins:0, best_score:0, best_cycle:0, total_games:0,
-            unlocked_skins:['polar']
-        });
-        if(error){
-            if(error.code==='23505'){errEl.textContent='❌ Ник занят, выбери другой';return;}
-            errEl.textContent='❌ '+error.message; return;
-        }
-        screen.style.display='none';
-        await _loadProfile();
-    };
-    document.getElementById('nick-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('nick-confirm').click();});
-}
-
-async function _loadProfile(){
-    if(!_sbUser)return;
-    const {data,error}=await _SB.from('profiles').select('*').eq('id',_sbUser.id).single();
-    if(error||!data){
-        // Профиль не создан — показываем экран ника
-        document.getElementById('auth-screen').classList.remove('visible');
-        _showNickScreen(); return;
-    }
-    _sbProfile=data;
-    // Синхронизируем в localStorage
-    localStorage.setItem('profileName',data.username);
-    localStorage.setItem('profileAvatar',data.avatar||'🐻‍❄️');
-    localStorage.setItem('profileBio',data.bio||'');
-    localStorage.setItem('profileStatus',data.status||'');
-    localStorage.setItem('profileColor',data.color||'#ffffff');
-    localStorage.setItem('selectedSkin',data.skin||'polar');
-    localStorage.setItem('totalCoins',data.coins||0);
-    localStorage.setItem('bestScore',data.best_score||0);
-    localStorage.setItem('bestCycle',data.best_cycle||0);
-    localStorage.setItem('totalGames',data.total_games||0);
-    if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
-    document.getElementById('auth-screen').classList.remove('visible');
-    document.getElementById('nick-screen').classList.remove('visible');
-    document.getElementById('loading-screen').style.display='none';
-    // Показываем меню и обновляем данные
-    document.getElementById('menu').style.display='flex';
-    try { startMenuMusic(); } catch(e){}
-    if(window.game){ window.game._updateMenuStats(); }
-}
-
-async function _saveProfileToCloud(profileData){
-    if(!_sbUser)return;
-    await _SB.from('profiles').update(profileData).eq('id',_sbUser.id);
-}
-
-async function _syncScoreToCloud(bestScore,totalCoins,totalGames,bestCycle){
-    if(!_sbUser)return;
-    await _SB.from('profiles').update({
-        best_score:bestScore, coins:totalCoins,
-        total_games:totalGames, best_cycle:bestCycle
-    }).eq('id',_sbUser.id);
-}
-</script>
 <script type="module">
 import * as THREE from 'three';
 
@@ -2772,18 +2531,10 @@ class Game {
         const bioIn=document.getElementById('profile-bio');
         if(bioIn) bioIn.value=this.profileBio||'';
     }
-    async _renderLeaderboard() {
+    _renderLeaderboard() {
         const list=document.getElementById('leaderboard-list');
-        list.innerHTML='<div style="text-align:center;opacity:.5;padding:20px">⏳ Загружаем...</div>';
-        // Загружаем топ из Supabase
-        let realPlayers=[];
-        try{
-            const {data}=await _SB.from('profiles').select('username,avatar,best_score,skin,status,bio,best_cycle').order('best_score',{ascending:false}).limit(50);
-            if(data&&data.length) realPlayers=data.map(p=>({name:p.username,avatar:p.avatar||'🐻‍❄️',score:p.best_score||0,skin:p.skin||'polar',status:p.status||'',bio:p.bio||'',level:Math.max(1,Math.floor((p.best_score||0)/30)+1)}));
-        }catch(e){}
-        // Если Supabase недоступен — используем FAKE_LB
-        if(!realPlayers.length) realPlayers=[...FAKE_LB];
         list.innerHTML='';
+        const realPlayers=[...FAKE_LB];
         const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
         const me={name:this.profileName,avatar:this.profileAvatar,score:this.bestScore,
                   skin:this.selectedSkin,status:this.profileStatus,bio:this.profileBio,
@@ -3134,7 +2885,7 @@ class Game {
         }
         this._checkAchievements();
         // Сохраняем в Supabase
-        try{ _syncScoreToCloud(this.bestScore,this.totalCoins,this.totalGames,this.bestCycle); }catch(e){}
+
         document.getElementById('gameover-score').innerText=this.score;
         document.getElementById('gameover-best').innerText=this.bestScore;
         document.getElementById('gameover-coins').innerText=this.coinsCollected;
