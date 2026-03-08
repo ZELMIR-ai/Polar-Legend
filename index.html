@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Polar Legend — Арктический Раннер 3D</title>
     <meta name="description" content="Polar Legend — бесплатная 3D браузерная игра. Прыгай по платформам в арктике, соревнуйся с друзьями в мультиплеере!">
-    <meta name="keywords" content="polar legend, игра, 3D, раннер, платформер, арктика, медведь, мультиплеер, бесплатная игра">
+    <meta name="keywords" content="polar legend, игра, 3D, раннер, платформер, арктика, медведь, мультиплеер, бесплатная игра, браузерная игра">
     <meta property="og:title" content="Polar Legend — Арктический Раннер 3D">
     <meta property="og:description" content="Бесплатная 3D браузерная игра. Прыгай, соревнуйся, побеждай!">
     <meta name="theme-color" content="#0077be">
@@ -34,6 +34,2877 @@
 
         /* ===== МЕНЮ ===== */
         #menu {
+            position: fixed; inset: 0;
+            background: linear-gradient(170deg, #0a1628 0%, #0d2d4d 40%, #0077be 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 5000; overflow: hidden;
+        }
+        #menu::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px),
+                              radial-gradient(circle,rgba(255,255,255,.5) 1px,transparent 1px);
+            background-size: 120px 120px, 60px 60px;
+            background-position: 0 0, 30px 30px;
+            animation: starsDrift 30s linear infinite; opacity: .4;
+        }
+        @keyframes starsDrift { from{transform:translateY(0)}to{transform:translateY(120px)} }
+
+        .coin-icon {
+            width: 1.1em; height: 1.1em;
+            background: radial-gradient(circle at 35% 35%,#ffe066,#f0a000);
+            border-radius: 50%; box-shadow: 0 0 6px #ffd70088;
+            display: inline-block; flex-shrink: 0; vertical-align: middle;
+        }
+
+        /* ===== BRAWL-STYLE МЕНЮ ===== */
+        /* TOP BAR */
+        #menu-topbar {
+            position: absolute; top: 0; left: 0; right: 0; height: 52px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 8px; z-index: 5050;
+            background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,transparent 100%);
+        }
+        #menu-profile-chip {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,.45); border-radius: 28px; padding: 4px 12px 4px 4px;
+            border: 1px solid rgba(255,255,255,.18); cursor: pointer; backdrop-filter: blur(8px);
+            transition: all .2s;
+        }
+        #menu-profile-chip:hover { background: rgba(0,150,255,.35); }
+        #menu-profile-chip .chip-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg,#00c6ff,#0072ff);
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+        #menu-profile-chip .chip-info { line-height: 1.2; }
+        #menu-profile-chip .chip-name { font-size: .85rem; color: white; font-weight: 600; }
+        #menu-profile-chip .chip-level { font-size: .7rem; color: #ffd740; }
+
+        #menu-top-resources {
+            display: flex; align-items: center; gap: 6px;
+        }
+        .res-pill {
+            display: flex; align-items: center; gap: 4px;
+            background: rgba(0,0,0,.5); border-radius: 20px; padding: 4px 10px;
+            border: 1px solid rgba(255,255,255,.12); color: white;
+            font-size: .8rem; white-space: nowrap; backdrop-filter: blur(6px);
+        }
+        .res-pill span { font-size: .9rem; font-weight: 700; }
+
+        #menu-topbar-right {
+            display: flex; gap: 6px;
+        }
+        .topbar-icon-btn {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.18);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; cursor: pointer; backdrop-filter: blur(6px);
+            transition: all .2s;
+        }
+        .topbar-icon-btn:hover { background: rgba(255,255,255,.2); }
+
+        /* LEFT SIDEBAR */
+        #menu-sidebar-left {
+            position: absolute; left: 8px; top: 58px; bottom: 110px;
+            display: flex; flex-direction: column; gap: 7px; z-index: 5020;
+            justify-content: center;
+        }
+        .sb-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 68px; min-height: 60px; border-radius: 14px; cursor: pointer;
+            background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.15);
+            color: white; font-size: .62rem; gap: 3px; transition: all .2s;
+            backdrop-filter: blur(8px); padding: 6px 4px; text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,.3);
+        }
+        .sb-btn .sb-icon { font-size: 1.5rem; line-height: 1; }
+        .sb-btn:hover { background: rgba(0,150,255,.4); border-color: rgba(0,200,255,.5); transform: scale(1.05); }
+        .sb-btn:active { transform: scale(.95); }
+        .sb-badge {
+            position: absolute; top: -4px; right: -4px; background: #ff3b30;
+            width: 16px; height: 16px; border-radius: 50%; font-size: .55rem;
+            display: flex; align-items: center; justify-content: center;
+            border: 1.5px solid rgba(255,255,255,.8); color: white; font-weight: 700;
+        }
+
+        /* RIGHT SIDEBAR */
+        #menu-sidebar-right {
+            position: absolute; right: 8px; top: 58px; bottom: 110px;
+            display: flex; flex-direction: column; gap: 7px; z-index: 5020;
+            justify-content: center;
+        }
+
+        /* CENTER */
+        #menu-center {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 5010; position: relative; gap: 6px; margin-top: 0;
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+        }
+        #menu-bear-preview {
+            width: clamp(130px,22vmin,220px); height: clamp(130px,22vmin,220px);
+            position: relative; z-index: 5015;
+            filter: drop-shadow(0 8px 25px rgba(0,150,255,.4)); flex-shrink: 0;
+        }
+        .menu-title { text-align: center; z-index: 5010; position: relative; }
+        .menu-title h1 {
+            font-size: clamp(1.6rem,4vw,3rem); color: white;
+            text-shadow: 0 0 20px rgba(0,200,255,.5), 0 3px 0 rgba(0,0,0,.3);
+            line-height: 1.1; letter-spacing: 2px;
+        }
+        .menu-title h3 {
+            font-size: clamp(.7rem,1.5vw,1.1rem); color: rgba(100,200,255,.8);
+            margin-top: 2px; letter-spacing: 3px; text-transform: uppercase;
+        }
+        #level-badge {
+            background: linear-gradient(135deg,#ffd700,#ff8c00);
+            color: #1a1a1a; font-size: .75rem; padding: 3px 12px;
+            border-radius: 20px; white-space: nowrap; margin-top: 4px; display: inline-block;
+            box-shadow: 0 3px 10px rgba(255,150,0,.4);
+        }
+
+        /* BOTTOM BAR */
+        #menu-bottom {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+            display: flex; align-items: center; gap: 10px; padding: 12px 10px;
+            background: linear-gradient(0deg,rgba(0,0,0,.7) 0%,transparent 100%);
+            z-index: 5030;
+        }
+        #menu-mode-card {
+            flex: 1; height: 74px; background: rgba(0,0,0,.55);
+            border-radius: 14px; border: 1px solid rgba(255,255,255,.15);
+            display: flex; align-items: center; gap: 10px; padding: 0 14px;
+            cursor: pointer; backdrop-filter: blur(8px); transition: all .2s;
+            overflow: hidden; min-width: 0;
+        }
+        #menu-mode-card:hover { background: rgba(0,100,200,.4); border-color: rgba(0,200,255,.4); }
+        #menu-mode-icon { font-size: 1.8rem; flex-shrink: 0; }
+        #menu-mode-info { min-width: 0; }
+        #menu-mode-name { font-size: .85rem; color: white; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #menu-mode-desc { font-size: .65rem; color: rgba(255,255,255,.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        #menu-play-area { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+        .btn-main {
+            padding: 0 clamp(18px,4vw,40px); height: 50px;
+            font-size: clamp(1rem,2.5vw,1.5rem); border-radius: 14px; border: none;
+            background: linear-gradient(135deg,#ffe900,#ff9500);
+            color: #1a1a00; cursor: pointer;
+            box-shadow: 0 5px 0 #a05e00, 0 6px 20px rgba(255,150,0,.4);
+            font-family: 'Fredoka',sans-serif; transition: transform .1s,box-shadow .1s;
+            position: relative; z-index: 5025; letter-spacing: 2px; font-weight: 700;
+        }
+        .btn-main:hover { filter: brightness(1.05); }
+        .btn-main:active { transform: translateY(3px); box-shadow: 0 2px 0 #a05e00; }
+
+
+        /* Десктоп — крупные кнопки */
+        @media (min-height: 600px) and (min-width: 900px) {
+            .sb-btn { width: 88px; min-height: 76px; font-size: .78rem; gap: 5px; border-radius: 18px; }
+            .sb-btn .sb-icon { font-size: 1.9rem; }
+            #menu-topbar { height: 62px; }
+            #menu-sidebar-left, #menu-sidebar-right { gap: 10px; top: 70px; bottom: 116px; }
+            .res-pill { padding: 6px 14px; font-size: .95rem; }
+            .res-pill span { font-size: 1.05rem; }
+            #menu-profile-chip { padding: 5px 16px 5px 5px; }
+            #menu-profile-chip .chip-avatar { width: 44px; height: 44px; font-size: 1.6rem; }
+            #menu-profile-chip .chip-name { font-size: 1rem; }
+            #menu-profile-chip .chip-level { font-size: .8rem; }
+            .topbar-icon-btn { width: 44px; height: 44px; font-size: 1.3rem; border-radius: 12px; }
+            #menu-bottom { height: 116px; padding: 16px 14px; gap: 14px; }
+            #menu-mode-card { height: 84px; padding: 0 20px; gap: 14px; border-radius: 18px; }
+            #menu-mode-icon { font-size: 2.2rem; }
+            #menu-mode-name { font-size: 1.1rem; }
+            #menu-mode-desc { font-size: .8rem; }
+            .btn-main { height: 62px; padding: 0 50px; font-size: 1.7rem; border-radius: 18px; }
+            #level-badge { font-size: .9rem; padding: 4px 16px; border-radius: 24px; }
+        }
+
+        /* Десктоп */
+        @media (min-height: 600px) and (min-width: 900px) {
+            .sb-btn { width: 88px; min-height: 76px; font-size: .78rem; gap: 5px; border-radius: 18px; }
+            .sb-btn .sb-icon { font-size: 1.9rem; }
+            #menu-topbar { height: 62px; }
+            .btn-main { height: 62px; padding: 0 50px; font-size: 1.7rem; border-radius: 18px; }
+        }
+
+        /* Мобильные медиа */
+        @media (max-height: 460px) {
+            #menu-topbar { height: 44px; }
+            #menu-sidebar-left,#menu-sidebar-right { top: 50px; bottom: 90px; }
+            .sb-btn { width: 56px; min-height: 50px; font-size: .56rem; }
+            .sb-btn .sb-icon { font-size: 1.2rem; }
+            #menu-bear-preview { width: 90px; height: 90px; }
+            .menu-title h1 { font-size: 1.3rem; }
+            #menu-bottom { height: 84px; padding: 8px; gap: 7px; }
+            #menu-mode-card { height: 60px; padding: 0 10px; gap: 7px; }
+            #menu-mode-icon { font-size: 1.4rem; }
+            .btn-main { height: 42px; font-size: .9rem; }
+
+            .res-pill { padding: 3px 7px; font-size: .72rem; }
+            #menu-profile-chip .chip-avatar { width: 30px; height: 30px; font-size: 1rem; }
+        }
+        @media (max-height: 350px) {
+            #menu-bear-preview { width: 65px; height: 65px; }
+            #menu-sidebar-left, #menu-sidebar-right { gap: 4px; }
+            .sb-btn { width: 50px; min-height: 44px; }
+        }
+
+        /* ===== HUD ===== */
+        #hud {
+            position: absolute; top: clamp(8px,2vw,20px); left: clamp(8px,2vw,20px); color: white;
+            font-size: clamp(1rem,3.5vmin,2rem); pointer-events: none; z-index: 100;
+            background: rgba(0,0,0,.45); padding: clamp(5px,1.2vmin,10px) clamp(10px,3vmin,20px); border-radius: 40px;
+            backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.1);
+            display: none; align-items: center; gap: 8px;
+        }
+        #coin-count {
+            position: absolute; top: clamp(8px,2vw,20px); right: clamp(8px,2vw,20px); color: white;
+            font-size: clamp(1rem,3.5vmin,2rem); pointer-events: none; z-index: 100;
+            background: rgba(0,0,0,.45); padding: clamp(5px,1.2vmin,10px) clamp(10px,3vmin,20px); border-radius: 40px;
+            backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.1);
+            display: none; align-items: center; gap: 6px;
+        }
+        #multiplier-badge {
+            position: absolute; top: clamp(8px,2vw,20px); left: 50%; transform: translateX(-50%);
+            color: white; font-size: clamp(.9rem,3vmin,1.8rem); pointer-events: none; z-index: 100;
+            background: rgba(255,150,0,.7); padding: clamp(4px,1vmin,8px) clamp(10px,3vmin,20px); border-radius: 40px;
+            backdrop-filter: blur(8px); display: none; align-items: center; gap: 6px; white-space: nowrap;
+        }
+        #mp-opponent-hud {
+            position: absolute; top: clamp(44px,10vmin,70px); left: 50%; transform: translateX(-50%);
+            display: none; align-items: center; gap: 6px;
+            background: rgba(255,100,0,.5); padding: clamp(4px,1vmin,8px) clamp(10px,3vmin,18px); border-radius: 40px;
+            color: white; font-size: clamp(.75rem,2.5vmin,1.5rem); pointer-events: none; z-index: 100;
+            backdrop-filter: blur(8px); border: 1px solid rgba(255,150,0,.3);
+            white-space: nowrap;
+        }
+
+        /* ===== GAME OVER ===== */
+        #game-over {
+            position: fixed; inset: 0; background: rgba(0,0,0,.85);
+            backdrop-filter: blur(10px); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            z-index: 6000; color: white; animation: fadeIn .5s;
+        }
+        @keyframes fadeIn { from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)} }
+        .game-over-title {
+            font-size: 4rem;
+            background: linear-gradient(135deg,#ff6b6b,#ff4757);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 10px;
+        }
+        .game-over-stats {
+            font-size: clamp(1.1rem,3.5vmin,2.2rem); margin: 10px; text-align: center;
+            background: rgba(255,255,255,.08); padding: clamp(12px,3vmin,30px) clamp(20px,5vmin,50px); border-radius: 40px;
+            border: 1px solid rgba(255,255,255,.1); min-width: min(90vw,350px);
+        }
+        .game-over-stats div { margin: 12px 0; display: flex; align-items: center; gap: 10px; justify-content: center; }
+        .go-new-best { font-size: 1.8rem; color: #ffd700; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.05)} }
+        .game-over-btns { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
+        .btn-secondary {
+            padding: 15px 40px; font-size: 1.8rem; border-radius: 40px; border: none;
+            background: rgba(255,255,255,.1); color: white; cursor: pointer;
+            font-family: 'Fredoka',sans-serif; transition: all .2s;
+            border: 1px solid rgba(255,255,255,.2);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,.2); }
+
+        /* ===== ДЖОЙСТИК (из рабочей версии) ===== */
+        #ctrls { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
+        .stick-zone {
+            position: absolute; bottom: clamp(12px,4vw,50px); left: clamp(12px,4vw,50px);
+            width: clamp(90px,22vmin,140px); height: clamp(90px,22vmin,140px);
+            background: rgba(255,255,255,.3); border: 2px solid rgba(255,255,255,.5);
+            border-radius: 50%; pointer-events: auto;
+        }
+        .stick-nub {
+            position: absolute; top: 50%; left: 50%;
+            width: clamp(38px,10vmin,60px); height: clamp(38px,10vmin,60px);
+            background: white; border-radius: 50%; transform: translate(-50%,-50%);
+            box-shadow: 0 3px 8px rgba(0,0,0,.2); pointer-events: none;
+        }
+        .btn-jump {
+            position: absolute; bottom: clamp(18px,5vw,60px); right: clamp(18px,5vw,60px);
+            width: clamp(72px,18vmin,110px); height: clamp(72px,18vmin,110px);
+            background: rgba(255,255,255,.45); border: 3px solid white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #0077be;
+            font-size: 2rem; pointer-events: auto; backdrop-filter: blur(5px);
+        }
+        .btn-jump:active { background: rgba(255,255,255,.8); }
+
+        /* ===== МОДАЛКИ ===== */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,10,.7);
+            backdrop-filter: blur(10px); display: none;
+            justify-content: center; align-items: center; z-index: 7000;
+        }
+        .modal-content {
+            background: linear-gradient(170deg,rgba(10,30,60,.97),rgba(0,60,120,.97));
+            border: 1px solid rgba(100,180,255,.2); border-radius: 40px; padding: 35px;
+            max-width: 1000px; width: 92%; max-height: 85vh; overflow-y: auto;
+            color: white; box-shadow: 0 20px 60px rgba(0,0,0,.7);
+        }
+        .modal-content::-webkit-scrollbar { width: 6px; }
+        .modal-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 10px; }
+        .modal-content h2 {
+            text-align: center; font-size: 3rem; margin-bottom: 25px;
+            background: linear-gradient(135deg,#7ec8ff,#fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .shop-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+        .shop-tab {
+            padding: 12px 28px; background: rgba(255,255,255,.07);
+            border-radius: 40px; font-size: 1.8rem; cursor: pointer;
+            transition: all .2s; border: 1px solid rgba(255,255,255,.1);
+            color: rgba(255,255,255,.7);
+        }
+        .shop-tab.active { background: rgba(0,150,255,.3); border-color: rgba(0,200,255,.4); color: white; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        .gift-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 16px; margin-bottom: 20px; }
+        .gift-card {
+            background: rgba(255,255,255,.06); border-radius: 25px; padding: 16px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border: 1px solid rgba(255,255,255,.1); transition: all .2s;
+        }
+        .gift-card:hover { transform: translateY(-5px); border-color: rgba(0,200,255,.3); }
+        .gift-img-wrap {
+            width: 90px; height: 90px; background: rgba(255,255,255,.07);
+            border-radius: 18px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+        }
+        .gift-img-wrap img { width: 80px; height: 80px; object-fit: contain; }
+        .gift-img-placeholder { font-size: 2.5rem; }
+        .gift-name { font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; }
+        .gift-price { font-size: 1.6rem; margin: 6px 0; display: flex; align-items: center; gap: 6px; }
+        .rarity-green { color: #69f0ae; } .rarity-yellow { color: #ffd740; } .rarity-red { color: #ff5252; }
+        .rarity-badge { font-size: .9rem; padding: 2px 10px; border-radius: 20px; margin-bottom: 6px; }
+        .rarity-badge.green { background: rgba(105,240,174,.15); color: #69f0ae; }
+        .rarity-badge.yellow { background: rgba(255,215,64,.15); color: #ffd740; }
+        .rarity-badge.red { background: rgba(255,82,82,.15); color: #ff5252; }
+        .btn-buy,.btn-sell,.btn-open { padding: 10px 20px; border-radius: 30px; border: none; font-size: 1.3rem; font-family: 'Fredoka',sans-serif; cursor: pointer; transition: all .1s; width: 100%; }
+        .btn-buy { background: linear-gradient(135deg,#00c853,#1b5e20); color: white; }
+        .btn-buy.disabled { background: #444; pointer-events: none; opacity: .5; }
+        .btn-sell { background: linear-gradient(135deg,#ff5252,#b71c1c); color: white; }
+        .btn-open { background: linear-gradient(135deg,#ffd740,#e65100); color: black; font-weight: bold; }
+        .promo-section { margin: 20px 0; padding: 20px; background: rgba(255,255,255,.05); border-radius: 30px; text-align: center; border: 1px solid rgba(255,255,255,.08); }
+        .promo-input { padding: 14px 20px; font-size: 1.5rem; border-radius: 30px; border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: white; width: 55%; max-width: 280px; margin-right: 8px; font-family: 'Fredoka',sans-serif; outline: none; }
+        .promo-input::placeholder { color: rgba(255,255,255,.4); }
+        .promo-btn { padding: 14px 28px; font-size: 1.5rem; border-radius: 30px; border: none; background: linear-gradient(135deg,#ffd700,#ff8c00); color: black; cursor: pointer; font-family: 'Fredoka',sans-serif; }
+        .settings-content { background: linear-gradient(170deg,rgba(10,30,60,.97),rgba(0,60,120,.97)); border: 1px solid rgba(100,180,255,.2); border-radius: 50px; padding: 40px; color: white; text-align: center; min-width: 340px; box-shadow: 0 20px 60px rgba(0,0,0,.7); max-height: 85vh; overflow-y: auto; }
+        .settings-content h2 { font-size: 2.8rem; margin-bottom: 25px; color: #7ec8ff; }
+        .setting-item { font-size: 1.9rem; margin: 18px 0; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; }
+        .toggle-wrap { position: relative; width: 60px; height: 30px; }
+        .toggle-wrap input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,.2); border-radius: 30px; cursor: pointer; transition: .3s; }
+        .toggle-slider::before { content: ''; position: absolute; width: 24px; height: 24px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: .3s; }
+        input:checked + .toggle-slider { background: linear-gradient(135deg,#00c6ff,#0072ff); }
+        input:checked + .toggle-slider::before { transform: translateX(30px); }
+        .close-btn { display: block; margin: 20px auto 0; padding: 14px 40px; background: rgba(255,255,255,.1); border-radius: 40px; border: 1px solid rgba(255,255,255,.2); font-size: 1.7rem; cursor: pointer; color: white; font-family: 'Fredoka',sans-serif; transition: all .2s; }
+        .close-btn:hover { background: rgba(255,255,255,.2); }
+        /* Крестик-закрывашка для модалок */
+        .modal-close-x {
+            position: absolute; top: 12px; right: 14px; width: 36px; height: 36px;
+            background: rgba(255,255,255,.12); border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 1.2rem; color: white; transition: all .2s; z-index: 10;
+            line-height: 1;
+        }
+        .modal-close-x:hover { background: rgba(255,80,80,.5); border-color: #ff5252; }
+        .modal-content { position: relative; }
+        .settings-content { position: relative; }
+
+        /* ===== ПРОФИЛЬ ===== */
+        .profile-header { display: flex; align-items: center; gap: 20px; background: rgba(255,255,255,.05); border-radius: 30px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,.1); }
+        .avatar-circle { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg,#00c6ff,#0072ff); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; flex-shrink: 0; cursor: pointer; }
+        .profile-info { flex: 1; }
+        .profile-name { font-size: 2.2rem; font-weight: 700; }
+        .profile-sub { font-size: 1.2rem; color: rgba(255,255,255,.5); margin-top: 4px; }
+        .profile-edit-btn { padding: 8px 20px; border-radius: 30px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: white; font-size: 1.3rem; cursor: pointer; font-family: 'Fredoka',sans-serif; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: rgba(255,255,255,.06); border-radius: 20px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,.08); }
+        .stat-card .s-val { font-size: 2rem; font-weight: 700; color: #7ec8ff; }
+        .stat-card .s-lbl { font-size: 1.1rem; color: rgba(255,255,255,.5); margin-top: 4px; }
+        .name-input { padding: 12px 20px; font-size: 1.6rem; border-radius: 25px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08); color: white; width: 100%; margin: 10px 0; font-family: 'Fredoka',sans-serif; outline: none; }
+        .avatar-picker { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 15px 0; }
+        .avatar-opt { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.1); border: 2px solid transparent; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: all .2s; }
+        .avatar-opt:hover,.avatar-opt.selected { border-color: #00c6ff; background: rgba(0,150,255,.2); }
+
+        /* ===== ДОСТИЖЕНИЯ ===== */
+        .achievements-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 12px; }
+        .achievement-card { background: rgba(255,255,255,.05); border-radius: 18px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,.08); }
+        .achievement-card.unlocked { background: rgba(255,215,64,.1); border-color: rgba(255,215,64,.3); }
+        .achievement-card.locked { opacity: .4; filter: grayscale(1); }
+        .ach-icon { font-size: 2rem; margin-bottom: 6px; }
+        .ach-name { font-size: 1.1rem; font-weight: 600; }
+        .ach-desc { font-size: .9rem; color: rgba(255,255,255,.4); margin-top: 3px; }
+
+        /* ===== ЛИДЕРБОРД ===== */
+        .leaderboard-row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 16px; margin-bottom: 8px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); }
+        .leaderboard-row.me { background: rgba(0,150,255,.15); border-color: rgba(0,200,255,.3); }
+        .lb-rank { font-size: 1.5rem; width: 36px; text-align: center; font-weight: 700; }
+        .lb-avatar { font-size: 1.6rem; }
+        .lb-name { flex: 1; font-size: 1.5rem; }
+        .lb-score { font-size: 1.5rem; color: #ffd740; font-weight: 600; }
+
+        /* ===== МУЛЬТИПЛЕЕР ЛОББИ ===== */
+        #mp-lobby {
+            position: fixed; inset: 0;
+            background: linear-gradient(170deg,#0a1628 0%,#0d2d4d 40%,#0077be 100%);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 5500; color: white; gap: 20px;
+        }
+        #mp-lobby::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px);
+            background-size: 80px 80px; opacity: .2;
+            animation: starsDrift 20s linear infinite;
+        }
+        .mp-lobby-box { position:relative;
+            background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15);
+            border-radius: 40px; padding: 40px 50px; text-align: center;
+            backdrop-filter: blur(20px); z-index: 1; min-width: 340px; max-width: 480px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+        }
+        .mp-lobby-box h2 { font-size: 2.6rem; margin-bottom: 20px; color: #7ec8ff; }
+        .mp-big-btn { width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 1.7rem; font-family: 'Fredoka',sans-serif; cursor: pointer; transition: all .2s; margin-bottom: 12px; }
+        .mp-btn-create { background: linear-gradient(135deg,#00c853,#1b5e20); color: white; box-shadow: 0 6px 0 #0a3010; }
+        .mp-btn-create:active { transform: translateY(3px); box-shadow: 0 3px 0 #0a3010; }
+        .mp-btn-join { background: linear-gradient(135deg,#00c6ff,#0072ff); color: white; box-shadow: 0 6px 0 #003080; }
+        .mp-btn-join:active { transform: translateY(3px); box-shadow: 0 3px 0 #003080; }
+        .mp-btn-back { background: rgba(255,255,255,.08); color: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.15); }
+        .mp-code-display { background: rgba(0,0,0,.3); border-radius: 20px; padding: 16px; margin: 12px 0; border: 1px solid rgba(0,200,255,.3); }
+        .mp-code-val { font-size: 3rem; letter-spacing: 6px; color: #00e5ff; font-weight: 700; text-shadow: 0 0 20px rgba(0,200,255,.5); }
+        .mp-code-hint { font-size: 1.1rem; color: rgba(255,255,255,.4); margin-top: 4px; }
+        .mp-code-input { width: 100%; padding: 14px; font-size: 2rem; text-align: center; border-radius: 20px; border: 2px solid rgba(0,200,255,.4); background: rgba(0,0,0,.3); color: white; font-family: 'Fredoka',sans-serif; letter-spacing: 4px; outline: none; margin-bottom: 12px; }
+        .mp-status { font-size: 1.3rem; color: rgba(255,255,255,.6); margin: 8px 0; min-height: 26px; }
+        .mp-status.ok { color: #69f0ae; } .mp-status.err { color: #ff5252; } .mp-status.wait { color: #ffd740; }
+        .mp-players-info { display: flex; gap: 16px; justify-content: center; margin: 12px 0; }
+        .mp-player-slot { background: rgba(255,255,255,.06); border-radius: 18px; padding: 12px 16px; text-align: center; border: 1px solid rgba(255,255,255,.1); flex: 1; }
+        .mp-player-slot.active { border-color: rgba(0,200,255,.4); background: rgba(0,150,255,.1); }
+        .slot-avatar { font-size: 2rem; }
+        .slot-name { font-size: 1.1rem; margin-top: 4px; }
+        .opponent-label { position: fixed; background: rgba(255,100,0,.75); padding: 3px 10px; border-radius: 20px; font-size: 1rem; color: white; pointer-events: none; white-space: nowrap; transform: translateX(-50%); z-index: 200; font-family: 'Fredoka',sans-serif; }
+
+        /* ===== ТОСТ ===== */
+        #toast {
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,200,100,.9); color: white; padding: 14px 30px; border-radius: 40px;
+            font-size: 1.8rem; z-index: 9000; display: none; pointer-events: none;
+            backdrop-filter: blur(10px); white-space: nowrap;
+        }
+        #toast.error { background: rgba(255,70,70,.9); }
+
+        /* ===== ЗАГРУЗКА ===== */
+        #loading-screen { position: fixed; inset: 0; background: linear-gradient(170deg,#0a1628,#0d2d4d); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: white; gap: 30px; }
+        .loading-logo { font-size: 4rem; letter-spacing: 4px; text-shadow: 0 0 30px rgba(0,200,255,.7); }
+        .loading-bar-bg { width: 300px; height: 8px; background: rgba(255,255,255,.15); border-radius: 10px; overflow: hidden; }
+        .loading-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg,#00c6ff,#0072ff); border-radius: 10px; transition: width .3s; }
+        .loading-text { font-size: 1.5rem; color: rgba(255,255,255,.5); }
+
+        canvas { display: block; }
+        /* ===== СКИНЫ ===== */
+        .skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:20px}
+        .skin-card{background:rgba(255,255,255,.07);border-radius:25px;padding:18px;display:flex;flex-direction:column;align-items:center;text-align:center;border:2px solid rgba(255,255,255,.1);transition:all .2s;cursor:pointer}
+        .skin-card:hover{transform:translateY(-4px);border-color:rgba(0,200,255,.4)}
+        .skin-card.sk-active{border-color:#00e5ff;background:rgba(0,200,255,.15);box-shadow:0 0 20px rgba(0,200,255,.3)}
+        .skin-card.sk-locked{opacity:.55;cursor:not-allowed}
+        .skin-emoji{font-size:3rem;margin-bottom:8px;background:rgba(255,255,255,.07);border-radius:18px;width:72px;height:72px;display:flex;align-items:center;justify-content:center}
+        .skin-name{font-size:1.4rem;font-weight:600;margin-bottom:4px}
+        .skin-price{font-size:1.2rem;color:#ffd740;display:flex;align-items:center;gap:5px}
+
+        /* ===== РЕЖИМЫ ===== */
+        .mode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+        .mode-card{background:rgba(255,255,255,.07);border-radius:25px;padding:22px 18px;text-align:center;border:2px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s}
+        .mode-card:hover{transform:translateY(-4px);border-color:rgba(0,200,255,.4);background:rgba(0,150,255,.15)}
+        .mode-card.md-active{border-color:#00e5ff;background:rgba(0,200,255,.2)}
+        .mode-icon{font-size:3rem;margin-bottom:10px}
+        .mode-name{font-size:1.6rem;font-weight:700;margin-bottom:6px}
+        .mode-desc{font-size:.95rem;color:rgba(255,255,255,.5);line-height:1.4}
+
+        /* ===== ПУБЛИЧНОЕ ЛОББИ ===== */
+        .lobby-list{display:flex;flex-direction:column;gap:10px;max-height:220px;overflow-y:auto;margin:12px 0;padding-right:4px}
+        .lobby-list::-webkit-scrollbar{width:4px}
+        .lobby-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:10px}
+        .lobby-row{background:rgba(255,255,255,.06);border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s}
+        .lobby-row:hover{background:rgba(0,150,255,.15);border-color:rgba(0,200,255,.3)}
+        .lobby-row-name{flex:1;font-size:1.4rem}
+        .lobby-row-join{padding:6px 16px;border-radius:20px;background:linear-gradient(135deg,#00c6ff,#0072ff);border:none;color:white;font-family:'Fredoka',sans-serif;font-size:1.2rem;cursor:pointer}
+
+        /* ===== HUD доп. ===== */
+        #mode-hud{position:absolute;top:20px;left:50%;transform:translateX(-50%);color:white;font-size:1.3rem;pointer-events:none;z-index:100;background:rgba(0,0,0,.45);padding:7px 18px;border-radius:30px;backdrop-filter:blur(8px);display:none;white-space:nowrap}
+        #timer-hud{position:absolute;top:62px;left:50%;transform:translateX(-50%);color:#ffd740;font-size:2rem;font-weight:700;pointer-events:none;z-index:100;background:rgba(0,0,0,.5);padding:7px 22px;border-radius:30px;display:none}
+
+        /* ===== РАСШИРЕННЫЙ ПРОФИЛЬ ===== */
+        .color-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+        .color-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;flex-shrink:0}
+        .color-dot.cd-sel{border-color:white;transform:scale(1.2)}
+        .status-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+        .status-badge{padding:6px 14px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);font-size:1.05rem;cursor:pointer;transition:all .2s}
+        .status-badge.sb-sel{background:rgba(0,150,255,.3);border-color:#00c6ff}
+        .bio-input{padding:10px 16px;font-size:1.2rem;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.07);color:white;width:100%;margin:8px 0;font-family:'Fredoka',sans-serif;outline:none;resize:none;height:68px}
+        .field-label{font-size:1.2rem;color:rgba(255,255,255,.45);margin:10px 0 4px}
+
+    </style>
+</head>
+<body>
+
+<!-- ЗАГРУЗКА -->
+<div id="loading-screen">
+    <div class="loading-logo">🐻‍❄️ POLAR LEGEND</div>
+    <div class="loading-bar-bg"><div class="loading-bar-fill" id="load-bar"></div></div>
+    <div class="loading-text" id="load-text">Загрузка...</div>
+</div>
+
+<!-- ПОВОРОТ -->
+<div id="rot-warn">
+    <div class="rot-icon">📱</div>
+    <h2>ПОВЕРНИ ЭКРАН</h2>
+    <p style="font-size:1.4rem;opacity:.7">Только горизонтальный режим</p>
+</div>
+
+<!-- ГЛАВНОЕ МЕНЮ -->
+<div id="menu" style="display:none">
+    <!-- TOP BAR -->
+    <div id="menu-topbar">
+        <div id="menu-profile-chip" id="profile-chip-btn">
+            <div class="chip-avatar" id="chip-avatar-el">🐻‍❄️</div>
+            <div class="chip-info">
+                <div class="chip-name" id="chip-name-el">Игрок</div>
+                <div class="chip-level">⭐ <span id="player-level">1</span> LVL</div>
+            </div>
+        </div>
+        <div id="menu-top-resources">
+            <div class="res-pill">🏆 <span id="best-score">0</span></div>
+            <div class="res-pill"><span class="coin-icon"></span>&nbsp;<span id="total-coins">0</span></div>
+        </div>
+        <div id="menu-topbar-right">
+            <div class="topbar-icon-btn" id="settings-btn">⚙️</div>
+            <div class="topbar-icon-btn" id="news-btn">📰</div>
+        </div>
+    </div>
+
+    <!-- LEFT SIDEBAR -->
+    <div id="menu-sidebar-left">
+        <div class="sb-btn" id="shop-btn" style="position:relative"><span class="sb-icon">🛒</span>Магазин</div>
+        <div class="sb-btn" id="inventory-btn"><span class="sb-icon">🎒</span>Инвентарь</div>
+        <div class="sb-btn" id="skins-btn"><span class="sb-icon">🎨</span>Скины</div>
+    </div>
+
+    <!-- CENTER -->
+    <div id="menu-center">
+        <div class="menu-title"><h1>POLAR LEGEND</h1><h3>Arctic Runner</h3></div>
+        <div id="level-badge">⭐ <span id="player-level-2">1</span> LVL</div>
+        <div id="menu-bear-preview">
+            <div style="width:100%;height:100%" id="preview-bear"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div id="menu-sidebar-right">
+        <div class="sb-btn" id="mp-btn"><span class="sb-icon">🌐</span>Мультиплеер</div>
+        <div class="sb-btn" id="friends-btn"><span class="sb-icon">👥</span>Друзья</div>
+        <div class="sb-btn" id="leaderboard-btn"><span class="sb-icon">🏅</span>Рейтинг</div>
+        <div class="sb-btn" id="achievements-btn"><span class="sb-icon">🏆</span>Достижения</div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div id="menu-bottom">
+        <div id="menu-mode-card" id="modes-btn-card">
+            <div id="menu-mode-icon">🎮</div>
+            <div id="menu-mode-info">
+                <div id="menu-mode-name">Классика</div>
+                <div id="menu-mode-desc">Стандартный режим</div>
+            </div>
+        </div>
+        <div id="menu-play-area">
+            <button class="btn-main" id="start-btn">▶ ИГРАТЬ</button>
+        </div>
+    </div>
+</div>
+
+<!-- HUD -->
+<div id="hud">🏆 <span id="score-val">0</span></div>
+<div id="coin-count"><span class="coin-icon"></span> <span id="coin-val">0</span></div>
+<div id="multiplier-badge">✨ x<span id="mult-val">1</span></div>
+<div id="mp-opponent-hud">👤 <span id="mp-opp-name">Друг</span>: 🏆 <span id="mp-opp-score">0</span></div>
+
+<!-- МУЛЬТИПЛЕЕР ЛОББИ -->
+<div id="mp-lobby">
+    <div class="mp-lobby-box" id="mp-screen-matchmaking" style="display:none;text-align:center">
+        <div id="mp-host-cancel" style="display:none"></div>
+        <div style="font-size:2.5rem;margin-bottom:8px">🌍</div>
+        <div style="font-size:1.4rem;font-weight:700;color:white;margin-bottom:6px">Поиск игры</div>
+        <div id="mm-status" style="font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:16px">Ищем игроков...</div>
+        <div id="mm-players" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:20px"></div>
+        <div id="mm-timer" style="font-size:2rem;color:#ffd740;font-weight:700;margin-bottom:16px">0:00</div>
+        <button class="mp-big-btn mp-btn-back" id="mm-cancel">✕ Отмена</button>
+    </div>
+    <div class="mp-lobby-box" id="mp-screen-choose">
+        <h2>🌐 МУЛЬТИПЛЕЕР</h2>
+        <p class="mp-status">Играй с другом по сети!</p>
+        <button class="mp-big-btn mp-btn-create" id="mp-do-create">🎮 СОЗДАТЬ ИГРУ</button>
+        <button class="mp-big-btn mp-btn-join" id="mp-do-join-open">🔗 ВОЙТИ ПО КОДУ</button>
+        <button class="mp-big-btn" id="mp-do-quickjoin" style="background:linear-gradient(135deg,#ff6b35,#ee0979);color:white;box-shadow:0 5px 0 #7a0030">🌍 БЫСТРОЕ ЛОББИ</button>
+        <button class="mp-big-btn" id="mp-do-fb-create" style="background:linear-gradient(135deg,#ff9800,#f44336);color:white;box-shadow:0 5px 0 #7a0000">🌍 ГЛОБАЛЬНАЯ ИГРА</button>
+        <button class="mp-big-btn mp-btn-back" id="mp-back-to-menu">✕ ЗАКРЫТЬ</button>
+    </div>
+    <div class="mp-lobby-box" id="mp-screen-quicklobby" style="display:none">
+        <h2>🌍 БЫСТРОЕ ЛОББИ</h2>
+        <p class="mp-status" id="ql-status">Поиск игр...</p>
+        <div class="lobby-list" id="ql-list"></div>
+        <button class="mp-big-btn mp-btn-create" id="ql-host-btn" style="margin-top:8px">🎮 Создать игру</button>
+        <div class="modal-close-x" id="ql-cancel" style="position:absolute;top:12px;right:14px">✕</div>
+    </div>
+    <div class="mp-lobby-box" id="mp-screen-host" style="display:none">
+        <h2>🎮 ТВОЯ ИГРА</h2>
+        <p class="mp-status wait" id="mp-host-status">⏳ Получаем код...</p>
+        <div class="mp-code-display">
+            <div class="mp-code-val" id="mp-room-code">------</div>
+            <div class="mp-code-hint">Отправь этот код другу</div>
+        </div>
+        <button class="mp-big-btn" id="mp-copy-code" style="background:rgba(255,215,0,.2);border:1px solid rgba(255,215,0,.4);color:#ffd740;margin-bottom:12px;">📋 СКОПИРОВАТЬ КОД</button>
+        <div class="mp-players-info">
+            <div class="mp-player-slot active"><div class="slot-avatar" id="mp-slot-me-av">🐻‍❄️</div><div class="slot-name" id="mp-slot-me-name">Ты</div></div>
+            <div class="mp-player-slot" id="mp-slot-opp"><div class="slot-avatar">❓</div><div class="slot-name">Ждём...</div></div>
+        </div>
+        <div class="modal-close-x" id="mp-host-cancel" onclick="window.game&&window.game.mp&&window.game.mp.close()" style="position:absolute;top:12px;right:14px">✕</div>
+    </div>
+    <div class="mp-lobby-box" id="mp-screen-join" style="display:none">
+        <h2>🔗 ВОЙТИ В ИГРУ</h2>
+        <input class="mp-code-input" id="mp-join-input" placeholder="Введи код..." maxlength="6">
+        <button class="mp-big-btn mp-btn-join" id="mp-do-connect">✅ ПОДКЛЮЧИТЬСЯ</button>
+        <div class="mp-status" id="mp-join-status"></div>
+        <div class="modal-close-x" id="mp-join-cancel" style="position:absolute;top:12px;right:14px">✕</div>
+    </div>
+    <div class="mp-lobby-box" id="mp-screen-ready" style="display:none">
+        <h2>✅ ГОТОВО!</h2>
+        <div class="mp-players-info">
+            <div class="mp-player-slot active"><div class="slot-avatar" id="mp-ready-me-av">🐻‍❄️</div><div class="slot-name" id="mp-ready-me-name">Ты</div></div>
+            <div class="mp-player-slot active"><div class="slot-avatar" id="mp-ready-opp-av">🐻</div><div class="slot-name" id="mp-ready-opp-name">Друг</div></div>
+        </div>
+        <div class="mp-status ok">Оба подключены! 🎉</div>
+        <button class="mp-big-btn mp-btn-create" id="mp-start-game" style="margin-top:10px">▶ НАЧАТЬ ИГРУ</button>
+        <div class="modal-close-x" id="mp-ready-cancel" style="position:absolute;top:12px;right:14px">✕</div>
+    </div>
+</div>
+
+<!-- GAME OVER -->
+<div id="game-over">
+    <div class="game-over-title">GAME OVER</div>
+    <div id="go-new-best" class="go-new-best" style="display:none">🏆 НОВЫЙ РЕКОРД!</div>
+    <div class="game-over-stats">
+        <div>🏆 СЧЁТ: <strong><span id="gameover-score">0</span></strong></div>
+        <div>🏅 РЕКОРД: <strong><span id="gameover-best">0</span></strong></div>
+        <div><span class="coin-icon"></span> МОНЕТЫ: <strong><span id="gameover-coins">0</span></strong></div>
+    </div>
+    <div class="game-over-btns">
+        <button class="btn-main" id="restart-btn">🔄 ЕЩЁ РАЗ</button>
+        <button class="btn-secondary" id="back-to-menu">🏠 МЕНЮ</button>
+    </div>
+</div>
+
+<!-- ДЖОЙСТИК -->
+<div id="ctrls">
+    <div class="stick-zone" id="j-zone"><div class="stick-nub" id="j-nub"></div></div>
+    <div class="btn-jump" id="j-btn">↑</div>
+</div>
+
+<!-- МАГАЗИН -->
+<div id="shop-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('shop-modal').style.display='none'">✕</div>
+        <h2>🛒 МАГАЗИН</h2>
+        <div class="shop-tabs">
+            <div class="shop-tab active" data-tab="gifts">🎁 Подарки</div>
+            <div class="shop-tab" data-tab="boxes">📦 Боксы</div>
+        </div>
+        <div class="tab-pane active" id="gifts-tab"><div class="gift-grid" id="shop-grid"></div></div>
+        <div class="tab-pane" id="boxes-tab"><div class="gift-grid" id="boxes-grid"></div></div>
+        <div class="promo-section">
+            <div style="font-size:1.8rem;margin-bottom:15px">🎟️ ПРОМОКОД</div>
+            <input type="text" class="promo-input" id="promo-code" placeholder="Введи код...">
+            <button class="promo-btn" id="activate-promo">Активировать</button>
+        </div>
+        
+    </div>
+</div>
+
+<!-- ИНВЕНТАРЬ -->
+<div id="inventory-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('inventory-modal').style.display='none'">✕</div>
+        <h2>🎒 ИНВЕНТАРЬ</h2>
+        <div class="gift-grid" id="inventory-grid"></div>
+        
+    </div>
+</div>
+
+<!-- ПРОФИЛЬ -->
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('profile-modal').style.display='none'">✕</div>
+        <h2>👤 ПРОФИЛЬ</h2>
+        <div class="profile-header">
+            <div class="avatar-circle" id="profile-avatar-display">🐻‍❄️</div>
+            <div class="profile-info">
+                <div class="profile-name" id="profile-name-display">Игрок</div>
+                <div class="profile-sub" id="profile-sub-display">Уровень 1</div>
+            </div>
+            <button class="profile-edit-btn" id="edit-profile-btn">✏️ Изменить</button>
+        </div>
+        <div id="profile-editor" style="display:none;background:rgba(255,255,255,.04);border-radius:25px;padding:20px;margin-bottom:20px;border:1px solid rgba(255,255,255,.08)">
+            <div class="field-label">👤 Никнейм</div>
+            <input type="text" class="name-input" id="profile-name-input" placeholder="Введи имя..." maxlength="20">
+            <div class="field-label">🎭 Аватар</div>
+            <div class="avatar-picker" id="avatar-picker"></div>
+            <div class="field-label">🎨 Цвет ника</div>
+            <div class="color-row" id="color-picker-row"></div>
+            <div class="field-label">🏷️ Статус</div>
+            <div class="status-row" id="status-picker-row"></div>
+            <div class="field-label">✏️ О себе</div>
+            <textarea class="bio-input" id="profile-bio" placeholder="Расскажи немного о себе..." maxlength="100"></textarea>
+            <button class="btn-main" id="save-profile-btn" style="margin-top:10px;font-size:1.4rem;padding:10px 30px">💾 Сохранить</button>
+        </div>
+        <div id="profile-bio-display" style="font-size:1.1rem;color:rgba(255,255,255,.45);text-align:center;padding:4px 0;font-style:italic;min-height:20px"></div>
+        <div id="profile-status-display" style="text-align:center;margin:5px 0;font-size:1.2rem;min-height:20px"></div>
+        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="stat-card"><div class="s-val" id="ps-best">0</div><div class="s-lbl">Рекорд</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-coins">0</div><div class="s-lbl">Монет</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-level">1</div><div class="s-lbl">Уровень</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-games">0</div><div class="s-lbl">Игр</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-platforms">0</div><div class="s-lbl">Платформ</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-items">0</div><div class="s-lbl">Предметов</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-bestcycle">0</div><div class="s-lbl">Лучший цикл</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-ach">0</div><div class="s-lbl">Достижений</div></div>
+            <div class="stat-card"><div class="s-val" id="ps-skin">🐻‍❄️</div><div class="s-lbl">Скин</div></div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- ДОСТИЖЕНИЯ -->
+<div id="achievements-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('achievements-modal').style.display='none'">✕</div>
+        <h2>🏆 ДОСТИЖЕНИЯ</h2>
+        <div class="achievements-grid" id="achievements-grid"></div>
+        
+    </div>
+</div>
+
+<!-- РЕЙТИНГ -->
+<div id="leaderboard-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('leaderboard-modal').style.display='none'">✕</div>
+        <h2>🏅 ТАБЛИЦА РЕКОРДОВ</h2>
+        <div id="leaderboard-list"></div>
+        
+    </div>
+</div>
+
+<!-- ДРУЗЬЯ -->
+<div id="friends-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('friends-modal').style.display='none'">✕</div>
+        <h2>👥 ДРУЗЬЯ</h2>
+        <div style="font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:14px;text-align:center">Добавляй друзей по нику и играй вместе!</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+            <input id="friend-add-input" placeholder="Введи ник друга..." style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 14px;color:white;font-family:'Fredoka',sans-serif;font-size:1rem;outline:none">
+            <button id="friend-add-btn" style="padding:10px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,#00c6ff,#0072ff);color:white;font-family:'Fredoka',sans-serif;font-size:.95rem;cursor:pointer;font-weight:700">➕</button>
+        </div>
+        <div id="friends-list" style="display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto">
+            <div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴</div>
+        </div>
+    </div>
+</div>
+
+<!-- НАСТРОЙКИ -->
+<div id="settings-modal" class="modal">
+    <div class="settings-content">
+        <div class="modal-close-x" onclick="document.getElementById('settings-modal').style.display='none'">✕</div>
+        <h2>⚙️ НАСТРОЙКИ</h2>
+        <div class="setting-item"><span>🎵 Музыка</span><label class="toggle-wrap"><input type="checkbox" id="music-toggle" checked><span class="toggle-slider"></span></label></div>
+        <div class="setting-item"><span>🔊 Звуки</span><label class="toggle-wrap"><input type="checkbox" id="sound-toggle" checked><span class="toggle-slider"></span></label></div>
+        <div class="setting-item"><span>🌨️ Частицы</span><label class="toggle-wrap"><input type="checkbox" id="particles-toggle" checked><span class="toggle-slider"></span></label></div>
+        <div style="margin-top:25px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)">
+            <button class="close-btn" style="margin:0 auto 10px;background:rgba(255,50,50,.15);border-color:rgba(255,50,50,.3)" id="reset-stats-btn">🗑️ Сбросить прогресс</button>
+        </div>
+        
+    </div>
+</div>
+
+<!-- 3D БОХ -->
+<div id="box-open-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,20,.92);z-index:8000;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(15px)">
+    <div id="box-open-title" style="font-family:'Fredoka',sans-serif;font-size:3rem;color:white;margin-bottom:10px">📦 ОТКРЫТИЕ БОКСА</div>
+    <div id="box-3d-container" style="width:300px;height:300px"></div>
+    <div id="box-open-result" style="display:none;text-align:center">
+        <div id="box-result-rarity" style="font-size:2rem;margin-bottom:8px"></div>
+        <img id="box-result-img" src="" style="width:120px;height:120px;object-fit:contain;border-radius:20px;background:rgba(255,255,255,.1);padding:10px;margin:10px auto;display:block">
+        <div id="box-result-name" style="font-family:'Fredoka',sans-serif;font-size:2.5rem;color:white;font-weight:700"></div>
+        <button id="box-result-close" style="margin-top:20px;padding:14px 50px;font-size:1.8rem;border-radius:40px;border:none;background:linear-gradient(135deg,#00c6ff,#0072ff);color:white;cursor:pointer;font-family:'Fredoka',sans-serif">ЗАБРАТЬ ✨</button>
+    </div>
+</div>
+
+
+<!-- СКИНЫ -->
+<div id="skins-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('skins-modal').style.display='none'">✕</div>
+        <h2>🎨 СКИНЫ ПЕРСОНАЖА</h2>
+        <div class="skin-grid" id="skins-grid"></div>
+        
+    </div>
+</div>
+
+<!-- РЕЖИМЫ ИГРЫ -->
+<div id="mode-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-close-x" onclick="document.getElementById('mode-modal').style.display='none'">✕</div>
+        <h2>🎮 РЕЖИМ ИГРЫ</h2>
+        <div class="mode-grid" id="mode-grid"></div>
+        <div style="text-align:center;margin-bottom:8px;font-size:1.2rem;color:rgba(255,255,255,.4)">В мультиплеере режим выбирает хост</div>
+        
+    </div>
+</div>
+
+<!-- ДОППИТ HUD -->
+<div id="mode-hud"></div>
+<div id="timer-hud"></div>
+
+<div id="toast"></div>
+
+<script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+
+// ===== УТИЛИТЫ =====
+
+// Безопасный хелпер: не бросает ошибку если элемент не найден
+function $on(id, ev, fn){ const el=document.getElementById(id); if(el) el[ev]=fn; }
+
+function setLoadProgress(p, t) { document.getElementById('load-bar').style.width=p+'%'; document.getElementById('load-text').textContent=t; }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+function showToast(msg, isError=false, dur=2500) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = isError ? 'error' : '';
+    t.style.display = 'block'; clearTimeout(t._t);
+    t._t = setTimeout(()=>t.style.display='none', dur);
+}
+
+// ===== АУДИО =====
+let musicEnabled = localStorage.getItem('musicEnabled') !== 'false';
+let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+let particlesEnabled = localStorage.getItem('particlesEnabled') !== 'false';
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+
+function tone(freq, type, dur, gain=.3, delay=0) {
+    if (!soundEnabled) return;
+    try {
+        const o=AC.createOscillator(), g=AC.createGain();
+        o.connect(g); g.connect(AC.destination);
+        o.type=type; o.frequency.setValueAtTime(freq,AC.currentTime+delay);
+        g.gain.setValueAtTime(gain,AC.currentTime+delay);
+        g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+delay+dur);
+        o.start(AC.currentTime+delay); o.stop(AC.currentTime+delay+dur);
+    } catch(e){}
+}
+const playClick = () => { tone(800,'sine',.08,.2); tone(1200,'sine',.05,.1,.04); };
+const playCoin = () => { tone(1047,'sine',.1,.3); tone(1319,'sine',.1,.3,.05); tone(1568,'sine',.15,.25,.1); };
+const playLevelUp = () => [523,659,784,1047].forEach((f,i)=>tone(f,'sine',.2,.3,i*.12));
+const playGameOver = () => [400,350,300,250].forEach((f,i)=>tone(f,'sawtooth',.3,.25,i*.15));
+function playJump() {
+    if (!soundEnabled) return;
+    try {
+        const o=AC.createOscillator(), g=AC.createGain();
+        o.connect(g); g.connect(AC.destination);
+        o.type='sine';
+        o.frequency.setValueAtTime(300,AC.currentTime);
+        o.frequency.exponentialRampToValueAtTime(600,AC.currentTime+.15);
+        g.gain.setValueAtTime(.3,AC.currentTime);
+        g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.2);
+        o.start(); o.stop(AC.currentTime+.2);
+    } catch(e){}
+}
+
+let bgPlaying=false, bgTimer=null, menuMusicPlaying=false, menuMusicTimer=null;
+
+// Арктическая мелодия для меню (медленная, атмосферная)
+const MENU_MELODY=[
+    [523,.6],[659,.4],[784,.6],[880,.4],[1047,.8],[880,.3],[784,.3],[659,.6],
+    [523,.6],[494,.4],[440,.8],[392,.4],[349,.6],[392,.4],[440,.6],[494,.4],
+    [523,1.0],[0,.3],[392,.5],[440,.5],[494,.6],[523,.4],[587,.8],
+    [659,.4],[784,.4],[880,.6],[1047,.4],[988,.4],[880,.8],[784,.4],[659,1.2],
+];
+let mMenuIdx=0;
+function startMenuMusic(){
+    if(!musicEnabled||menuMusicPlaying) return;
+    menuMusicPlaying=true;
+    function noteM(){
+        if(!musicEnabled||!menuMusicPlaying) return;
+        const [freq,dur]=MENU_MELODY[mMenuIdx++%MENU_MELODY.length];
+        if(freq>0){
+            try{
+                const o=AC.createOscillator(),g=AC.createGain(),rev=AC.createGain();
+                o.connect(g);g.connect(rev);rev.connect(AC.destination);
+                o.type='sine'; o.frequency.value=freq;
+                // Базовая нота
+                g.gain.setValueAtTime(0,AC.currentTime);
+                g.gain.linearRampToValueAtTime(.08,AC.currentTime+.04);
+                g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+dur*.9);
+                o.start(); o.stop(AC.currentTime+dur);
+                // Тихое эхо на октаву ниже
+                const o2=AC.createOscillator(),g2=AC.createGain();
+                o2.connect(g2);g2.connect(AC.destination);
+                o2.type='triangle'; o2.frequency.value=freq/2;
+                g2.gain.setValueAtTime(.025,AC.currentTime+.02);
+                g2.gain.exponentialRampToValueAtTime(.001,AC.currentTime+dur);
+                o2.start(AC.currentTime+.02); o2.stop(AC.currentTime+dur);
+            }catch(e){}
+        }
+        menuMusicTimer=setTimeout(noteM, dur*1000);
+    }
+    noteM();
+}
+function stopMenuMusic(){ menuMusicPlaying=false; clearTimeout(menuMusicTimer); }
+
+// Игровая музыка (быстрее, энергичнее)
+const melody=[262,294,330,349,392,440,494,523]; let mIdx=0;
+function startBgMusic() {
+    stopMenuMusic();
+    if (!musicEnabled||bgPlaying) return; bgPlaying=true;
+    (function note(){
+        if (!musicEnabled||!bgPlaying) return;
+        try {
+            const o=AC.createOscillator(),g=AC.createGain();
+            o.connect(g);g.connect(AC.destination);
+            o.type='triangle'; o.frequency.value=melody[mIdx++%melody.length];
+            g.gain.setValueAtTime(.06,AC.currentTime);
+            g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.35);
+            o.start(); o.stop(AC.currentTime+.4);
+        } catch(e){}
+        bgTimer=setTimeout(note,400);
+    })();
+}
+function stopBgMusic() { bgPlaying=false; clearTimeout(bgTimer); }
+
+document.addEventListener('click',()=>{ if(AC.state==='suspended') AC.resume(); },{once:true});
+document.addEventListener('click',e=>{ if(e.target.closest('button')||e.target.closest('.menu-btn')||e.target.closest('.mobile-menu-btn')||e.target.closest('.shop-tab')) playClick(); });
+
+// ===== СНЕГ =====
+class Snow {
+    constructor(scene) {
+        this.scene=scene; this.count=200;
+        const geo=new THREE.BufferGeometry();
+        const pos=new Float32Array(this.count*3);
+        for(let i=0;i<this.count;i++){pos[i*3]=(Math.random()-.5)*100;pos[i*3+1]=Math.random()*80-20;pos[i*3+2]=(Math.random()-.5)*200;}
+        geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+        this.pts=new THREE.Points(geo,new THREE.PointsMaterial({color:0xffffff,size:.3,transparent:true,opacity:.7}));
+        scene.add(this.pts);
+    }
+    update(py) {
+        if (!particlesEnabled){this.pts.visible=false;return;} this.pts.visible=true;
+        const p=this.pts.geometry.attributes.position.array;
+        for(let i=0;i<this.count;i++){
+            p[i*3+1]-=.05; p[i*3]+=Math.sin(Date.now()*.001+i)*.01;
+            if(p[i*3+1]<py-20){p[i*3+1]=py+40;p[i*3]=(Math.random()-.5)*100;}
+        }
+        this.pts.geometry.attributes.position.needsUpdate=true;
+    }
+}
+
+// ===== МОНЕТКА =====
+class Coin {
+    constructor(scene, pos) {
+        this.scene=scene; this.collected=false;
+        this.mesh=new THREE.Group();
+        const c=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.15,12),new THREE.MeshStandardMaterial({color:0xffd700,roughness:.2,metalness:.8}));
+        c.rotation.x=Math.PI/2;
+        const e=new THREE.Mesh(new THREE.TorusGeometry(.5,.06,8,24),new THREE.MeshStandardMaterial({color:0xffaa00}));
+        this.mesh.add(c,e);
+        this.mesh.position.copy(pos); this.mesh.position.y+=1.5;
+        scene.add(this.mesh); this._sy=this.mesh.position.y;
+    }
+    update(){ if(!this.collected){this.mesh.rotation.y+=.04;this.mesh.position.y=this._sy+Math.sin(Date.now()*.003)*.2;} }
+    collect(){ if(!this.collected){this.collected=true;this.scene.remove(this.mesh);return true;} return false; }
+}
+
+// ===== ЗВЕРЬ — УНИКАЛЬНЫЕ МОДЕЛИ =====
+class Bear {
+    constructor(scene, isPreview=false, skinId=null) {
+        this.mesh=new THREE.Group();
+        this.sadMode=false;
+        this._skinId=skinId||localStorage.getItem('selectedSkin')||'polar';
+        this._build(scene);
+    }
+    _mat(hex,rough=.8,metal=0){ return new THREE.MeshStandardMaterial({color:hex,roughness:rough,metalness:metal}); }
+    _box(w,h,d,mat){ return new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); }
+    _sph(r,mat,seg=8){ return new THREE.Mesh(new THREE.SphereGeometry(r,seg,seg),mat); }
+    _cyl(rt,rb,h,mat,seg=8){ return new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),mat); }
+    _cone(r,h,mat,seg=8){ return new THREE.Mesh(new THREE.ConeGeometry(r,h,seg),mat); }
+
+    _build(scene) {
+        switch(this._skinId){
+            case 'brown': this._buildBear(scene,0xcc6622,0xaa4400,0xdd8855); break;
+            case 'panda': this._buildPanda(scene); break;
+            case 'wolf':  this._buildWolf(scene); break;
+            case 'fox':   this._buildFox(scene); break;
+            case 'lion':  this._buildLion(scene); break;
+            case 'tiger': this._buildTiger(scene); break;
+            case 'racoon':this._buildRacoon(scene); break;
+            default:      this._buildBear(scene,0xfafafa,0xeeeeee,0xffffff); break; // polar
+        }
+        this.mesh.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+        scene.add(this.mesh);
+    }
+
+    // Переиспользуемый скелет медведя с заданными цветами
+    _buildBear(scene,bodyC,legC,headC){
+        const mF=this._mat(bodyC,.9); const mL=this._mat(legC,.8); const mH=this._mat(headC,.85); const mS=this._mat(0x111111);
+        this.body=this._box(1.5,2,1.2,mF); this.body.position.y=2; this.mesh.add(this.body);
+        const tail=this._box(.4,.4,.4,mF); tail.position.set(0,-.6,-.65); this.body.add(tail);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.5,0);
+        const hd=this._box(1.3,1.1,1.1,mH);
+        const sn=this._box(.7,.5,.5,mH); sn.position.set(0,-.2,.6);
+        const ns=this._box(.3,.2,.1,mS); ns.position.set(0,.1,.3); sn.add(ns);
+        const lE=this._box(.35,.35,.2,mH); lE.position.set(-.4,.6,0);
+        const rE=this._box(.35,.35,.2,mH); rE.position.set(.4,.6,0);
+        const lEy=this._box(.15,.15,.1,mS); lEy.position.set(-.3,.1,.56);
+        const rEy=this._box(.15,.15,.1,mS); rEy.position.set(.3,.1,.56);
+        const sh=new THREE.MeshBasicMaterial({color:0xffffff});
+        [lEy,rEy].forEach(e=>{const g=this._sph(.04,sh,6);g.position.set(.04,.04,.08);e.add(g);});
+        this.headG.add(hd,sn,lE,rE,lEy,rEy); this.body.add(this.headG);
+        this._addBearLegsArms(mL,mF);
+    }
+    _addBearLegsArms(mL,mA){
+        const lbG=new THREE.BoxGeometry(.5,1.2,.5); const ftG=new THREE.BoxGeometry(.6,.3,.7);
+        this.lLeg=new THREE.Group(); this.lLeg.add(new THREE.Mesh(lbG,mL));
+        const lf=new THREE.Mesh(ftG,mL); lf.position.set(0,-.75,.12); this.lLeg.add(lf);
+        this.lLeg.position.set(-.45,-1.1,0); this.body.add(this.lLeg);
+        this.rLeg=this.lLeg.clone(); this.rLeg.position.set(.45,-1.1,0); this.body.add(this.rLeg);
+        this.lArm=new THREE.Group(); this.lArm.add(new THREE.Mesh(lbG,mA));
+        this.lArm.position.set(-1.05,.7,0); this.body.add(this.lArm);
+        this.rArm=this.lArm.clone(); this.rArm.position.set(1.05,.7,0); this.body.add(this.rArm);
+    }
+
+    // ПАНДА — пятна, круглая морда
+    _buildPanda(scene){
+        const mW=this._mat(0xfafafa,.85); const mB=this._mat(0x111122,.9); const mS=this._mat(0x111111);
+        this.body=this._box(1.5,2,1.2,mW); this.body.position.y=2; this.mesh.add(this.body);
+        // Чёрные пятна на теле
+        const sp1=this._box(.55,1,.55,mB); sp1.position.set(-.55,0,.62); this.body.add(sp1);
+        const sp2=this._box(.55,1,.55,mB); sp2.position.set(.55,0,.62); this.body.add(sp2);
+        const tail=this._box(.35,.35,.35,mW); tail.position.set(0,-.6,-.65); this.body.add(tail);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.5,0);
+        const hd=this._sph(.72,mW,10); hd.scale.set(1,.95,1);
+        const sn=this._sph(.32,mW,8); sn.position.set(0,-.18,.6);
+        const ns=this._box(.25,.15,.1,mS); ns.position.set(0,.04,.32); sn.add(ns);
+        // Чёрные круги вокруг глаз (фишка панды)
+        const ler=this._sph(.3,mB,8); ler.scale.set(1,1,.5); ler.position.set(-.3,.12,.52);
+        const rer=this._sph(.3,mB,8); rer.scale.set(1,1,.5); rer.position.set(.3,.12,.52);
+        const lEy=this._box(.15,.15,.12,mS); lEy.position.set(-.3,.12,.62);
+        const rEy=this._box(.15,.15,.12,mS); rEy.position.set(.3,.12,.62);
+        // Круглые уши панды
+        const lEr=this._sph(.22,mB,8); lEr.position.set(-.5,.55,.05);
+        const rEr=this._sph(.22,mB,8); rEr.position.set(.5,.55,.05);
+        this.headG.add(hd,sn,ns,ler,rer,lEy,rEy,lEr,rEr); this.body.add(this.headG);
+        this._addBearLegsArms(mB,mW);
+    }
+
+    // ВОЛК — вытянутая морда, острые уши
+    _buildWolf(scene){
+        const mG=this._mat(0x778899,.85); const mLg=this._mat(0xaabbcc,.8); const mW=this._mat(0xeeeeff,.8); const mS=this._mat(0x111111);
+        this.body=this._box(1.4,2,1.1,mG); this.body.position.y=2; this.mesh.add(this.body);
+        // Белое брюхо
+        const belly=this._box(.8,1.4,.35,mW); belly.position.set(0,0,.56); this.body.add(belly);
+        const tail=this._cyl(.15,.25,1.2,mG,8); tail.rotation.x=-.7; tail.position.set(0,-.2,-.75); this.body.add(tail);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.5,0);
+        const hd=this._box(1.2,1.0,1.0,mG);
+        // Вытянутая морда волка
+        const sn=this._box(.55,.42,.8,mLg); sn.position.set(0,-.18,.72);
+        const ns=this._box(.22,.15,.1,mS); ns.position.set(0,.06,.42); sn.add(ns);
+        // Треугольные острые уши
+        const lEar=this._cone(.2,.6,mG,4); lEar.position.set(-.42,.7,-.05); lEar.rotation.z=.15;
+        const rEar=this._cone(.2,.6,mG,4); rEar.position.set(.42,.7,-.05); rEar.rotation.z=-.15;
+        const lEarI=this._cone(.12,.4,this._mat(0xff9999,.8),4); lEarI.position.set(-.42,.72,-.02); lEarI.rotation.z=.15;
+        const rEarI=this._cone(.12,.4,this._mat(0xff9999,.8),4); rEarI.position.set(.42,.72,-.02); rEarI.rotation.z=-.15;
+        const lEy=this._box(.16,.16,.1,this._mat(0xffdd00,.5)); lEy.position.set(-.28,.1,.52);
+        const rEy=this._box(.16,.16,.1,this._mat(0xffdd00,.5)); rEy.position.set(.28,.1,.52);
+        const lp=this._box(.08,.08,.06,mS); lp.position.set(0,0,.06); lEy.add(lp);
+        const rp=lp.clone(); rEy.add(rp);
+        this.headG.add(hd,sn,lEar,rEar,lEarI,rEarI,lEy,rEy); this.body.add(this.headG);
+        this._addBearLegsArms(mG,mG);
+    }
+
+    // ЛИС — лисья мордочка, рыжий с белым
+    _buildFox(scene){
+        const mO=this._mat(0xe05a00,.8); const mW=this._mat(0xfff0e0,.8); const mBl=this._mat(0x111111); const mBr=this._mat(0x330000);
+        this.body=this._box(1.3,1.9,1.0,mO); this.body.position.y=2; this.mesh.add(this.body);
+        const belly=this._box(.7,1.2,.3,mW); belly.position.set(0,0,.52); this.body.add(belly);
+        // Пушистый хвост
+        const tail=new THREE.Group();
+        const t1=this._sph(.35,mO,8); t1.scale.set(.7,2.2,.7); t1.position.set(0,.3,0);
+        const t2=this._sph(.22,mW,8); t2.position.set(0,.95,.06);
+        tail.add(t1,t2); tail.position.set(0,-.55,-.68); tail.rotation.x=.5; this.body.add(tail);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.45,0);
+        const hd=this._box(1.1,.95,.95,mO);
+        // Острая лисья морда
+        const sn=this._cone(.28,.75,mO,6); sn.rotation.x=-Math.PI/2; sn.position.set(0,-.15,.78);
+        const snW=this._cone(.18,.5,mW,6); snW.rotation.x=-Math.PI/2; snW.position.set(0,-.2,.82);
+        const ns=this._sph(.1,mBl,6); ns.position.set(0,.02,.35); sn.add(ns);
+        // Острые уши
+        const lEar=this._cone(.22,.65,mO,4); lEar.position.set(-.38,.68,-.05); lEar.rotation.z=.2;
+        const rEar=this._cone(.22,.65,mO,4); rEar.position.set(.38,.68,-.05); rEar.rotation.z=-.2;
+        const lEarI=this._cone(.13,.4,this._mat(0xffccaa),4); lEarI.position.set(-.38,.7,-.02); lEarI.rotation.z=.2;
+        const rEarI=this._cone(.13,.4,this._mat(0xffccaa),4); rEarI.position.set(.38,.7,-.02); rEarI.rotation.z=-.2;
+        const lEy=this._box(.15,.15,.1,this._mat(0x44cc44)); lEy.position.set(-.26,.1,.5);
+        const rEy=this._box(.15,.15,.1,this._mat(0x44cc44)); rEy.position.set(.26,.1,.5);
+        const lp=this._box(.07,.07,.06,mBl); lp.position.set(0,0,.06); lEy.add(lp); rEy.add(lp.clone());
+        // Белые щёки
+        const lCh=this._sph(.22,mW,8); lCh.scale.set(1,.8,.7); lCh.position.set(-.4,-.05,.5);
+        const rCh=this._sph(.22,mW,8); rCh.scale.set(1,.8,.7); rCh.position.set(.4,-.05,.5);
+        this.headG.add(hd,sn,snW,lEar,rEar,lEarI,rEarI,lEy,rEy,lCh,rCh); this.body.add(this.headG);
+        this._addBearLegsArms(mO,mO);
+    }
+
+    // ЛЕВ — грива, мощная морда
+    _buildLion(scene){
+        const mY=this._mat(0xd4a017,.8); const mDY=this._mat(0xaa7700,.8); const mMane=this._mat(0x885500,.85); const mS=this._mat(0x111111);
+        this.body=this._box(1.6,2.1,1.3,mY); this.body.position.y=2; this.mesh.add(this.body);
+        // Кисточка хвоста
+        const tailB=this._cyl(.08,.12,1.4,mY,6); tailB.rotation.x=-.5; tailB.position.set(0,-.3,-.72); this.body.add(tailB);
+        const tailT=this._sph(.2,mMane,8); tailT.position.set(0,.5,0); tailB.add(tailT);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.55,0);
+        // Грива вокруг головы
+        const mane=this._sph(.75,mMane,12); mane.scale.set(1.05,1,.9); mane.position.set(0,0,-.1);
+        const hd=this._box(1.25,1.05,1.05,mY);
+        const sn=this._box(.68,.5,.55,mDY); sn.position.set(0,-.18,.6);
+        const ns=this._box(.3,.2,.1,mS); ns.position.set(0,.1,.3); sn.add(ns);
+        // Маленькие круглые уши
+        const lEar=this._sph(.18,mY,8); lEar.position.set(-.52,.55,-.05);
+        const rEar=this._sph(.18,mY,8); rEar.position.set(.52,.55,-.05);
+        const lEarI=this._sph(.1,this._mat(0xffccaa),8); lEarI.position.set(0,0,.06); lEar.add(lEarI);
+        const rEarI=lEarI.clone(); rEar.add(rEarI);
+        const lEy=this._box(.17,.17,.1,this._mat(0xff8800)); lEy.position.set(-.3,.12,.55);
+        const rEy=this._box(.17,.17,.1,this._mat(0xff8800)); rEy.position.set(.3,.12,.55);
+        const lp=this._box(.08,.08,.06,mS); lp.position.set(0,0,.06); lEy.add(lp); rEy.add(lp.clone());
+        this.headG.add(mane,hd,sn,lEar,rEar,lEy,rEy); this.body.add(this.headG);
+        this._addBearLegsArms(mY,mY);
+    }
+
+    // ТИГР — полосы
+    _buildTiger(scene){
+        const mO=this._mat(0xee7700,.8); const mStr=this._mat(0x222200,.9); const mW=this._mat(0xffeedd,.8); const mS=this._mat(0x111111);
+        this.body=this._box(1.5,2,1.2,mO); this.body.position.y=2; this.mesh.add(this.body);
+        // Полосы на теле
+        for(let i=0;i<4;i++){const st=this._box(1.6,.22,1.3,mStr);st.position.set(0,.6-i*.45,0);this.body.add(st);}
+        const belly=this._box(.7,1.4,.3,mW); belly.position.set(0,0,.61); this.body.add(belly);
+        const tail=this._cyl(.12,.18,1.5,mO,8); tail.rotation.x=-.4; tail.position.set(0,-.25,-.74); this.body.add(tail);
+        // Полосы на хвосте
+        for(let i=0;i<3;i++){const st=this._cyl(.14,.14,.12,mStr,8);st.position.set(0,.2+i*.3,0);tail.add(st);}
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.5,0);
+        const hd=this._box(1.3,1.1,1.1,mO);
+        // Полосы на голове
+        const hs1=this._box(1.35,.2,1.15,mStr); hs1.position.set(0,.3,0); hd.add(hs1);
+        const sn=this._box(.68,.5,.55,mW); sn.position.set(0,-.18,.6);
+        const ns=this._box(.3,.2,.1,mS); ns.position.set(0,.1,.3); sn.add(ns);
+        const lEar=this._cone(.22,.5,mO,4); lEar.position.set(-.48,.64,-.08); lEar.rotation.z=.15;
+        const rEar=this._cone(.22,.5,mO,4); rEar.position.set(.48,.64,-.08); rEar.rotation.z=-.15;
+        const lEarI=this._sph(.12,this._mat(0xffccaa),8); lEarI.position.set(0,0,.1); lEar.add(lEarI);
+        const rEarI=lEarI.clone(); rEar.add(rEarI);
+        const lEy=this._box(.16,.16,.1,this._mat(0x44aa22)); lEy.position.set(-.28,.12,.58);
+        const rEy=this._box(.16,.16,.1,this._mat(0x44aa22)); rEy.position.set(.28,.12,.58);
+        const lp=this._box(.08,.08,.06,mS); lp.position.set(0,0,.06); lEy.add(lp); rEy.add(lp.clone());
+        this.headG.add(hd,sn,lEar,rEar,lEy,rEy); this.body.add(this.headG);
+        this._addBearLegsArms(mO,mO);
+    }
+
+    // ЕНОТ — маска, полосатый хвост
+    _buildRacoon(scene){
+        const mGr=this._mat(0x888888,.85); const mDk=this._mat(0x444444,.9); const mW=this._mat(0xdddddd,.8); const mS=this._mat(0x111111);
+        this.body=this._box(1.3,1.9,1.0,mGr); this.body.position.y=2; this.mesh.add(this.body);
+        // Белое брюхо
+        const belly=this._box(.65,1.2,.3,mW); belly.position.set(0,0,.52); this.body.add(belly);
+        // Полосатый хвост
+        const tail=new THREE.Group();
+        for(let i=0;i<4;i++){const r=this._cyl(.18,.22,.35,i%2?mDk:mW,8);r.position.y=i*.32;tail.add(r);}
+        const tailT=this._sph(.22,mDk,8); tailT.position.y=1.35; tail.add(tailT);
+        tail.rotation.x=.5; tail.position.set(0,-.5,-.65); this.body.add(tail);
+        this.headG=new THREE.Group(); this.headG.position.set(0,1.45,0);
+        const hd=this._box(1.15,.98,.95,mGr);
+        const sn=this._box(.55,.42,.55,mW); sn.position.set(0,-.18,.56);
+        const ns=this._sph(.12,mDk,8); ns.position.set(0,.06,.3); sn.add(ns);
+        // Маска (тёмные полосы вокруг глаз)
+        const mask=this._box(1.1,.28,.22,mDk); mask.position.set(0,.12,.5); hd.add(mask);
+        const lEar=this._cone(.2,.5,mGr,6); lEar.position.set(-.42,.6,-.06); lEar.rotation.z=.15;
+        const rEar=this._cone(.2,.5,mGr,6); rEar.position.set(.42,.6,-.06); rEar.rotation.z=-.15;
+        const lEarI=this._sph(.1,this._mat(0xffddcc),6); lEarI.position.set(0,0,.1); lEar.add(lEarI);
+        const rEarI=lEarI.clone(); rEar.add(rEarI);
+        const lEy=this._box(.14,.14,.1,mW); lEy.position.set(-.26,.12,.52);
+        const rEy=this._box(.14,.14,.1,mW); rEy.position.set(.26,.12,.52);
+        const lp=this._box(.07,.07,.06,mS); lp.position.set(0,0,.06); lEy.add(lp); rEy.add(lp.clone());
+        this.headG.add(hd,sn,lEar,rEar,lEy,rEy); this.body.add(this.headG);
+        this._addBearLegsArms(mGr,mGr);
+    }
+
+    animate(spd, grounded, t) {
+        if(!this.body) return;
+        if (this.sadMode) { this.body.rotation.x=.25; if(this.headG)this.headG.rotation.z=Math.sin(t*1.5)*.1; if(this.lArm){this.lArm.rotation.x=.6;this.rArm.rotation.x=.6;} return; }
+        this.body.rotation.x=spd*.45;
+        if (!grounded) {
+            if(this.lLeg){this.lLeg.rotation.x=-.5; this.rLeg.rotation.x=.5;}
+            if(this.lArm){this.lArm.rotation.x=-2.5; this.rArm.rotation.x=-2.5;}
+        } else if (spd>.05) {
+            const k=15;
+            if(this.lLeg){this.lLeg.rotation.x=Math.sin(t*k)*.9; this.rLeg.rotation.x=Math.sin(t*k+Math.PI)*.9;}
+            if(this.lArm){this.lArm.rotation.x=Math.sin(t*k+Math.PI)*.9; this.rArm.rotation.x=Math.sin(t*k)*.9;}
+        } else {
+            if(this.lLeg){this.lLeg.rotation.x=0; this.rLeg.rotation.x=0;}
+            if(this.lArm){this.lArm.rotation.x=Math.sin(t*2)*.05; this.rArm.rotation.x=-Math.sin(t*2)*.05;}
+            this.body.position.y=2+Math.sin(t*3)*.05;
+        }
+    }
+    setSadMode(v) { this.sadMode=v; }
+}
+
+
+// ===== СКИНЫ =====
+const SKINS=[
+    {id:'polar',   name:'Белый медведь', emoji:'🐻‍❄️', body:0xfafafa, leg:0xeeeeee, price:0},
+    {id:'brown',   name:'Бурый медведь', emoji:'🐻',   body:0xcc7733, leg:0xaa5522, price:500},
+    {id:'panda',   name:'Панда',         emoji:'🐼',   body:0xfafafa, leg:0x111122, price:800},
+    {id:'wolf',    name:'Волк',          emoji:'🐺',   body:0x8899aa, leg:0x667788, price:900},
+    {id:'fox',     name:'Лис',           emoji:'🦊',   body:0xe86a2b, leg:0xd45510, price:1000},
+    {id:'lion',    name:'Лев',           emoji:'🦁',   body:0xd4a017, leg:0xb88800, price:1200},
+    {id:'tiger',   name:'Тигр',          emoji:'🐯',   body:0xee8811, leg:0xcc5500, price:1500},
+    {id:'racoon',  name:'Енот',          emoji:'🦝',   body:0x888888, leg:0x555555, price:2000},
+];
+
+// ===== РЕЖИМЫ ИГРЫ =====
+const GAME_MODES=[
+    {id:'classic',    name:'Классика',        icon:'🎮', desc:'Стандартный режим — доходи до финала, набирай очки'},
+    {id:'timeattack', name:'Гонка времени',   icon:'⏱️', desc:'2 минуты на максимальный счёт!'},
+    {id:'blitz',      name:'Блиц',            icon:'⚡', desc:'60 секунд — успей набрать как можно больше'},
+    {id:'survival',   name:'Выживание',       icon:'❤️', desc:'3 жизни — умер 3 раза, игра окончена'},
+    {id:'speedrun',   name:'Спидран',         icon:'🏃', desc:'Дойди до финала за минимальное время'},
+];
+
+// ===== ДАННЫЕ =====
+const GIFTS = [
+    {id:'tank',name:'Танк',price:220,rarity:'green',image:'gift/tank.gif',emoji:'🎁'},
+    {id:'rocket',name:'Ракета',price:260,rarity:'green',image:'gift/rocket.gif',emoji:'🚀'},
+    {id:'goldenring',name:'Золотое кольцо',price:330,rarity:'green',image:'gift/goldenring.gif',emoji:'💍'},
+    {id:'ball',name:'Мяч',price:380,rarity:'yellow',image:'gift/ball.gif',emoji:'⚽'},
+    {id:'emeraldgemstone',name:'Изумруд',price:670,rarity:'yellow',image:'gift/emeraldgemstone.gif',emoji:'💎'},
+    {id:'brownbear',name:'Бурый медведь',price:560,rarity:'yellow',image:'gift/brownbear.gif',emoji:'🐻'},
+    {id:'polarbear',name:'Белый медведь',price:1990,rarity:'red',image:'gift/polarbear.gif',emoji:'🐻‍❄️'},
+    {id:'parrot',name:'Попугай',price:8990,rarity:'red',image:'gift/parrot.gif',emoji:'🦜'}
+];
+const giftsByRarity = {green:GIFTS.filter(g=>g.rarity==='green'),yellow:GIFTS.filter(g=>g.rarity==='yellow'),red:GIFTS.filter(g=>g.rarity==='red')};
+const BOXES=[{id:'firstbox',name:'First Collection',price:400}];
+const PROMOS={'FREEMONETKI10000':{coins:10000,msg:'💰 +10 000 монет!'},'POLAR2025':{coins:5000,msg:'🐻‍❄️ +5 000 монет!'},'ARCTIC':{coins:2500,msg:'❄️ +2 500 монет!'}};
+const usedPromos=JSON.parse(localStorage.getItem('usedPromos')||'[]');
+const AVATARS=['🐻‍❄️','🐻','🦁','🐯','🦊','🐺','🐼','🦝','🐸','🦋'];
+const ACHIEVEMENTS=[
+    {id:'first_game',name:'Первый шаг',desc:'Сыграй первую игру',icon:'🦘',check:s=>s.totalGames>=1},
+    {id:'score_100',name:'Сотня',desc:'Набери 100 очков',icon:'💯',check:s=>s.bestScore>=100},
+    {id:'score_500',name:'Мастер',desc:'Набери 500 очков',icon:'⭐',check:s=>s.bestScore>=500},
+    {id:'score_1000',name:'Легенда',desc:'Набери 1000 очков',icon:'🌟',check:s=>s.bestScore>=1000},
+    {id:'coins_100',name:'Монетник',desc:'Собери 100 монет',icon:'🪙',check:s=>s.totalCoins>=100},
+    {id:'coins_1000',name:'Богач',desc:'Накопи 1000 монет',icon:'💰',check:s=>s.totalCoins>=1000},
+    {id:'buy_gift',name:'Шоппинг',desc:'Купи первый подарок',icon:'🛍️',check:s=>Object.keys(s.purchasedGifts).length>=1},
+    {id:'games_10',name:'Упорный',desc:'Сыграй 10 игр',icon:'🎮',check:s=>s.totalGames>=10},
+    {id:'cycle_2',name:'Цикл',desc:'Пройди 2-й уровень',icon:'🔄',check:s=>s.bestCycle>=2},
+    {id:'polar_fan',name:'Фанат',desc:'Купи Белого медведя',icon:'🐻‍❄️',check:s=>(s.purchasedGifts['polarbear']||0)>0},
+];
+const FAKE_LB=[
+    {name:'ArcticKing',  avatar:'🦁', score:4820, skin:'lion',   status:'🏆 Чемпион',  bio:'Лучший в арктике!',     level:162},
+    {name:'IceRunner',   avatar:'🐯', score:3710, skin:'tiger',  status:'🔥 В ударе',  bio:'Люблю скоростные забеги',level:125},
+    {name:'FrostBear',   avatar:'🐻‍❄️',score:2990, skin:'polar',  status:'❄️ Ледяной', bio:'Родился на льду',        level:100},
+    {name:'SnowWolf',    avatar:'🐺', score:2340, skin:'wolf',   status:'😈 Дерзкий',  bio:'Волк-одиночка',          level:79},
+    {name:'PolarFox',    avatar:'🦊', score:1870, skin:'fox',    status:'🎯 Снайпер',  bio:'Точность — мой стиль',   level:63},
+    {name:'TundraX',     avatar:'🐼', score:1450, skin:'panda',  status:'🌙 Ночник',   bio:'Играю только ночью',     level:49},
+    {name:'IceLegend',   avatar:'🦝', score:980,  skin:'racoon', status:'⭐ Легенда',  bio:'На пути к вершине',      level:33},
+    {name:'ColdPaw',     avatar:'🐸', score:760,  skin:'polar',  status:'✨ Новичок',  bio:'Только начинаю',         level:26},
+    {name:'BearHunter',  avatar:'🐻', score:580,  skin:'brown',  status:'🎮 Хардкор',  bio:'Хардкор или ничего',     level:20},
+    {name:'IceCrystal',  avatar:'🦋', score:310,  skin:'polar',  status:'✨ Новичок',  bio:'Просто отдыхаю',         level:11},
+];
+
+// ===== Firebase конфиг (публичный, Read+Write со своего домена) =====
+const FB_CFG = {
+    apiKey:"AIzaSyD-placeholder-polar-legend",
+    authDomain:"polar-legend-game.firebaseapp.com",
+    databaseURL:"https://polar-legend-game-default-rtdb.firebaseio.com",
+    projectId:"polar-legend-game"
+};
+let _fbApp=null, _fbDb=null;
+function getFbDb(){
+    if(_fbDb) return _fbDb;
+    try{
+        if(typeof firebase!=='undefined'&&firebase.apps&&firebase.apps.length===0){
+            _fbApp=firebase.initializeApp(FB_CFG);
+        }
+        if(typeof firebase!=='undefined'){
+            _fbDb=firebase.database();
+        }
+    }catch(e){ console.warn('Firebase init failed:',e.message); }
+    return _fbDb;
+}
+
+// ===== МУЛЬТИПЛЕЕР =====
+class MP {
+    constructor(game) {
+        this.game=game; this.peer=null; this.conn=null;
+        this.isHost=false; this.connected=false;
+        this.oppBear=null; this.oppLabel=null;
+        this.oppTarget={x:0,y:10,z:0,ry:0};
+        this.oppScore=0; this.oppName='Друг'; this.oppAvatar='🐻';
+        this._sendTimer=null;
+        this._fbRoom=null; this._fbRef=null; this._fbListener=null;
+        this._useFirebase=false;
+        this._initUI();
+    }
+    _showScreen(n) {
+        ['choose','host','join','ready','quicklobby'].forEach(s=>{
+            document.getElementById('mp-screen-'+s).style.display = s===n?'block':'none';
+        });
+    }
+    _initUI() {
+        try {
+        document.getElementById('mp-do-create').onclick=()=>this._create();
+        document.getElementById('mp-do-join-open').onclick=()=>{ this._showScreen('join'); document.getElementById('mp-join-input').value=''; document.getElementById('mp-join-status').textContent=''; setTimeout(()=>document.getElementById('mp-join-input').focus(),100); };
+        document.getElementById('mp-back-to-menu').onclick=()=>this.close();
+        document.getElementById('mp-host-cancel').onclick=()=>{ this._destroy(); this._showScreen('choose'); };
+        document.getElementById('mp-join-cancel').onclick=()=>{ this._destroy(); this._showScreen('choose'); };
+        document.getElementById('mp-ready-cancel').onclick=()=>{ this._destroy(); this._showScreen('choose'); };
+        document.getElementById('mp-copy-code').onclick=()=>{
+            const code=document.getElementById('mp-room-code').textContent;
+            navigator.clipboard.writeText(code).then(()=>showToast('📋 Код скопирован!')).catch(()=>showToast('Код: '+code,false,5000));
+        };
+        document.getElementById('mp-start-game').onclick=()=>this._startGame();
+        document.getElementById('mp-do-connect').onclick=()=>{
+            const code=document.getElementById('mp-join-input').value.trim().toUpperCase();
+            if(code.length<4){document.getElementById('mp-join-status').textContent='❌ Введи код!';return;}
+            this._join(code);
+        };
+        document.getElementById('mp-join-input').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('mp-do-connect').click(); });
+        // Быстрое лобби
+        document.getElementById('ql-cancel').onclick=()=>{ this._stopQLRefresh(); this._showScreen('choose'); };
+        document.getElementById('ql-host-btn').onclick=()=>this._qlCreate();
+        // Firebase глобальный МП
+        document.getElementById('mp-do-matchmaking').onclick=()=>this._startMatchmaking();
+        $on('mp-do-quickjoin','onclick',()=>this._openQL());
+        } catch(e){ console.warn('MP _initUI error:',e); }
+    }
+    open() {
+        document.getElementById('menu').style.display='none';
+        document.getElementById('mp-lobby').style.display='flex';
+        this._showScreen('choose');
+        document.getElementById('mp-slot-me-av').textContent=this.game.profileAvatar;
+        document.getElementById('mp-slot-me-name').textContent=this.game.profileName;
+    }
+    close() {
+        this._destroy();
+        document.getElementById('mp-lobby').style.display='none';
+        document.getElementById('menu').style.display='flex';
+    }
+    _genCode() {
+        const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s='';
+        for(let i=0;i<6;i++) s+=c[Math.floor(Math.random()*c.length)]; return s;
+    }
+    _create() {
+        this._showScreen('host');
+        document.getElementById('mp-host-status').textContent='⏳ Подключаемся...';
+        document.getElementById('mp-host-status').className='mp-status wait';
+        document.getElementById('mp-room-code').textContent='......';
+        if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+        const code=this._genCode();
+        this.isHost=true;
+        this.peer=new Peer('PL-'+code,{debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun2.l.google.com:19302'}]}});
+        this.peer.on('open',()=>{
+            document.getElementById('mp-room-code').textContent=code;
+            document.getElementById('mp-host-status').textContent='✅ Ожидаем друга...';
+            document.getElementById('mp-host-status').className='mp-status ok';
+        });
+        this.peer.on('connection',conn=>{
+            this.conn=conn;
+            this._setup(conn);
+        });
+        this.peer.on('error',err=>{
+            const m=err.type==='unavailable-id'?'Код занят — нажми снова':'Ошибка сети: '+err.type;
+            document.getElementById('mp-host-status').textContent='❌ '+m;
+            document.getElementById('mp-host-status').className='mp-status err';
+            // Авто-повтор при занятом коде
+            if(err.type==='unavailable-id') setTimeout(()=>this._create(),1000);
+        });
+    }
+    _join(code) {
+        document.getElementById('mp-join-status').textContent='⏳ Подключаемся...';
+        document.getElementById('mp-join-status').className='mp-status wait';
+        this.isHost=false;
+        // Уничтожаем старый peer если был
+        if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+        this.peer=new Peer({debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun2.l.google.com:19302'}]}});
+        let joinTimeout=setTimeout(()=>{
+            if(!this.connected){
+                document.getElementById('mp-join-status').textContent='❌ Время ожидания вышло';
+                document.getElementById('mp-join-status').className='mp-status err';
+                try{this.peer&&this.peer.destroy();}catch(e){}
+            }
+        },12000);
+        this.peer.on('open',()=>{
+            document.getElementById('mp-join-status').textContent='🔗 Соединяемся...';
+            const conn=this.peer.connect('PL-'+code,{reliable:true});
+            this.conn=conn;
+            this._setup(conn);
+            // Таймаут если соединение не открылось
+            setTimeout(()=>{
+                if(!this.connected){
+                    document.getElementById('mp-join-status').textContent='❌ Комната не найдена или заполнена';
+                    document.getElementById('mp-join-status').className='mp-status err';
+                }
+            },8000);
+        });
+        this.peer.on('error',(err)=>{
+            clearTimeout(joinTimeout);
+            const msg = err.type==='peer-unavailable' ? '❌ Комната не найдена' :
+                        err.type==='network' ? '❌ Ошибка сети' : '❌ Ошибка: '+err.type;
+            document.getElementById('mp-join-status').textContent=msg;
+            document.getElementById('mp-join-status').className='mp-status err';
+        });
+    }
+    _setup(conn) {
+        conn.on('open',()=>{
+            this.connected=true;
+            // Оба стороны шлют hello
+            conn.send({type:'hello',name:this.game.profileName,avatar:this.game.profileAvatar});
+            // Хост дополнительно сразу показывает ready
+            if(this.isHost){
+                document.getElementById('mp-host-status').textContent='✅ Друг подключился!';
+                document.getElementById('mp-host-status').className='mp-status ok';
+            }
+        });
+        conn.on('data',d=>{
+            if(!d||!d.type) return;
+            if(d.type==='hello') {
+                this.oppName=d.name||'Друг'; this.oppAvatar=d.avatar||'🐻';
+                // Гость тоже получает ответ от хоста
+                if(!this.isHost) conn.send({type:'hello_ack',name:this.game.profileName,avatar:this.game.profileAvatar});
+                this._bothReady();
+            }
+            if(d.type==='hello_ack') { this.oppName=d.name||'Друг'; this.oppAvatar=d.avatar||'🐻'; this._bothReady(); }
+            else if(d.type==='start') { if(!this.isHost){ this.game.currentCycle=d.cycle||0; this.game.currentMult=1+(d.cycle||0)*.5; this.game.gameMode=d.mode||'classic'; this._startGame(); } }
+            else if(d.type==='cycle') { if(!this.isHost){ this.game.currentCycle=d.cycle; this.game.currentMult=d.mult; document.getElementById('mult-val').innerText=d.mult; this.game._cycleComplete(); } }
+            else if(d.type==='pos') { this.oppTarget={x:d.x,y:d.y,z:d.z,ry:d.ry}; if(typeof d.cyc==='number'&&d.cyc!==this.game.currentCycle){this.game.currentCycle=d.cyc;this.game.currentMult=1+d.cyc*.5;document.getElementById('mult-val').innerText=this.game.currentMult;} }
+            else if(d.type==='score') { this.oppScore=d.score; document.getElementById('mp-opp-score').textContent=d.score; }
+            else if(d.type==='gameover') { showToast(`💀 ${this.oppName} упал! (${d.score} очков)`,false,4000); }
+            else if(d.type==='disconnect') { showToast('🔌 '+this.oppName+' отключился',true); this._onDisconnect(); }
+        });
+        conn.on('close',()=>{ if(this.connected){showToast('🔌 Соперник отключился',true); this._onDisconnect();} });
+    }
+    _openQL() {
+        this._showScreen('quicklobby');
+        document.getElementById('ql-status').textContent='🔍 Ищем открытые игры...';
+        document.getElementById('ql-list').innerHTML='';
+        this._refreshQL();
+        this._qlTimer=setInterval(()=>this._refreshQL(),3000);
+    }
+    _stopQLRefresh() { clearInterval(this._qlTimer); this._qlTimer=null; }
+    _refreshQL() {
+        const now=Date.now();
+        let rooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+        rooms=rooms.filter(r=>now-r.ts<120000);
+        localStorage.setItem('ql_rooms',JSON.stringify(rooms));
+        const list=document.getElementById('ql-list');
+        if(!rooms.length){
+            list.innerHTML='<div style="text-align:center;opacity:.5;padding:18px;font-size:1.3rem">Нет открытых игр 😴</div>';
+        } else {
+            list.innerHTML='';
+            rooms.forEach(r=>{
+                const row=document.createElement('div'); row.className='lobby-row';
+                row.innerHTML=`<div style="font-size:1.7rem">${r.avatar||'🐻'}</div><div class="lobby-row-name">${r.host}</div><div style="font-size:1rem;color:rgba(255,255,255,.4)">${r.mode||'Классика'}</div><button class="lobby-row-join">Войти</button>`;
+                row.querySelector('.lobby-row-join').onclick=()=>{
+                    this._stopQLRefresh();
+                    document.getElementById('mp-join-input').value=r.code;
+                    document.getElementById('mp-join-status').textContent='';
+                    this._join(r.code); this._showScreen('join');
+                };
+                list.appendChild(row);
+            });
+        }
+        document.getElementById('ql-status').textContent=rooms.length?`Найдено игр: ${rooms.length}`:'Нет открытых игр';
+    }
+    _qlCreate() {
+        this._stopQLRefresh(); this._showScreen('host');
+        document.getElementById('mp-host-status').textContent='⏳ Подключаемся...';
+        document.getElementById('mp-host-status').className='mp-status wait';
+        document.getElementById('mp-room-code').textContent='......';
+        const code=this._genCode(); this.isHost=true;
+        if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+        this.peer=new Peer('PL-'+code,{debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:stun2.l.google.com:19302'}]}});
+        this.peer.on('open',()=>{
+            document.getElementById('mp-room-code').textContent=code;
+            document.getElementById('mp-host-status').textContent='✅ Ожидаем игрока...';
+            document.getElementById('mp-host-status').className='mp-status ok';
+            const rooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+            const modeName=(GAME_MODES.find(m=>m.id===this.game.gameMode)||GAME_MODES[0]).name;
+            rooms.push({code,host:this.game.profileName,avatar:this.game.profileAvatar,mode:modeName,ts:Date.now()});
+            localStorage.setItem('ql_rooms',JSON.stringify(rooms));
+            this._qlCleanCode=code;
+        });
+        this.peer.on('connection',conn=>{ this.conn=conn; this._setup(conn); this._removeQLEntry(); });
+        this.peer.on('error',err=>{
+            const m=err.type==='unavailable-id'?'Код занят':'Ошибка: '+err.type;
+            document.getElementById('mp-host-status').textContent='❌ '+m;
+            document.getElementById('mp-host-status').className='mp-status err';
+            if(err.type==='unavailable-id') setTimeout(()=>this._qlCreate(),800);
+        });
+    }
+    _removeQLEntry() {
+        if(!this._qlCleanCode) return;
+        const rooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+        localStorage.setItem('ql_rooms',JSON.stringify(rooms.filter(r=>r.code!==this._qlCleanCode)));
+        this._qlCleanCode=null;
+    }
+    // ===== FIREBASE ГЛОБАЛЬНЫЙ МП =====
+    _fbAvailable() {
+        try{ return !!getFbDb(); } catch(e){ return false; }
+    }
+    _fbCreate() {
+        if(!this._fbAvailable()){showToast('⚠️ Firebase недоступен — используем PeerJS',true,3000);this._qlCreate();return;}
+        this._useFirebase=true;
+        const code=this._genCode(); this.isHost=true; this._fbRoom=code;
+        const db=getFbDb();
+        const ref=db.ref('rooms/'+code);
+        this._fbRef=ref;
+        const md=(GAME_MODES.find(m=>m.id===this.game.gameMode)||GAME_MODES[0]).name;
+        ref.set({
+            host:this.game.profileName, hostAvatar:this.game.profileAvatar,
+            mode:this.game.gameMode, created:Date.now(), state:'waiting',
+            pos_host:{x:0,y:10,z:0,ry:0,cyc:0,score:0}
+        });
+        ref.onDisconnect().remove();
+        this._fbRoomCode=code;
+        document.getElementById('mp-room-code').textContent=code;
+        document.getElementById('mp-host-status').textContent='✅ Ожидаем игрока...';
+        document.getElementById('mp-host-status').className='mp-status ok';
+        // Обновить лобби
+        const qlRooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+        qlRooms.push({code,host:this.game.profileName,avatar:this.game.profileAvatar,mode:md,ts:Date.now(),fb:true});
+        localStorage.setItem('ql_rooms',JSON.stringify(qlRooms));
+        this._qlCleanCode=code;
+        // Слушаем подключение гостя
+        this._fbListener=ref.child('guest').on('value',snap=>{
+            const g=snap.val(); if(!g) return;
+            this.oppName=g.name||'Друг'; this.oppAvatar=g.avatar||'🐻';
+            this.connected=true;
+            ref.child('guest_ack').off('value',this._fbListener);
+            this._bothReady();
+            // Слушаем позиции гостя
+            ref.child('pos_guest').on('value',ps=>{
+                const d=ps.val(); if(!d) return;
+                this.oppTarget={x:d.x||0,y:d.y||10,z:d.z||0,ry:d.ry||0};
+                if(typeof d.cyc==='number'&&d.cyc!==this.game.currentCycle){this.game.currentCycle=d.cyc;this.game.currentMult=1+d.cyc*.5;}
+                if(d.score!==undefined){this.oppScore=d.score;document.getElementById('mp-opp-score').textContent=d.score;}
+                if(d.gameover){showToast('💀 '+this.oppName+' упал!',false,3500);}
+            });
+        });
+        this._showScreen('host');
+    }
+    _fbJoin(code) {
+        if(!this._fbAvailable()){showToast('⚠️ Firebase недоступен — используем PeerJS',true,2000);this._join(code);return;}
+        this._useFirebase=true;
+        this.isHost=false; this._fbRoom=code;
+        const db=getFbDb();
+        const ref=db.ref('rooms/'+code);
+        this._fbRef=ref;
+        // Проверяем комнату
+        ref.once('value',snap=>{
+            const room=snap.val();
+            if(!room){document.getElementById('mp-join-status').textContent='❌ Комната не найдена';document.getElementById('mp-join-status').className='mp-status err';return;}
+            this.oppName=room.host; this.oppAvatar=room.hostAvatar||'🐻';
+            this.game.gameMode=room.mode||'classic';
+            // Входим
+            ref.child('guest').set({name:this.game.profileName,avatar:this.game.profileAvatar,ts:Date.now()});
+            ref.onDisconnect().child('guest').remove();
+            this.connected=true;
+            this._bothReady();
+            // Слушаем позиции хоста
+            ref.child('pos_host').on('value',ps=>{
+                const d=ps.val(); if(!d) return;
+                this.oppTarget={x:d.x||0,y:d.y||10,z:d.z||0,ry:d.ry||0};
+                if(typeof d.cyc==='number'&&d.cyc!==this.game.currentCycle){this.game.currentCycle=d.cyc;this.game.currentMult=1+d.cyc*.5;}
+                if(d.score!==undefined){this.oppScore=d.score;document.getElementById('mp-opp-score').textContent=d.score;}
+                if(d.start){this.game.currentCycle=d.start.cycle||0;this.game.currentMult=1+(d.start.cycle||0)*.5;this.game.gameMode=d.start.mode||'classic';if(!this._fbGameStarted){this._fbGameStarted=true;this._startGame();}}
+                if(d.gameover){showToast('💀 '+this.oppName+' упал!',false,3500);}
+            });
+        });
+    }
+    _fbSendPos() {
+        if(!this._fbRef||!this._fbRoom) return;
+        const b=this.game.bear.mesh;
+        const key=this.isHost?'pos_host':'pos_guest';
+        try{
+            this._fbRef.child(key).set({
+                x:Math.round(b.position.x*100)/100,
+                y:Math.round(b.position.y*100)/100,
+                z:Math.round(b.position.z*100)/100,
+                ry:Math.round(b.rotation.y*100)/100,
+                cyc:this.game.currentCycle,
+                score:this.game.score
+            });
+        }catch(e){}
+    }
+    _fbStartGame() {
+        if(this.isHost&&this._fbRef){
+            this._fbRef.child('pos_host').update({start:{cycle:this.game.currentCycle,mode:this.game.gameMode}});
+        }
+    }
+    _fbDestroy(){
+        if(this._fbRef){
+            try{
+                if(this.isHost) this._fbRef.remove();
+                else this._fbRef.child('guest').remove();
+                this._fbRef.off();
+            }catch(e){}
+            this._fbRef=null;
+        }
+        this._fbRoom=null; this._useFirebase=false; this._fbGameStarted=false;
+    }
+    // ===== КОНЕЦ FIREBASE =====
+
+    // ===== МАТЧМЕЙКИНГ =====
+    _startMatchmaking() {
+        this._showScreen('matchmaking');
+        this._mmStartTime=Date.now();
+        this._mmTimer=setInterval(()=>this._mmTick(),1000);
+        this._mmSearchTimer=setInterval(()=>this._mmSearch(),2000);
+        this._mmSearch();
+        document.getElementById('mm-cancel').onclick=()=>{ this._stopMatchmaking(); this._showScreen('choose'); };
+    }
+    _stopMatchmaking(){
+        clearInterval(this._mmTimer); clearInterval(this._mmSearchTimer);
+        this._mmTimer=null; this._mmSearchTimer=null;
+        // Убираем себя из лобби
+        const rooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+        localStorage.setItem('ql_rooms',JSON.stringify(rooms.filter(r=>r.code!==this._mmCode)));
+        this._mmCode=null;
+    }
+    _mmTick(){
+        const el=document.getElementById('mm-timer'); if(!el) return;
+        const sec=Math.floor((Date.now()-this._mmStartTime)/1000);
+        el.textContent=Math.floor(sec/60)+':'+(sec%60).toString().padStart(2,'0');
+    }
+    _mmSearch(){
+        const now=Date.now();
+        // Чистим старые записи
+        let rooms=JSON.parse(localStorage.getItem('ql_rooms')||'[]');
+        rooms=rooms.filter(r=>now-r.ts<30000&&r.mm);
+        // Добавляем себя если нет
+        if(!this._mmCode){
+            this._mmCode=this._genCode();
+            rooms.push({
+                code:this._mmCode, host:this.game.profileName,
+                avatar:this.game.profileAvatar, mode:this.game.gameMode,
+                ts:now, mm:true, peer:'PL-'+this._mmCode
+            });
+            // Создаём peer
+            if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+            this.isHost=false; // Матчмейкинг — первый кто найдёт — хост
+            this.peer=new Peer('PL-'+this._mmCode,{debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}]}});
+            this.peer.on('connection',conn=>{ this.conn=conn; this._setup(conn); this._stopMatchmaking(); this.isHost=true; });
+            this.peer.on('error',()=>{});
+        } else {
+            // Обновляем timestamp
+            const me=rooms.find(r=>r.code===this._mmCode);
+            if(me) me.ts=now;
+        }
+        localStorage.setItem('ql_rooms',JSON.stringify(rooms));
+
+        // Обновляем UI
+        const others=rooms.filter(r=>r.code!==this._mmCode);
+        const pEl=document.getElementById('mm-players');
+        const statusEl=document.getElementById('mm-status');
+        if(!pEl||!statusEl) return;
+        const total=others.length+1;
+        pEl.innerHTML='';
+        // Свой аватар
+        const me=document.createElement('div');
+        me.style.cssText='width:44px;height:44px;border-radius:50%;background:rgba(0,200,255,.3);border:2px solid #00e5ff;display:flex;align-items:center;justify-content:center;font-size:1.6rem';
+        me.textContent=this.game.profileAvatar;
+        pEl.appendChild(me);
+        others.forEach(r=>{
+            const p=document.createElement('div');
+            p.style.cssText='width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:1.6rem';
+            p.textContent=r.avatar||'🐻';
+            pEl.appendChild(p);
+        });
+        statusEl.textContent=total>=2?`Найдено ${total} игрок(а) — подключаемся...`:`Ищем игроков... (${total}/2+)`;
+
+        // Если нашёлся хотя бы 1 другой — подключаемся к первому
+        if(others.length>=1){
+            const target=others[0];
+            this._stopMatchmaking();
+            showToast('✅ Игрок найден! Подключаемся...',false,2500);
+            setTimeout(()=>{
+                this._showScreen('join');
+                document.getElementById('mp-join-status').textContent='🔗 Подключаемся к '+target.host+'...';
+                document.getElementById('mp-join-status').className='mp-status wait';
+                // Подключаемся к его peer
+                if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+                this.isHost=false;
+                this.peer=new Peer({debug:0,config:{iceServers:[{urls:'stun:stun.l.google.com:19302'}]}});
+                this.peer.on('open',()=>{
+                    const conn=this.peer.connect(target.peer,{reliable:true});
+                    this.conn=conn; this._setup(conn);
+                    setTimeout(()=>{ if(!this.connected){ document.getElementById('mp-join-status').textContent='❌ Не удалось подключиться'; document.getElementById('mp-join-status').className='mp-status err'; }},8000);
+                });
+                this.peer.on('error',()=>{ document.getElementById('mp-join-status').textContent='❌ Ошибка подключения'; document.getElementById('mp-join-status').className='mp-status err'; });
+            },800);
+        }
+    }
+    // ===== КОНЕЦ МАТЧМЕЙКИНГА =====
+
+    _bothReady() {
+        document.getElementById('mp-ready-me-av').textContent=this.game.profileAvatar;
+        document.getElementById('mp-ready-me-name').textContent=this.game.profileName;
+        document.getElementById('mp-ready-opp-av').textContent=this.oppAvatar;
+        document.getElementById('mp-ready-opp-name').textContent=this.oppName;
+        this._showScreen('ready');
+        document.getElementById('mp-start-game').style.display=this.isHost?'block':'none';
+    }
+    _startGame() {
+        if(this._useFirebase){ this._fbStartGame(); }
+        else if(this.isHost&&this.conn) this.conn.send({type:'start',cycle:this.game.currentCycle,mode:this.game.gameMode||'classic'});
+        document.getElementById('mp-lobby').style.display='none';
+        document.getElementById('hud').style.display='flex';
+        document.getElementById('coin-count').style.display='flex';
+        document.getElementById('multiplier-badge').style.display='flex';
+        document.getElementById('mp-opponent-hud').style.display='flex';
+        document.getElementById('mp-opp-name').textContent=this.oppAvatar+' '+this.oppName;
+        document.getElementById('mp-opp-score').textContent='0';
+        this.game.active=true; this.game.mpMode=true;
+        this.game.reset(); startBgMusic();
+        this._spawnOpp();
+        this._startSend();
+    }
+    _spawnOpp() {
+        if(this.oppBear){ this.game.scene.remove(this.oppBear.mesh); }
+        this.oppBear=new Bear(this.game.scene,false);
+        // Красим соперника в коричневый
+        this.oppBear.mesh.traverse(o=>{
+            if(o.isMesh&&o.material&&o.material.color){
+                const col=o.material.color;
+                if(col.r>.8&&col.g>.8){ o.material=o.material.clone(); o.material.color.setHex(0xcc7733); }
+            }
+        });
+        this.oppBear.mesh.position.set(3,10,0);
+        if(this.oppLabel){ this.oppLabel.remove(); }
+        this.oppLabel=document.createElement('div');
+        this.oppLabel.className='opponent-label';
+        this.oppLabel.textContent=this.oppAvatar+' '+this.oppName;
+        document.body.appendChild(this.oppLabel);
+    }
+    _startSend() {
+        clearInterval(this._sendTimer);
+        this._sendTimer=setInterval(()=>{
+            if(!this.connected||!this.game.active) return;
+            if(this._useFirebase){ this._fbSendPos(); return; }
+            if(!this.conn) return;
+            const b=this.game.bear.mesh;
+            try { this.conn.send({type:'pos',x:Math.round(b.position.x*100)/100,y:Math.round(b.position.y*100)/100,z:Math.round(b.position.z*100)/100,ry:Math.round(b.rotation.y*100)/100,cyc:this.game.currentCycle}); } catch(e){}
+        },50);
+    }
+    sendScore(s){ if(this.conn&&this.connected) try{this.conn.send({type:'score',score:s});}catch(e){} }
+    sendGameOver(s){
+        if(this._useFirebase&&this._fbRef){ try{const k=this.isHost?'pos_host':'pos_guest';this._fbRef.child(k).update({gameover:true,score:s});}catch(e){} return; }
+        if(this.conn&&this.connected) try{this.conn.send({type:'gameover',score:s});}catch(e){}
+    }
+    updateOpp(et) {
+        if(!this.oppBear) return;
+        const t=this.oppTarget, b=this.oppBear.mesh;
+        b.position.x+=(t.x-b.position.x)*.3;
+        b.position.y+=(t.y-b.position.y)*.3;
+        b.position.z+=(t.z-b.position.z)*.3;
+        b.rotation.y+=(t.ry-b.rotation.y)*.3;
+        const spd=Math.hypot(t.x-b.position.x,t.z-b.position.z);
+        this.oppBear.animate(spd*10,true,et);
+        if(this.oppLabel&&this.game.camera){
+            const p=b.position.clone(); p.y+=5;
+            const pr=p.project(this.game.camera);
+            const x=(pr.x*.5+.5)*window.innerWidth;
+            const y=(-pr.y*.5+.5)*window.innerHeight;
+            if(pr.z<1){ this.oppLabel.style.display='block'; this.oppLabel.style.left=x+'px'; this.oppLabel.style.top=y+'px'; }
+            else this.oppLabel.style.display='none';
+        }
+    }
+    _cleanupOpp() {
+        if(this.oppBear){ this.game.scene.remove(this.oppBear.mesh); this.oppBear=null; }
+        if(this.oppLabel){ this.oppLabel.remove(); this.oppLabel=null; }
+    }
+    _onDisconnect() {
+        this.connected=false; clearInterval(this._sendTimer);
+        this._cleanupOpp();
+        document.getElementById('mp-opponent-hud').style.display='none';
+        this.game.mpMode=false;
+    }
+    _destroy() {
+        clearInterval(this._sendTimer);
+        if(this._useFirebase){ this._fbDestroy(); }
+        if(this.conn){ try{this.conn.send({type:'disconnect'});this.conn.close();}catch(e){} this.conn=null; }
+        if(this.peer){ try{this.peer.destroy();}catch(e){} this.peer=null; }
+        this._onDisconnect();
+        this.connected=false;
+        this.isHost=false;
+    }
+}
+
+// ===== ИГРА =====
+class Game {
+    constructor() {
+        this.bestScore=parseInt(localStorage.getItem('bestScore')||'0');
+        this.totalCoins=parseInt(localStorage.getItem('totalCoins')||'0');
+        this.purchasedGifts=JSON.parse(localStorage.getItem('purchasedGifts')||'{}');
+        this.totalGames=parseInt(localStorage.getItem('totalGames')||'0');
+        this.totalPlatformsEver=parseInt(localStorage.getItem('totalPlatformsEver')||'0');
+        this.bestCycle=parseInt(localStorage.getItem('bestCycle')||'0');
+        this.profileName=localStorage.getItem('profileName')||'Игрок';
+        this.profileAvatar=localStorage.getItem('profileAvatar')||'🐻‍❄️';
+        this.profileBio=localStorage.getItem('profileBio')||'';
+        this.profileStatus=localStorage.getItem('profileStatus')||'';
+        this.profileColor=localStorage.getItem('profileColor')||'#ffffff';
+        this.selectedSkin=localStorage.getItem('selectedSkin')||'polar';
+        this.gameMode=localStorage.getItem('gameMode')||'classic';
+        this.totalPlatforms=50;
+        this.mpMode=false;
+        this.modeLives=3; this.modeTimer=0; this.modeTimerActive=false; this.modeStartTime=0;
+        this._doInit();
+    }
+    async _doInit() {
+        try {
+            setLoadProgress(20,'Инициализация...');
+            this._initRender(); await sleep(100);
+            setLoadProgress(50,'Загрузка...');
+            this._initPreview(); await sleep(100);
+            setLoadProgress(70,'Управление...');
+            this._initInput(); await sleep(100);
+            setLoadProgress(85,'Интерфейс...');
+            this._initUI(); await sleep(100);
+        } catch(e) {
+            console.error('Init error:', e);
+        }
+        // Всегда показываем меню, даже если была ошибка
+        setLoadProgress(100,'Готово!'); await sleep(300);
+        document.getElementById('loading-screen').style.display='none';
+        document.getElementById('menu').style.display='flex';
+        try { startMenuMusic(); } catch(e){}
+        // Регистрируем динамические ID чтобы не было ошибок
+        ['lb-profile-modal','lbp-avatar','lbp-bio','lbp-level','lbp-name','lbp-score','lbp-skin','lbp-status'].forEach(id=>{ if(!document.getElementById(id)){ const d=document.createElement('div'); d.id=id; d.style.display='none'; document.body.appendChild(d); } });
+        try { this.mp=new MP(this); } catch(e){ console.warn('MP init error:',e); }
+        try { this.reset(); } catch(e){ console.warn('Reset error:',e); }
+        this._loop();
+    }
+
+    // ===== РЕНДЕР =====
+    _initRender() {
+        this.scene=new THREE.Scene();
+        this.scene.background=new THREE.Color(0x87ceeb);
+        this.scene.fog=new THREE.FogExp2(0x87ceeb,.006);
+        this.camera=new THREE.PerspectiveCamera(65,innerWidth/innerHeight,.1,1000);
+        this.renderer=new THREE.WebGLRenderer({antialias:true});
+        this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+        this.renderer.setSize(innerWidth,innerHeight);
+        this.renderer.shadowMap.enabled=true;
+        this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+        document.body.appendChild(this.renderer.domElement);
+        this.scene.add(new THREE.AmbientLight(0xffffff,.7));
+        const d=new THREE.DirectionalLight(0xffffff,1.2); d.position.set(50,100,50); d.castShadow=true; d.shadow.mapSize.set(2048,2048); d.shadow.camera.far=500; this.scene.add(d);
+        this.scene.add(new THREE.HemisphereLight(0x87ceeb,0x334455,.4));
+        this.bear=new Bear(this.scene,false,this.selectedSkin);
+        this.clock=new THREE.Clock();
+        this.active=false;
+        this.platforms=[]; this.coins=[]; this.pushers=[];
+        this.score=0; this.coinsCollected=0; this.zoom=24;
+        this.baseScore=0; this.currentCycleMaxIdx=-1; this.currentCycle=0; this.currentMult=1;
+        this.vel=new THREE.Vector3(); this.grounded=false;
+        this.inp={x:0,y:0,active:false,camX:0,camY:.5};
+        this.snow=new Snow(this.scene);
+    }
+    _initPreview() {
+        const c=document.getElementById('preview-bear'); c.innerHTML='';
+        this.prevScene=new THREE.Scene();
+        this.prevCam=new THREE.PerspectiveCamera(50,1,.1,1000);
+        this.prevCam.position.set(5,3,5); this.prevCam.lookAt(0,2,0);
+        this.prevRend=new THREE.WebGLRenderer({antialias:true,alpha:true});
+        this.prevRend.setSize(260,260); this.prevRend.shadowMap.enabled=true;
+        c.appendChild(this.prevRend.domElement);
+        this.prevScene.add(new THREE.AmbientLight(0xffffff,.8));
+        const d=new THREE.DirectionalLight(0xaaccff,1.5); d.position.set(5,10,7); this.prevScene.add(d);
+        this.prevBear=new Bear(this.prevScene,true);
+        this.prevRot=0;
+    }
+
+    // ===== УПРАВЛЕНИЕ (джойстик из рабочей версии) =====
+    _initInput() {
+        const isTouchDev='ontouchstart' in window||navigator.maxTouchPoints>0;
+        if (isTouchDev) {
+            document.getElementById('ctrls').style.display='block';
+            this._initMobile();
+        } else {
+            this._initPC();
+        }
+    }
+
+    _initPC() {
+        this.keys={w:false,a:false,s:false,d:false};
+        window.addEventListener('keydown',e=>{
+            if(!this.active) return;
+            if(e.code==='KeyW'||e.code==='ArrowUp'){this.keys.w=true;e.preventDefault();}
+            if(e.code==='KeyA'||e.code==='ArrowLeft'){this.keys.a=true;e.preventDefault();}
+            if(e.code==='KeyS'||e.code==='ArrowDown'){this.keys.s=true;e.preventDefault();}
+            if(e.code==='KeyD'||e.code==='ArrowRight'){this.keys.d=true;e.preventDefault();}
+            if(e.code==='Space'){e.preventDefault();if(this.grounded){this.vel.y=.45;this.grounded=false;playJump();}}
+        });
+        window.addEventListener('keyup',e=>{
+            if(e.code==='KeyW'||e.code==='ArrowUp') this.keys.w=false;
+            if(e.code==='KeyA'||e.code==='ArrowLeft') this.keys.a=false;
+            if(e.code==='KeyS'||e.code==='ArrowDown') this.keys.s=false;
+            if(e.code==='KeyD'||e.code==='ArrowRight') this.keys.d=false;
+        });
+        let drag=false;
+        window.addEventListener('mousedown',e=>{ if(e.button===0&&this.active&&!e.target.closest('button')&&!e.target.closest('.modal')&&!e.target.closest('#menu')) drag=true; });
+        window.addEventListener('mousemove',e=>{ if(drag&&this.active){this.inp.camX-=e.movementX*.005;this.inp.camY=Math.max(.1,Math.min(1.4,this.inp.camY+e.movementY*.005));} });
+        window.addEventListener('mouseup',()=>drag=false);
+        window.addEventListener('wheel',e=>{ if(this.active) this.zoom=Math.max(12,Math.min(60,this.zoom+e.deltaY*.05)); });
+        window.addEventListener('contextmenu',e=>e.preventDefault());
+    }
+
+    // Рабочий джойстик — точно такой же как в старой версии (pointer events)
+    _initMobile() {
+        const zone=document.getElementById('j-zone');
+        const nub=document.getElementById('j-nub');
+        const jBtn=document.getElementById('j-btn');
+        let initialDist=0;
+
+        // Прыжок
+        jBtn.onpointerdown=e=>{ e.preventDefault(); if(this.active&&this.grounded){this.vel.y=.45;this.grounded=false;playJump();} };
+
+        window.onpointerdown=e=>{
+            const r=zone.getBoundingClientRect();
+            if(e.clientX>r.left&&e.clientX<r.right&&e.clientY>r.top&&e.clientY<r.bottom){
+                this.inp.active=true; this.inp._id=e.pointerId;
+                zone.setPointerCapture(e.pointerId);
+            } else if(e.target.id!=='j-btn'&&e.target.id!=='start-btn'&&!e.target.closest('button')&&!e.target.closest('.modal')&&!e.target.closest('#menu')&&!e.target.closest('#mp-lobby')&&!e.target.closest('#game-over')) {
+                this.inp._camId=e.pointerId; this.inp._camLX=e.clientX; this.inp._camLY=e.clientY;
+            }
+        };
+
+        window.onpointermove=e=>{
+            if(this.inp.active&&e.pointerId===this.inp._id){
+                const r=zone.getBoundingClientRect();
+                const cx=r.left+r.width/2, cy=r.top+r.height/2;
+                const dx=e.clientX-cx, dy=e.clientY-cy;
+                const dist=Math.sqrt(dx*dx+dy*dy);
+                const clamped=Math.min(dist,70);
+                const a=Math.atan2(dy,dx);
+                this.inp.x=Math.cos(a)*clamped/70;
+                this.inp.y=Math.sin(a)*clamped/70;
+                nub.style.transform=`translate(calc(-50% + ${this.inp.x*70}px), calc(-50% + ${this.inp.y*70}px))`;
+            } else if(e.pointerId===this.inp._camId&&this.active){
+                this.inp.camX-=(e.clientX-this.inp._camLX)*.005;
+                this.inp.camY=Math.max(.1,Math.min(1.4,this.inp.camY+(e.clientY-this.inp._camLY)*.005));
+                this.inp._camLX=e.clientX; this.inp._camLY=e.clientY;
+            }
+        };
+
+        window.onpointerup=e=>{
+            if(e.pointerId===this.inp._id){
+                this.inp.active=false; this.inp.x=0; this.inp.y=0;
+                nub.style.transform='translate(-50%,-50%)'; this.inp._id=null;
+            }
+            if(e.pointerId===this.inp._camId) this.inp._camId=null;
+        };
+
+        // Pinch zoom
+        window.addEventListener('touchmove',e=>{
+            if(e.touches.length===2){
+                const d=Math.hypot(e.touches[0].pageX-e.touches[1].pageX,e.touches[0].pageY-e.touches[1].pageY);
+                if(initialDist>0) this.zoom=Math.max(12,Math.min(60,this.zoom-(d-initialDist)*.1));
+                initialDist=d;
+            }
+        },{passive:false});
+        window.addEventListener('touchend',()=>initialDist=0);
+    }
+
+    // ===== UI =====
+    _initUI() {
+        try {
+        // Кнопки меню
+        document.getElementById('start-btn').onclick=()=>this._startGame();
+        document.getElementById('restart-btn').onclick=()=>{ document.getElementById('game-over').style.display='none'; this._startGame(); };
+        document.getElementById('back-to-menu').onclick=()=>{ startMenuMusic();
+            if(this.mp){ this.mp._cleanupOpp(); this.mpMode=false; }
+            document.getElementById('mp-opponent-hud').style.display='none';
+            document.getElementById('game-over').style.display='none';
+            document.getElementById('hud').style.display='none';
+            document.getElementById('coin-count').style.display='none';
+            document.getElementById('multiplier-badge').style.display='none';
+            document.getElementById('menu').style.display='flex';
+            const _m=document.getElementById('mode-hud'); if(_m) _m.style.display='none';
+            const _t=document.getElementById('timer-hud'); if(_t) _t.style.display='none';
+            this.modeTimerActive=false;
+            this.active=false; stopBgMusic(); this._updateMenuStats();
+        };
+        document.getElementById('mp-btn').onclick=()=>{ if(this.mp) this.mp.open(); };
+        document.getElementById('news-btn').onclick=()=>showToast('📰 Скоро!');
+        document.getElementById('m-news-btn').onclick=()=>showToast('📰 Скоро!');
+
+        // (мобильные кнопки теперь в sidebar'ах)
+
+        // Десктоп
+        document.getElementById('shop-btn').onclick=()=>{ this._renderShopGifts(); this._renderShopBoxes(); document.getElementById('shop-modal').style.display='flex'; };
+        document.getElementById('inventory-btn').onclick=()=>{ this._renderInventory(); document.getElementById('inventory-modal').style.display='flex'; };
+        document.getElementById('profile-btn').onclick=()=>{ this._renderProfile(); document.getElementById('profile-modal').style.display='flex'; };
+        document.getElementById('settings-btn').onclick=()=>document.getElementById('settings-modal').style.display='flex';
+        document.getElementById('leaderboard-btn').onclick=()=>{ this._renderLeaderboard(); document.getElementById('leaderboard-modal').style.display='flex'; };
+        document.getElementById('achievements-btn').onclick=()=>{ this._renderAchievements(); document.getElementById('achievements-modal').style.display='flex'; };
+
+        // Закрытия
+        document.getElementById('close-shop').onclick=()=>document.getElementById('shop-modal').style.display='none';
+        document.getElementById('close-inventory').onclick=()=>document.getElementById('inventory-modal').style.display='none';
+        document.getElementById('close-profile').onclick=()=>document.getElementById('profile-modal').style.display='none';
+        document.getElementById('close-settings').onclick=()=>document.getElementById('settings-modal').style.display='none';
+        document.getElementById('close-achievements').onclick=()=>document.getElementById('achievements-modal').style.display='none';
+        document.getElementById('close-leaderboard').onclick=()=>document.getElementById('leaderboard-modal').style.display='none';
+        document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.style.display='none'; }));
+
+        // Табы магазина
+        document.querySelectorAll('.shop-tab').forEach(tab=>{
+            tab.addEventListener('click',()=>{
+                const mc=tab.closest('.modal-content');
+                mc.querySelectorAll('.shop-tab').forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                mc.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+                document.getElementById(tab.dataset.tab==='gifts'?'gifts-tab':'boxes-tab').classList.add('active');
+            });
+        });
+
+        // Промокод
+        document.getElementById('activate-promo').onclick=()=>{
+            const code=document.getElementById('promo-code').value.trim().toUpperCase();
+            if(!code){showToast('Введи промокод!',true);return;}
+            if(usedPromos.includes(code)){showToast('❌ Уже использован!',true);return;}
+            if(PROMOS[code]){
+                const d=PROMOS[code]; this.totalCoins+=d.coins;
+                localStorage.setItem('totalCoins',this.totalCoins);
+                usedPromos.push(code); localStorage.setItem('usedPromos',JSON.stringify(usedPromos));
+                this._updateMenuStats(); document.getElementById('promo-code').value='';
+                showToast(d.msg,false,3000); this._renderShopGifts(); this._renderShopBoxes();
+            } else showToast('❌ Неверный промокод',true);
+        };
+        document.getElementById('promo-code').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('activate-promo').click(); });
+
+        // Настройки
+        const mT=document.getElementById('music-toggle');
+        const sT=document.getElementById('sound-toggle');
+        const pT=document.getElementById('particles-toggle');
+        mT.checked=musicEnabled; sT.checked=soundEnabled; pT.checked=particlesEnabled;
+        mT.onchange=e=>{ musicEnabled=e.target.checked; localStorage.setItem('musicEnabled',musicEnabled); if(!musicEnabled) stopBgMusic(); else if(this.active) startBgMusic(); };
+        sT.onchange=e=>{ soundEnabled=e.target.checked; localStorage.setItem('soundEnabled',soundEnabled); };
+        pT.onchange=e=>{ particlesEnabled=e.target.checked; localStorage.setItem('particlesEnabled',particlesEnabled); };
+        document.getElementById('reset-stats-btn').onclick=()=>{ if(confirm('Сбросить весь прогресс?')){localStorage.clear();location.reload();} };
+
+        // Профиль
+        document.getElementById('edit-profile-btn').onclick=()=>{
+            const ed=document.getElementById('profile-editor');
+            ed.style.display=ed.style.display==='none'?'block':'none';
+            if(ed.style.display==='block'){ document.getElementById('profile-name-input').value=this.profileName; this._renderAvatarPicker(); }
+        };
+        document.getElementById('save-profile-btn').onclick=()=>{
+            const n=document.getElementById('profile-name-input').value.trim();
+            if(n){this.profileName=n;localStorage.setItem('profileName',n);}
+            localStorage.setItem('profileAvatar',this.profileAvatar);
+            const bioEl=document.getElementById('profile-bio');
+            if(bioEl){this.profileBio=bioEl.value.trim();localStorage.setItem('profileBio',this.profileBio);}
+            localStorage.setItem('profileStatus',this.profileStatus||'');
+            localStorage.setItem('profileColor',this.profileColor||'#ffffff');
+            document.getElementById('profile-editor').style.display='none';
+            this._renderProfile(); showToast('✅ Профиль сохранён!');
+        };
+
+        this._updateMenuStats();
+        // Скины
+        $on('skins-btn','onclick',()=>{ this._renderSkins(); document.getElementById('skins-modal').style.display='flex'; });
+        $on('close-skins','onclick',()=>document.getElementById('skins-modal').style.display='none');
+        // Режимы
+        $on('modes-btn','onclick',()=>{ this._renderModes(); document.getElementById('mode-modal').style.display='flex'; });
+        $on('friends-btn','onclick',()=>{ this._renderFriends(); document.getElementById('friends-modal').style.display='flex'; });
+        $on('friend-add-btn','onclick',()=>this._addFriend());
+        $on('close-mode','onclick',()=>document.getElementById('mode-modal').style.display='none');
+        // Быстрый МП из меню
+        $on('quickmp-btn','onclick',()=>{ if(this.mp){ this.mp.open(); this.mp._openQL(); } });
+        // Brawl-style кнопки
+        $on('menu-profile-chip','onclick',()=>{ this._renderProfile(); document.getElementById('profile-modal').style.display='flex'; });
+        $on('menu-mode-card','onclick',()=>{ this._renderModes(); document.getElementById('mode-modal').style.display='flex'; });
+        // Закрыть модалки
+        $on('close-shop','onclick',()=>document.getElementById('shop-modal').style.display='none');
+        $on('close-inventory','onclick',()=>document.getElementById('inventory-modal').style.display='none');
+        $on('close-profile','onclick',()=>document.getElementById('profile-modal').style.display='none');
+        $on('close-achievements','onclick',()=>document.getElementById('achievements-modal').style.display='none');
+        $on('close-leaderboard','onclick',()=>document.getElementById('leaderboard-modal').style.display='none');
+        $on('close-settings','onclick',()=>document.getElementById('settings-modal').style.display='none');
+        $on('m-news-btn','onclick',()=>showToast('📰 Скоро!'));
+        } catch(e){ console.warn('Game _initUI error:',e); }
+    }
+
+    _startGame() {
+        AC.resume(); stopMenuMusic();
+        document.getElementById('menu').style.display='none';
+        document.getElementById('hud').style.display='flex';
+        document.getElementById('coin-count').style.display='flex';
+        document.getElementById('multiplier-badge').style.display='flex';
+        document.getElementById('mp-opponent-hud').style.display='none';
+        // FIX1: убираем метку соперника при старте одиночной игры
+        if(this.mp && !this.mpMode) this.mp._cleanupOpp();
+        this.active=true; this.reset(); this._initModeState(); startBgMusic();
+    }
+
+    _updateMenuStats() {
+        const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
+        const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.innerText=v;};
+        setT('best-score',this.bestScore); setT('total-coins',this.totalCoins);
+        setT('player-level',lvl); setT('player-level-2',lvl);
+        // Chip
+        const cn=document.getElementById('chip-name-el'); if(cn) cn.textContent=this.profileName;
+        const ca=document.getElementById('chip-avatar-el'); if(ca) ca.textContent=this.profileAvatar;
+        // Режим
+        const md=GAME_MODES.find(m=>m.id===this.gameMode)||GAME_MODES[0];
+        const mn=document.getElementById('menu-mode-name'); if(mn) mn.textContent=md.name;
+        const mi=document.getElementById('menu-mode-icon'); if(mi) mi.textContent=md.icon;
+        const mde=document.getElementById('menu-mode-desc'); if(mde) mde.textContent=md.desc;
+    }
+
+    // ===== МАГАЗИН =====
+    _renderShopGifts() {
+        const grid=document.getElementById('shop-grid'); grid.innerHTML='';
+        const rl={green:'🟢 Обычный',yellow:'🟡 Редкий',red:'🔴 Легендарный'};
+        GIFTS.forEach(gift=>{
+            const owned=this.purchasedGifts[gift.id]||0;
+            const card=document.createElement('div'); card.className='gift-card';
+            card.innerHTML=`<div class="gift-img-wrap"><img src="${gift.image}" alt="${gift.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="gift-img-placeholder" style="display:none">${gift.emoji}</div></div><div class="rarity-badge ${gift.rarity}">${rl[gift.rarity]}</div><div class="gift-name">${gift.name}</div>${owned?`<div style="font-size:1.1rem;color:rgba(255,255,255,.45)">Есть: ${owned} шт.</div>`:''}<div class="gift-price rarity-${gift.rarity}"><span class="coin-icon"></span>${gift.price}</div>`;
+            const btn=document.createElement('button');
+            btn.className='btn-buy'+(this.totalCoins<gift.price?' disabled':'');
+            btn.innerText='КУПИТЬ'; btn.onclick=()=>this._buyGift(gift);
+            card.appendChild(btn); grid.appendChild(card);
+        });
+    }
+    _renderShopBoxes() {
+        const grid=document.getElementById('boxes-grid'); grid.innerHTML='';
+        BOXES.forEach(box=>{
+            const card=document.createElement('div'); card.className='gift-card';
+            card.innerHTML=`<div style="width:110px;height:110px" id="bp-${box.id}"></div><div class="gift-name">${box.name}</div><div style="font-size:1.1rem;color:rgba(255,255,255,.5);margin:5px 0">70% 🟢 / 29% 🟡 / 1% 🔴</div><div class="gift-price"><span class="coin-icon"></span>${box.price}</div>`;
+            const btn=document.createElement('button');
+            btn.className='btn-open'+(this.totalCoins<box.price?' disabled':'');
+            btn.innerText='✨ ОТКРЫТЬ'; btn.onclick=()=>this._openBox(box);
+            card.appendChild(btn); grid.appendChild(card);
+            setTimeout(()=>this._miniBox('bp-'+box.id),50);
+        });
+    }
+    _miniBox(id) {
+        const c=document.getElementById(id); if(!c||c._r) return;
+        const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.1,100);
+        cam.position.set(2.5,2,2.5); cam.lookAt(0,0,0);
+        const r=new THREE.WebGLRenderer({antialias:true,alpha:true}); r.setSize(110,110); c.appendChild(r.domElement); c._r=r;
+        sc.add(new THREE.AmbientLight(0xffffff,.6)); const dl=new THREE.DirectionalLight(0xffffff,1.5); dl.position.set(5,8,5); sc.add(dl);
+        const bg=new THREE.Group();
+        const bm=new THREE.MeshStandardMaterial({color:0x1a8a3c,roughness:.3});
+        const lm=new THREE.MeshStandardMaterial({color:0x22aa4c});
+        const rm=new THREE.MeshStandardMaterial({color:0xffd700,roughness:.2,metalness:.6});
+        bg.add(new THREE.Mesh(new THREE.BoxGeometry(1.4,1,.4),bm),new THREE.Mesh(new THREE.BoxGeometry(1.5,.35,1.5),lm),new THREE.Mesh(new THREE.BoxGeometry(.18,1.42,1.52),rm),new THREE.Mesh(new THREE.BoxGeometry(1.52,1.42,.18),rm));
+        sc.add(bg);
+        let t=0; (function a(){if(!c._r)return;requestAnimationFrame(a);t+=.02;bg.rotation.y=t;bg.position.y=Math.sin(t*.8)*.08;r.render(sc,cam);})();
+    }
+    _openBox(box) {
+        if(this.totalCoins<box.price){showToast('❌ Недостаточно монет!',true);return;}
+        const modal=document.getElementById('box-open-modal');
+        const cont=document.getElementById('box-3d-container');
+        const res=document.getElementById('box-open-result');
+        modal.style.display='flex'; res.style.display='none'; cont.style.display='block'; cont.innerHTML='';
+        const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(55,1,.1,100);
+        cam.position.set(4,3.5,4); cam.lookAt(0,.5,0);
+        const rnd=new THREE.WebGLRenderer({antialias:true,alpha:true}); rnd.setSize(300,300); cont.appendChild(rnd.domElement);
+        sc.add(new THREE.AmbientLight(0xffffff,.5)); const dl=new THREE.DirectionalLight(0xffffff,1.8); dl.position.set(5,10,5); sc.add(dl);
+        const pl=new THREE.PointLight(0x00ffaa,3,12); pl.position.set(0,4,0); sc.add(pl);
+        const bg=new THREE.Group(),lg=new THREE.Group();
+        const bm=new THREE.MeshStandardMaterial({color:0x1a8a3c}),lm=new THREE.MeshStandardMaterial({color:0x22aa4c}),rm=new THREE.MeshStandardMaterial({color:0xffd700,emissive:0x553300,roughness:.1,metalness:.8});
+        const bMesh=new THREE.Mesh(new THREE.BoxGeometry(2,1.5,2),bm);
+        const lMesh=new THREE.Mesh(new THREE.BoxGeometry(2.15,.5,2.15),lm);
+        const b1=new THREE.Mesh(new THREE.TorusGeometry(.35,.09,8,20),rm); b1.position.set(-.32,.4,0); b1.rotation.y=.5;
+        const b2=new THREE.Mesh(new THREE.TorusGeometry(.35,.09,8,20),rm); b2.position.set(.32,.4,0); b2.rotation.y=-.5;
+        lg.add(lMesh,b1,b2); lg.position.y=1.1; bg.add(bMesh,lg); sc.add(bg);
+        let phase='spin',t=0,lY=0;
+        const self=this;
+        (function a(){if(phase==='done')return;requestAnimationFrame(a);t+=.016;pl.intensity=2+Math.sin(t*4);
+        if(phase==='spin'){bg.rotation.y=t*1.5;bg.position.y=Math.sin(t*2)*.1;if(t>2)phase='open';}
+        else if(phase==='open'){bg.rotation.y+=.03;lY=Math.min(lY+.06,3.5);lg.position.y=1.1+lY;lg.rotation.x=Math.min(lg.rotation.x+.04,Math.PI/2);if(lY>=3.5){phase='done';rnd.dispose();self._resolveBox(box);}}
+        rnd.render(sc,cam);})();
+    }
+    _resolveBox(box) {
+        this.totalCoins-=box.price; localStorage.setItem('totalCoins',this.totalCoins); this._updateMenuStats();
+        const r=Math.random()*100;
+        const rar=r<70?'green':r<99?'yellow':'red';
+        const gift=giftsByRarity[rar][Math.floor(Math.random()*giftsByRarity[rar].length)];
+        this.purchasedGifts[gift.id]=(this.purchasedGifts[gift.id]||0)+1;
+        localStorage.setItem('purchasedGifts',JSON.stringify(this.purchasedGifts));
+        document.getElementById('box-3d-container').style.display='none';
+        document.getElementById('box-open-result').style.display='block';
+        const rc=rar==='green'?'#69f0ae':rar==='yellow'?'#ffd740':'#ff5252';
+        const rl=rar==='green'?'🟢 ОБЫЧНЫЙ':rar==='yellow'?'🟡 РЕДКИЙ':'🔴 ЛЕГЕНДАРНЫЙ';
+        document.getElementById('box-result-rarity').innerHTML=`<span style="color:${rc};font-size:2.2rem">${rl}</span>`;
+        document.getElementById('box-result-img').src=gift.image;
+        document.getElementById('box-result-name').textContent=gift.name;
+        document.getElementById('box-open-title').textContent='🎁 ВЫ ПОЛУЧИЛИ!';
+        document.getElementById('box-result-close').onclick=()=>{
+            document.getElementById('box-open-modal').style.display='none';
+            document.getElementById('box-open-title').textContent='📦 ОТКРЫТИЕ БОКСА';
+            this._renderShopBoxes(); this._renderInventory();
+        };
+    }
+    _buyGift(gift) {
+        if(this.totalCoins<gift.price){showToast('❌ Недостаточно монет!',true);return;}
+        this.totalCoins-=gift.price; this.purchasedGifts[gift.id]=(this.purchasedGifts[gift.id]||0)+1;
+        localStorage.setItem('totalCoins',this.totalCoins); localStorage.setItem('purchasedGifts',JSON.stringify(this.purchasedGifts));
+        this._updateMenuStats(); this._renderShopGifts(); showToast(`🎁 Куплено: ${gift.name}!`); this._checkAchievements();
+    }
+    _renderInventory() {
+        const grid=document.getElementById('inventory-grid'); grid.innerHTML='';
+        const owned=Object.entries(this.purchasedGifts).filter(([,c])=>c>0);
+        if(!owned.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;font-size:2rem;opacity:.5;padding:30px">Инвентарь пуст 🎒</div>';return;}
+        owned.forEach(([id,count])=>{
+            const gift=GIFTS.find(g=>g.id===id); if(!gift) return;
+            const sp=Math.floor(gift.price*.4);
+            const card=document.createElement('div'); card.className='gift-card';
+            card.innerHTML=`<div class="gift-img-wrap"><img src="${gift.image}" alt="${gift.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="gift-img-placeholder" style="display:none">${gift.emoji}</div></div><div class="gift-name">${gift.name} ×${count}</div><div class="gift-price rarity-${gift.rarity}"><span class="coin-icon"></span>${sp}</div>`;
+            const btn=document.createElement('button'); btn.className='btn-sell'; btn.innerText='ПРОДАТЬ';
+            btn.onclick=()=>{
+                this.purchasedGifts[gift.id]--; if(!this.purchasedGifts[gift.id]) delete this.purchasedGifts[gift.id];
+                this.totalCoins+=sp; localStorage.setItem('totalCoins',this.totalCoins); localStorage.setItem('purchasedGifts',JSON.stringify(this.purchasedGifts));
+                this._updateMenuStats(); this._renderInventory(); showToast(`💰 Продано за ${sp} монет`);
+            };
+            card.appendChild(btn); grid.appendChild(card);
+        });
+    }
+    _renderProfile() {
+        document.getElementById('profile-avatar-display').textContent=this.profileAvatar;
+        const nd=document.getElementById('profile-name-display');
+        nd.textContent=this.profileName; nd.style.color=this.profileColor||'#ffffff';
+        const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
+        const titles=['Новичок','Игрок','Охотник','Мастер','Легенда','ПОЛЯРНЫЙ БОГ'];
+        document.getElementById('profile-sub-display').textContent=`Уровень ${lvl} • ${titles[Math.min(Math.floor(lvl/3),5)]}`;
+        const bioEl=document.getElementById('profile-bio-display');
+        if(bioEl) bioEl.textContent=this.profileBio||'';
+        const stEl=document.getElementById('profile-status-display');
+        if(stEl) stEl.textContent=this.profileStatus||'';
+        document.getElementById('ps-best').textContent=this.bestScore;
+        document.getElementById('ps-coins').textContent=this.totalCoins;
+        document.getElementById('ps-level').textContent=lvl;
+        document.getElementById('ps-games').textContent=this.totalGames;
+        document.getElementById('ps-platforms').textContent=this.totalPlatformsEver;
+        document.getElementById('ps-items').textContent=Object.values(this.purchasedGifts).reduce((a,b)=>a+b,0);
+        const bcEl=document.getElementById('ps-bestcycle'); if(bcEl) bcEl.textContent=this.bestCycle;
+        const achEl=document.getElementById('ps-ach'); if(achEl) achEl.textContent=JSON.parse(localStorage.getItem('unlockedAchievements')||'[]').length;
+        const skEl=document.getElementById('ps-skin'); if(skEl){ const sk=SKINS.find(s=>s.id===this.selectedSkin)||SKINS[0]; skEl.textContent=sk.emoji; }
+    }
+    _renderAvatarPicker() {
+        const p=document.getElementById('avatar-picker'); p.innerHTML='';
+        AVATARS.forEach(av=>{
+            const o=document.createElement('div'); o.className='avatar-opt'+(av===this.profileAvatar?' selected':'');
+            o.textContent=av;
+            o.onclick=()=>{ this.profileAvatar=av; p.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected')); o.classList.add('selected'); };
+            p.appendChild(o);
+        });
+        // Цвет ника
+        const colors=['#ffffff','#00e5ff','#ffd740','#69f0ae','#ff5252','#ff6b35','#e040fb','#ff80ab'];
+        const cr=document.getElementById('color-picker-row');
+        if(cr){ cr.innerHTML=''; colors.forEach(c=>{
+            const d=document.createElement('div'); d.className='color-dot'+(c===(this.profileColor||'#ffffff')?' cd-sel':'');
+            d.style.background=c; d.title=c;
+            d.onclick=()=>{ this.profileColor=c; cr.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('cd-sel')); d.classList.add('cd-sel'); };
+            cr.appendChild(d);
+        }); }
+        // Статусы
+        const statuses=['🔥 В ударе','❄️ Ледяной','⭐ Легенда','🏆 Чемпион','🎮 Хардкор','😈 Дерзкий','🌙 Ночник','🎯 Снайпер','🐻 Полярник','✨ Новичок'];
+        const sr=document.getElementById('status-picker-row');
+        if(sr){ sr.innerHTML=''; statuses.forEach(s=>{
+            const d=document.createElement('div'); d.className='status-badge'+(s===this.profileStatus?' sb-sel':'');
+            d.textContent=s;
+            d.onclick=()=>{ this.profileStatus=s; sr.querySelectorAll('.status-badge').forEach(x=>x.classList.remove('sb-sel')); d.classList.add('sb-sel'); };
+            sr.appendChild(d);
+        }); }
+        // Биография
+        const bioIn=document.getElementById('profile-bio');
+        if(bioIn) bioIn.value=this.profileBio||'';
+    }
+    _renderFriends() {
+        const list = document.getElementById('friends-list');
+        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
+        if (!friends.length) {
+            list.innerHTML = '<div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴<br>Добавь друга по нику!</div>';
+            return;
+        }
+        list.innerHTML = '';
+        friends.forEach((f, i) => {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08)';
+            row.innerHTML = `<div style="font-size:1.8rem">${f.avatar||'🐻'}</div>
+                <div style="flex:1"><div style="color:white;font-weight:600">${f.name}</div><div style="font-size:.8rem;color:rgba(255,255,255,.4)">🏆 ${f.score||0}</div></div>
+                <button onclick="game._removeFriend(${i})" style="padding:5px 10px;border-radius:8px;border:none;background:rgba(255,50,50,.2);color:#ff5252;cursor:pointer;font-family:'Fredoka',sans-serif">✕</button>`;
+            list.appendChild(row);
+        });
+    }
+    _addFriend() {
+        const input = document.getElementById('friend-add-input');
+        const name = input.value.trim();
+        if (!name) return;
+        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
+        if (friends.find(f => f.name === name)) { showToast('⚠️ Уже в друзьях'); return; }
+        friends.push({ name, avatar: '🐻', score: 0 });
+        localStorage.setItem('friends_list', JSON.stringify(friends));
+        input.value = '';
+        showToast('✅ ' + name + ' добавлен!');
+        this._renderFriends();
+    }
+    _removeFriend(i) {
+        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
+        friends.splice(i, 1);
+        localStorage.setItem('friends_list', JSON.stringify(friends));
+        this._renderFriends();
+    }
+
+    _renderLeaderboard() {
+        const list=document.getElementById('leaderboard-list'); list.innerHTML='';
+        const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
+        const me={name:this.profileName,avatar:this.profileAvatar,score:this.bestScore,
+                  skin:this.selectedSkin,status:this.profileStatus,bio:this.profileBio,
+                  level:lvl,isMe:true};
+        const all=[...FAKE_LB,me].sort((a,b)=>b.score-a.score);
+        const em=['🥇','🥈','🥉'];
+        all.forEach((e,i)=>{
+            const row=document.createElement('div'); row.className='leaderboard-row'+(e.isMe?' me':'');
+            row.style.cursor='pointer';
+            const skinEmoji=(SKINS.find(sk=>sk.id===e.skin)||SKINS[0]).emoji;
+            row.innerHTML=`
+                <div class="lb-rank">${i<3?em[i]:'#'+(i+1)}</div>
+                <div class="lb-avatar">${e.avatar}</div>
+                <div class="lb-info">
+                    <div class="lb-name">${e.name}${e.isMe?' <span style="color:#ffd740;font-size:.75em">(ты)</span>':''}</div>
+                    <div class="lb-status">${e.status||''}</div>
+                </div>
+                <div class="lb-right">
+                    <div class="lb-score">🏆 ${e.score}</div>
+                    <div class="lb-level">Lv.${e.level||1}</div>
+                </div>`;
+            row.onclick=()=>this._showLbProfile(e);
+            list.appendChild(row);
+        });
+    }
+    _showLbProfile(p) {
+        // Создаём модалку профиля игрока
+        let modal=document.getElementById('lb-profile-modal');
+        if(!modal){
+            modal=document.createElement('div');
+            modal.id='lb-profile-modal';
+            modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:9500;display:flex;align-items:center;justify-content:center';
+            modal.innerHTML=`<div style="background:linear-gradient(135deg,rgba(0,30,60,.95),rgba(0,10,30,.98));border:1px solid rgba(255,255,255,.15);border-radius:28px;padding:32px 36px;max-width:380px;width:90%;color:white;font-family:Fredoka,sans-serif;position:relative;text-align:center">
+                <div class="modal-close-x" id="lb-profile-close" style="position:absolute;top:12px;right:14px;width:36px;height:36px;background:rgba(255,255,255,.12);border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem" onclick="document.getElementById('lb-profile-modal').style.display='none'">✕</div>
+                <div id="lbp-avatar" style="font-size:3.5rem;margin-bottom:6px"></div>
+                <div id="lbp-name" style="font-size:1.8rem;font-weight:700;margin-bottom:4px"></div>
+                <div id="lbp-status" style="font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:10px"></div>
+                <div id="lbp-bio" style="font-size:.9rem;color:rgba(255,255,255,.4);font-style:italic;margin-bottom:16px;min-height:18px"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px">
+                    <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px">
+                        <div id="lbp-score" style="font-size:1.4rem;font-weight:700;color:#ffd740"></div>
+                        <div style="font-size:.7rem;color:rgba(255,255,255,.4)">Рекорд</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px">
+                        <div id="lbp-level" style="font-size:1.4rem;font-weight:700;color:#00e5ff"></div>
+                        <div style="font-size:.7rem;color:rgba(255,255,255,.4)">Уровень</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,.06);border-radius:14px;padding:10px">
+                        <div id="lbp-skin" style="font-size:1.4rem"></div>
+                        <div style="font-size:.7rem;color:rgba(255,255,255,.4)">Скин</div>
+                    </div>
+                </div>
+            </div>`;
+            document.body.appendChild(modal);
+        }
+        const skinEmoji=(SKINS.find(sk=>sk.id===p.skin)||SKINS[0]).emoji;
+        document.getElementById('lbp-avatar').textContent=p.avatar;
+        document.getElementById('lbp-name').textContent=p.name;
+        document.getElementById('lbp-status').textContent=p.status||'— нет статуса —';
+        document.getElementById('lbp-bio').textContent=p.bio||'';
+        document.getElementById('lbp-score').textContent=p.score;
+        document.getElementById('lbp-level').textContent=p.level||1;
+        document.getElementById('lbp-skin').textContent=skinEmoji;
+        modal.style.display='flex';
+    }
+    _checkAchievements() {
+        const prev=JSON.parse(localStorage.getItem('unlockedAchievements')||'[]');
+        ACHIEVEMENTS.forEach(a=>{
+            if(!prev.includes(a.id)&&a.check(this)){
+                prev.push(a.id); localStorage.setItem('unlockedAchievements',JSON.stringify(prev));
+                setTimeout(()=>showToast('🏆 '+a.name+'!',false,3500),500);
+            }
+        });
+    }
+    _renderAchievements() {
+        const grid=document.getElementById('achievements-grid'); grid.innerHTML='';
+        const unlocked=JSON.parse(localStorage.getItem('unlockedAchievements')||'[]');
+        ACHIEVEMENTS.forEach(a=>{
+            const ok=unlocked.includes(a.id)||a.check(this);
+            const card=document.createElement('div'); card.className='achievement-card '+(ok?'unlocked':'locked');
+            card.innerHTML=`<div class="ach-icon">${a.icon}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div>${ok?'<div style="font-size:.9rem;color:#ffd740;margin-top:4px">✅ Выполнено</div>':''}`;
+            grid.appendChild(card);
+        });
+    }
+
+    // ===== СКИНЫ =====
+    _renderSkins() {
+        const grid=document.getElementById('skins-grid'); grid.innerHTML='';
+        const unlocked=JSON.parse(localStorage.getItem('unlockedSkins')||'["polar"]');
+        SKINS.forEach(sk=>{
+            const isUnlocked=unlocked.includes(sk.id)||sk.price===0;
+            const isActive=sk.id===this.selectedSkin;
+            const card=document.createElement('div');
+            card.className='skin-card'+(isActive?' sk-active':'')+(isUnlocked?'':' sk-locked');
+            card.innerHTML=`<div class="skin-emoji">${sk.emoji}</div><div class="skin-name">${sk.name}</div>${isUnlocked?'<div style="color:#69f0ae;font-size:1.05rem;margin-top:4px">✅ Открыт</div>':`<div class="skin-price"><span class="coin-icon"></span>${sk.price}</div>`}`;
+            card.onclick=()=>{
+                if(!isUnlocked){
+                    if(this.totalCoins>=sk.price){
+                        if(confirm(`Купить скин "${sk.name}" за ${sk.price} монет?`)){
+                            this.totalCoins-=sk.price; localStorage.setItem('totalCoins',this.totalCoins);
+                            unlocked.push(sk.id); localStorage.setItem('unlockedSkins',JSON.stringify(unlocked));
+                            this.selectedSkin=sk.id; localStorage.setItem('selectedSkin',sk.id);
+                            this._updateMenuStats(); this._renderSkins(); showToast('🎨 Скин куплен и надет!');
+                            this._refreshPreview();
+                        }
+                    } else showToast('❌ Недостаточно монет!',true);
+                    return;
+                }
+                this.selectedSkin=sk.id; localStorage.setItem('selectedSkin',sk.id);
+                grid.querySelectorAll('.skin-card').forEach(c=>c.classList.remove('sk-active'));
+                card.classList.add('sk-active');
+                showToast('✅ Скин "'+sk.name+'" надет!');
+                this._refreshPreview();
+            };
+            grid.appendChild(card);
+        });
+    }
+    _refreshPreview() {
+        if(this.prevBear){this.prevScene.remove(this.prevBear.mesh);}
+        this.prevBear=new Bear(this.prevScene,true,this.selectedSkin);
+        this.prevRot=0;
+        // Также пересоздаём медведя в сцене
+        this.scene.remove(this.bear.mesh);
+        this.bear=new Bear(this.scene,false,this.selectedSkin);
+    }
+
+    // ===== РЕЖИМЫ =====
+    _renderModes() {
+        const grid=document.getElementById('mode-grid'); grid.innerHTML='';
+        GAME_MODES.forEach(md=>{
+            const card=document.createElement('div');
+            card.className='mode-card'+(md.id===this.gameMode?' md-active':'');
+            card.innerHTML=`<div class="mode-icon">${md.icon}</div><div class="mode-name">${md.name}</div><div class="mode-desc">${md.desc}</div>`;
+            card.onclick=()=>{
+                this.gameMode=md.id; localStorage.setItem('gameMode',md.id);
+                grid.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('md-active'));
+                card.classList.add('md-active');
+                this._updateMenuStats(); showToast('🎮 Режим: '+md.name);
+            };
+            grid.appendChild(card);
+        });
+    }
+
+    // ===== ИНИЦИАЛИЗАЦИЯ РЕЖИМА =====
+    _initModeState() {
+        const mhud=document.getElementById('mode-hud');
+        const thud=document.getElementById('timer-hud');
+        this.modeTimerActive=false;
+        if(!mhud||!thud) return;
+        const md=GAME_MODES.find(m=>m.id===this.gameMode)||GAME_MODES[0];
+        mhud.textContent=md.icon+' '+md.name; mhud.style.display='block';
+        thud.style.display='none';
+        if(this.gameMode==='timeattack'){ this.modeTimer=120; this.modeTimerActive=true; this.modeStartTime=performance.now(); thud.style.display='block'; }
+        else if(this.gameMode==='blitz'){ this.modeTimer=60; this.modeTimerActive=true; this.modeStartTime=performance.now(); thud.style.display='block'; }
+        else if(this.gameMode==='survival'){ this.modeLives=3; mhud.textContent='❤️❤️❤️ Выживание'; }
+        else if(this.gameMode==='speedrun'){ this.modeStartTime=performance.now(); }
+    }
+    _tickMode() {
+        const thud=document.getElementById('timer-hud');
+        const mhud=document.getElementById('mode-hud');
+        if(this.gameMode==='speedrun'&&mhud){
+            const sec=((performance.now()-this.modeStartTime)/1000).toFixed(1);
+            mhud.textContent='🏃 '+sec+'с';
+        }
+        if(!this.modeTimerActive||!thud) return;
+        const elapsed=(performance.now()-this.modeStartTime)/1000;
+        const rem=Math.max(0,this.modeTimer-elapsed);
+        const mm=Math.floor(rem/60); const ss=Math.floor(rem%60);
+        thud.textContent='⏱ '+mm+':'+ss.toString().padStart(2,'0');
+        if(rem<10) thud.style.color=Math.floor(elapsed*2)%2?'#ff5252':'#ffd740'; else thud.style.color='#ffd740';
+        if(rem<=0){ this.modeTimerActive=false; this._gameOver(); }
+    }
+
+    // ===== ПЛАТФОРМЫ =====
+    _buildPlatforms() {
+        const count=this.totalPlatforms, stepZ=-18;
+        let lastY=0;
+        const cycleColors=[0x0055aa,0x005522,0x550011,0x334455,0x553300];
+        const platColor=cycleColors[this.currentCycle%cycleColors.length];
+
+        for(let i=0;i<count;i++){
+            const z=i*stepZ;
+            const x=i===0?0:(Math.random()-.5)*14;
+            let yOff=0;
+            if(i>0){
+                const diff=Math.min(1+this.currentCycle*.3,3);
+                yOff=Math.max(-18,Math.min(18,lastY+(Math.random()-.5)*5*diff));
+            }
+            lastY=yOff;
+
+            const isPusher=i>3&&Math.random()<Math.min(.05+this.currentCycle*.03,.2);
+
+            // Платформы с толкателем — ШИРОКИЕ (20x16 минимум)
+            let w=8,d=12;
+            if(isPusher){ w=22; d=16; }
+            const shrink=Math.max(.5,1-this.currentCycle*.08);
+            if(!isPusher){ w*=shrink; d*=shrink; }
+
+            const mat=new THREE.MeshStandardMaterial({color:platColor,roughness:.15,metalness:.2});
+            const plat=new THREE.Mesh(new THREE.BoxGeometry(w,2,d),mat);
+            plat.position.set(x,yOff,z);
+            plat.receiveShadow=true; plat.castShadow=true;
+            plat.userData={hw:w/2,hd:d/2,index:i};
+
+            // Финальная платформа
+            if(i===count-1){
+                plat.material=new THREE.MeshStandardMaterial({color:0x00ff88,emissive:0x00aa44,roughness:.1});
+                const beacon=new THREE.PointLight(0x00ff88,3,15); beacon.position.y=5; plat.add(beacon);
+            }
+
+            // Стена-толкатель (красная)
+            if(isPusher){
+                const wall=new THREE.Mesh(new THREE.BoxGeometry(18,6,2),new THREE.MeshStandardMaterial({color:0xff2233,emissive:0x330011}));
+                wall.position.y=4; wall.castShadow=true;
+                plat.add(wall);
+                this.pushers.push({mesh:wall,offset:Math.random()*Math.PI*2});
+            }
+
+            // ШИПЫ — со второго цикла: красивые, видимые, но проходимые
+            if(this.currentCycle>0&&i>3&&!isPusher&&Math.random()<.15){
+                // Расставляем шипы в ряд по краям — середина всегда свободна
+                const spikeCount=Math.min(2+this.currentCycle,5);
+                const sideZ=(Math.random()>.5?1:-1)*((d/2)-1.5);
+
+                for(let s=0;s<spikeCount;s++){
+                    const spikeGroup=new THREE.Group();
+
+                    // Основание шипа (красное)
+                    const base=new THREE.Mesh(
+                        new THREE.CylinderGeometry(.35,.5,.4,8),
+                        new THREE.MeshStandardMaterial({color:0xcc2200,emissive:0x440000,roughness:.3})
+                    );
+                    base.position.y=.2;
+
+                    // Сам шип (белый с синим отливом)
+                    const spike=new THREE.Mesh(
+                        new THREE.ConeGeometry(.28,1.4,8),
+                        new THREE.MeshStandardMaterial({color:0xddeeff,emissive:0x1133aa,roughness:.1,metalness:.6})
+                    );
+                    spike.position.y=1.1;
+
+                    // Маленькая светящаяся точка на кончике
+                    const tip=new THREE.Mesh(
+                        new THREE.SphereGeometry(.08,6,6),
+                        new THREE.MeshBasicMaterial({color:0x00aaff})
+                    );
+                    tip.position.y=.75;
+                    spike.add(tip);
+
+                    spikeGroup.add(base,spike);
+
+                    // Расставляем с промежутком — чтобы можно было пройти между ними
+                    const gap=(w-3)/(spikeCount+1);
+                    spikeGroup.position.set(-w/2+1.5+gap*(s+1), 1.3, sideZ);
+                    spikeGroup.userData.isSpike=true;
+                    plat.add(spikeGroup);
+
+                    // Тусклый свет от шипа
+                    const sl=new THREE.PointLight(0x0066ff,.8,3); sl.position.y=1.5; spikeGroup.add(sl);
+                }
+            }
+
+            this.scene.add(plat);
+            this.platforms.push(plat);
+
+            // Монеты
+            if(i>0&&Math.random()<.35){
+                this.coins.push(new Coin(this.scene,new THREE.Vector3(x+(Math.random()-.5)*3,yOff,z)));
+            }
+        }
+    }
+
+    // ===== СБРОС =====
+    reset() {
+        this.platforms.forEach(p=>this.scene.remove(p));
+        this.coins.forEach(c=>c.collect());
+        this.pushers=[]; this.platforms=[]; this.coins=[];
+        this.baseScore=0; this.currentCycleMaxIdx=-1;
+        if(!this.mpMode){ this.currentCycle=0; this.currentMult=1; }
+        this.score=0; this.coinsCollected=0;
+        document.getElementById('score-val').innerText='0';
+        document.getElementById('coin-val').innerText='0';
+        document.getElementById('mult-val').innerText='1';
+        this._buildPlatforms();
+        this.bear.mesh.position.set(0,10,0);
+        this.vel.set(0,0,0); this.grounded=false;
+        this.bear.setSadMode(false);
+        this.inp.camX=0; this.inp.camY=.5;
+        this.inp.x=0; this.inp.y=0; this.inp.active=false;
+        if(this.keys){Object.keys(this.keys).forEach(k=>this.keys[k]=false);}
+    }
+
+    _cycleComplete() {
+        this.currentCycle++; this.currentMult=1+this.currentCycle*.5;
+        if(this.currentCycle>this.bestCycle){this.bestCycle=this.currentCycle;localStorage.setItem('bestCycle',this.bestCycle);}
+        playLevelUp(); showToast(`🎉 Уровень ${this.currentCycle+1}! x${this.currentMult}`,false,3000);
+        document.getElementById('mult-val').innerText=this.currentMult;
+        // Синхронизация уровня в мультиплеере
+        if(this.mpMode&&this.mp&&this.mp.isHost&&this.mp.conn){
+            try{ this.mp.conn.send({type:'cycle',cycle:this.currentCycle,mult:this.currentMult}); }catch(e){}
+        }
+        // Блиц и Гонка времени — +30 секунд бонус при переходе уровня
+        if(this.gameMode==='timeattack'||this.gameMode==='blitz'){
+            const bonus=this.gameMode==='timeattack'?30:20;
+            this.modeStartTime=performance.now()-(this.modeTimer-Math.max(0,this.modeTimer-((performance.now()-this.modeStartTime)/1000)))*1000+bonus*1000;
+            // Проще: сбросить таймер на текущее оставшееся время + бонус
+            const elapsed=(performance.now()-this.modeStartTime)/1000;
+            const remaining=Math.max(0,this.modeTimer-elapsed);
+            this.modeTimer=remaining+bonus;
+            this.modeStartTime=performance.now();
+            showToast(`⏱ +${bonus}с за уровень!`,false,1500);
+        }
+        this.platforms.forEach(p=>this.scene.remove(p)); this.coins.forEach(c=>c.collect());
+        this.pushers=[]; this.platforms=[]; this.coins=[];
+        this._buildPlatforms();
+        if(this.platforms.length){const f=this.platforms[0];this.bear.mesh.position.set(f.position.x,f.position.y+2,f.position.z);this.vel.set(0,0,0);}
+        this.currentCycleMaxIdx=0;
+    }
+
+    _gameOver() {
+        // Survival mode
+        if(this.gameMode==='survival'&&!this.mpMode&&this.modeLives>1){
+            this.modeLives--;
+            const hearts='❤️'.repeat(this.modeLives)+'🖤'.repeat(3-this.modeLives);
+            const mhud=document.getElementById('mode-hud');
+            if(mhud) mhud.textContent=hearts+' Выживание';
+            showToast('💔 Потеряна жизнь! Осталось: '+this.modeLives,true,2000);
+            this.bear.mesh.position.set(0,10,0); this.vel.set(0,0,0);
+            return;
+        }
+        this.active=false; this.bear.setSadMode(true);
+        stopBgMusic(); playGameOver();
+        this.totalGames++; localStorage.setItem('totalGames',this.totalGames);
+        this.totalPlatformsEver+=this.baseScore; localStorage.setItem('totalPlatformsEver',this.totalPlatformsEver);
+        const newBest=this.score>this.bestScore;
+        if(newBest){this.bestScore=this.score;localStorage.setItem('bestScore',this.bestScore);}
+        this.totalCoins+=this.coinsCollected; localStorage.setItem('totalCoins',this.totalCoins);
+        if(this.mpMode&&this.mp){
+            this.mp.sendGameOver(this.score);
+            document.getElementById('mp-opponent-hud').style.display='none';
+            // После смерти в МП — выходим из режима и чистим соперника
+            this.mpMode=false;
+            this.mp._cleanupOpp();
+        } else if(this.mp){
+            // На всякий случай — чистим соперника и в одиночной игре
+            this.mp._cleanupOpp();
+            document.getElementById('mp-opponent-hud').style.display='none';
+        }
+        this._checkAchievements();
+        document.getElementById('gameover-score').innerText=this.score;
+        document.getElementById('gameover-best').innerText=this.bestScore;
+        document.getElementById('gameover-coins').innerText=this.coinsCollected;
+        document.getElementById('go-new-best').style.display=newBest?'block':'none';
+        document.getElementById('game-over').style.display='flex';
+        document.getElementById('hud').style.display='none';
+        document.getElementById('coin-count').style.display='none';
+        document.getElementById('multiplier-badge').style.display='none';
+        const _mh=document.getElementById('mode-hud'); if(_mh) _mh.style.display='none';
+        const _th=document.getElementById('timer-hud'); if(_th) _th.style.display='none';
+        this.modeTimerActive=false;
+        this._updateMenuStats();
+    }
+
+    // ===== ГЛАВНЫЙ ЦИКЛ =====
+    _loop() {
+        requestAnimationFrame(()=>this._loop());
+
+        // Превью медведя в меню
+        if(this.prevBear){
+            this.prevRot+=.008; this.prevBear.mesh.rotation.y=this.prevRot;
+            this.prevBear.animate(0,true,performance.now()/1000);
+            this.prevRend.render(this.prevScene,this.prevCam);
+        }
+
+        if(!this.active){this.renderer.render(this.scene,this.camera);return;}
+
+        const et=this.clock.getElapsedTime();
+        this._tickMode();
+
+        // Толкатели
+        this.pushers.forEach(w=>{ if(w.mesh.parent) w.mesh.position.x=Math.sin(et*(2+this.currentCycle*.3)+w.offset)*8; });
+
+        // Клавиши
+        if(this.keys){
+            let mx=0,mz=0;
+            if(this.keys.w) mz-=1; if(this.keys.s) mz+=1;
+            if(this.keys.a) mx-=1; if(this.keys.d) mx+=1;
+            if(mx||mz){const l=Math.hypot(mx,mz);this.inp.x=mx/l;this.inp.y=mz/l;this.inp.active=true;}
+            else{this.inp.active=false;this.inp.x=0;this.inp.y=0;}
+        }
+
+        // Движение
+        const cd=new THREE.Vector3(0,0,-1).applyAxisAngle(new THREE.Vector3(0,1,0),this.inp.camX);
+        const cr=new THREE.Vector3(1,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),this.inp.camX);
+        const wish=new THREE.Vector3().addScaledVector(cd,-this.inp.y).addScaledVector(cr,this.inp.x);
+        const spd=.32+this.currentCycle*.02;
+
+        if(this.grounded){
+            if(this.inp.active&&wish.lengthSq()>.001){
+                this.vel.x=THREE.MathUtils.lerp(this.vel.x,wish.x*spd,.2);
+                this.vel.z=THREE.MathUtils.lerp(this.vel.z,wish.z*spd,.2);
+                const ta=Math.atan2(wish.x,wish.z);
+                let df=ta-this.bear.mesh.rotation.y;
+                while(df>Math.PI)df-=Math.PI*2; while(df<-Math.PI)df+=Math.PI*2;
+                this.bear.mesh.rotation.y+=df*.2;
+            } else {this.vel.x*=.8;this.vel.z*=.8;}
+        } else {
+            if(this.inp.active&&wish.lengthSq()>.001){
+                this.vel.x=THREE.MathUtils.lerp(this.vel.x,wish.x*spd,.05);
+                this.vel.z=THREE.MathUtils.lerp(this.vel.z,wish.z*spd,.05);
+            }
+        }
+
+        this.vel.y-=.022;
+        this.bear.mesh.position.add(this.vel);
+
+        // Коллизия
+        this.grounded=false;
+        let curIdx=-1, onSpike=false;
+
+        for(const p of this.platforms){
+            const dx=Math.abs(this.bear.mesh.position.x-p.position.x);
+            const dz=Math.abs(this.bear.mesh.position.z-p.position.z);
+            if(dx<p.userData.hw+.5&&dz<p.userData.hd+.5){
+                const top=p.position.y+1;
+                if(this.bear.mesh.position.y>top-.8&&this.bear.mesh.position.y<top+.8&&this.vel.y<=0){
+                    this.bear.mesh.position.y=top; this.vel.y=0; this.grounded=true; curIdx=p.userData.index;
+                    // Проверка шипов
+                    p.children.forEach(child=>{
+                        if(child.userData.isSpike){
+                            const wp=new THREE.Vector3(); child.getWorldPosition(wp);
+                            if(this.bear.mesh.position.distanceTo(wp)<1.0) onSpike=true;
+                        }
+                    });
+                }
+            }
+        }
+
+        if(onSpike){this._gameOver();return;}
+
+        // Счёт
+        if(curIdx!==-1&&curIdx>this.currentCycleMaxIdx){
+            this.baseScore++; this.currentCycleMaxIdx=curIdx;
+            this.score=Math.floor(this.baseScore*this.currentMult);
+            document.getElementById('score-val').innerText=this.score;
+            if(this.mpMode&&this.mp) this.mp.sendScore(this.score);
+            if(curIdx===this.totalPlatforms-1){
+                this._cycleComplete();
+            }
+        }
+
+        // Монеты
+        this.coins=this.coins.filter(coin=>{
+            if(!coin.collected){
+                coin.update();
+                if(this.bear.mesh.position.distanceTo(coin.mesh.position)<2.2&&coin.collect()){
+                    this.coinsCollected++; document.getElementById('coin-val').innerText=this.coinsCollected; playCoin(); return false;
+                }
+                return true;
+            }
+            return false;
+        });
+
+        // Толкатели — столкновение
+        this.pushers.forEach(w=>{
+            if(!w.mesh.parent) return;
+            const wp=new THREE.Vector3(); w.mesh.getWorldPosition(wp);
+            if(Math.abs(this.bear.mesh.position.x-wp.x)<9&&Math.abs(this.bear.mesh.position.z-wp.z)<2&&Math.abs(this.bear.mesh.position.y-wp.y)<4){
+                const dir=this.bear.mesh.position.x>wp.x?1:-1;
+                this.bear.mesh.position.x+=dir*.6; this.vel.x+=dir*.15;
+            }
+        });
+
+        // Смерть
+        if(this.bear.mesh.position.y<-40){this._gameOver();return;}
+
+        this.bear.animate(Math.hypot(this.vel.x,this.vel.z),this.grounded,et);
+        this.snow.update(this.bear.mesh.position.y);
+
+        // Соперник в мультиплеере
+        if(this.mpMode&&this.mp) this.mp.updateOpp(et);
+
+        // Камера
+        const cx=Math.sin(this.inp.camX)*Math.cos(this.inp.camY)*this.zoom;
+        const cy=Math.sin(this.inp.camY)*this.zoom;
+        const cz=Math.cos(this.inp.camX)*Math.cos(this.inp.camY)*this.zoom;
+        this.camera.position.lerp(this.bear.mesh.position.clone().add(new THREE.Vector3(cx,cy,cz)),.15);
+        this.camera.lookAt(this.bear.mesh.position.x,this.bear.mesh.position.y+2,this.bear.mesh.position.z);
+        this.renderer.render(this.scene,this.camera);
+    }
+}
+
+window.addEventListener('resize',()=>{
+    if(window.game){
+        window.game.camera.aspect=innerWidth/innerHeight;
+        window.game.camera.updateProjectionMatrix();
+        window.game.renderer.setSize(innerWidth,innerHeight);
+    }
+});
+
+window.onload=()=>{ window.game=new Game(); };
+</script>
+
+<!-- Заглушки для совместимости JS -->
+<div id="friends-btn" style="display:none"></div>
+<div id="friend-add-btn" style="display:none"></div>
+<div id="friend-add-input" style="display:none"></div>
+<div id="mp-do-matchmaking" style="display:none"></div>
+<div id="profile-btn" style="display:none"></div>
+<div id="close-achievements" style="display:none"></div>
+<div id="close-inventory" style="display:none"></div>
+<div id="close-leaderboard" style="display:none"></div>
+<div id="close-mode" style="display:none"></div>
+<div id="close-profile" style="display:none"></div>
+<div id="close-settings" style="display:none"></div>
+<div id="close-shop" style="display:none"></div>
+<div id="close-skins" style="display:none"></div>
+<div id="m-news-btn" style="display:none"></div>
+<div id="modes-btn" style="display:none"></div>
+</body>
+</html>
             position: fixed; inset: 0;
             background: linear-gradient(170deg, #0a1628 0%, #0d2d4d 40%, #0077be 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -2839,3 +5710,4 @@ window.onload=()=>{ window.game=new Game(); };
 <div id="modes-btn" style="display:none"></div>
 </body>
 </html>
+
