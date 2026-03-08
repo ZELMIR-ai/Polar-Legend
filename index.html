@@ -32,7 +32,7 @@
         #auth-screen {
             position: fixed; inset: 0; z-index: 10000;
             background: linear-gradient(170deg,#0a1628 0%,#0d2d4d 40%,#0077be 100%);
-            display: flex; align-items: center; justify-content: center;
+            display: none; align-items: center; justify-content: center;
         }
         #auth-screen::before {
             content:''; position:absolute; inset:0;
@@ -2298,20 +2298,11 @@ class Game {
         } catch(e) {
             console.error('Init error:', e);
         }
-        // Всегда показываем меню, даже если была ошибка
+        // Всегда показываем меню — auth показывается поверх него
         setLoadProgress(100,'Готово!'); await sleep(300);
-        // Показываем меню только если авторизация уже прошла
-        // Если нет — auth-screen сам покажет меню после входа
-        const authVisible = document.getElementById('auth-screen').style.display !== 'none';
-        const nickVisible = document.getElementById('nick-screen').style.display === 'flex';
-        if(!authVisible && !nickVisible){
-            document.getElementById('loading-screen').style.display='none';
-            document.getElementById('menu').style.display='flex';
-            try { startMenuMusic(); } catch(e){}
-        } else {
-            // Прячем loading, auth уже показан поверх
-            document.getElementById('loading-screen').style.display='none';
-        }
+        document.getElementById('loading-screen').style.display='none';
+        document.getElementById('menu').style.display='flex';
+        try { startMenuMusic(); } catch(e){}
         // Регистрируем динамические ID чтобы не было ошибок
         ['lb-profile-modal','lbp-avatar','lbp-bio','lbp-level','lbp-name','lbp-score','lbp-skin','lbp-status'].forEach(id=>{ if(!document.getElementById(id)){ const d=document.createElement('div'); d.id=id; d.style.display='none'; document.body.appendChild(d); } });
         try { this.mp=new MP(this); } catch(e){ console.warn('MP init error:',e); }
