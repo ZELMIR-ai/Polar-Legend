@@ -1135,7 +1135,10 @@ async function _loadProfile(){
     if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
     document.getElementById('auth-screen').style.display='none';
     document.getElementById('nick-screen').style.display='none';
-    // Обновляем данные в уже запущенной игре
+    document.getElementById('loading-screen').style.display='none';
+    // Показываем меню и обновляем данные
+    document.getElementById('menu').style.display='flex';
+    try { startMenuMusic(); } catch(e){}
     if(window.game){ window.game._updateMenuStats(); }
 }
 
@@ -2297,9 +2300,18 @@ class Game {
         }
         // Всегда показываем меню, даже если была ошибка
         setLoadProgress(100,'Готово!'); await sleep(300);
-        document.getElementById('loading-screen').style.display='none';
-        document.getElementById('menu').style.display='flex';
-        try { startMenuMusic(); } catch(e){}
+        // Показываем меню только если авторизация уже прошла
+        // Если нет — auth-screen сам покажет меню после входа
+        const authVisible = document.getElementById('auth-screen').style.display !== 'none';
+        const nickVisible = document.getElementById('nick-screen').style.display === 'flex';
+        if(!authVisible && !nickVisible){
+            document.getElementById('loading-screen').style.display='none';
+            document.getElementById('menu').style.display='flex';
+            try { startMenuMusic(); } catch(e){}
+        } else {
+            // Прячем loading, auth уже показан поверх
+            document.getElementById('loading-screen').style.display='none';
+        }
         // Регистрируем динамические ID чтобы не было ошибок
         ['lb-profile-modal','lbp-avatar','lbp-bio','lbp-level','lbp-name','lbp-score','lbp-skin','lbp-status'].forEach(id=>{ if(!document.getElementById(id)){ const d=document.createElement('div'); d.id=id; d.style.display='none'; document.body.appendChild(d); } });
         try { this.mp=new MP(this); } catch(e){ console.warn('MP init error:',e); }
