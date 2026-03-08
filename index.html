@@ -1127,6 +1127,10 @@ async function _loadProfile(){
     if(data.unlocked_skins) localStorage.setItem('unlockedSkins',JSON.stringify(data.unlocked_skins));
     document.getElementById('auth-screen').style.display='none';
     document.getElementById('nick-screen').style.display='none';
+    // Запускаем игру если ещё не запущена
+    if(!window.game){
+        window.game = new Game();
+    }
 }
 
 async function _saveProfileToCloud(profileData){
@@ -3263,7 +3267,13 @@ window.addEventListener('resize',()=>{
     }
 });
 
-window.onload=()=>{ window.game=new Game(); };
+// Игра запускается только после авторизации через _loadProfile()
+// Если Supabase недоступен — запускаем автоматически через 4 секунды
+window.onload=()=>{
+    window._gameStartTimeout = setTimeout(()=>{
+        if(!window.game){ window.game=new Game(); }
+    }, 4000);
+};
 </script>
 
 <!-- Заглушки для совместимости JS -->
