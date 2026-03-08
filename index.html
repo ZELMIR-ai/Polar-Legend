@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Polar Legend — Арктический Раннер 3D</title>
-    <meta name="description" content="Polar Legend — бесплатная 3D браузерная игра. Прыгай по платформам в арктике, соревнуйся с друзьями в мультиплеере!">
-    <meta name="keywords" content="polar legend, игра, 3D, раннер, платформер, арктика, медведь, мультиплеер, бесплатная игра, браузерная игра">
+    <meta name="description" content="Polar Legend — бесплатная 3D браузерная игра!">
     <meta property="og:title" content="Polar Legend — Арктический Раннер 3D">
-    <meta property="og:description" content="Бесплатная 3D браузерная игра. Прыгай, соревнуйся, побеждай!">
     <meta name="theme-color" content="#0077be">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Polar+Legend%22,%22short_name%22:%22Polar+Legend%22,%22start_url%22:%22./%22,%22display%22:%22standalone%22,%22background_color%22:%22%230a1628%22,%22theme_color%22:%22%230077be%22,%22orientation%22:%22landscape%22,%22icons%22:[{%22src%22:%22icon.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},{%22src%22:%22icon.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- PeerJS с Google STUN серверами для надёжного глобального соединения -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -217,14 +214,6 @@
             #menu-mode-desc { font-size: .8rem; }
             .btn-main { height: 62px; padding: 0 50px; font-size: 1.7rem; border-radius: 18px; }
             #level-badge { font-size: .9rem; padding: 4px 16px; border-radius: 24px; }
-        }
-
-        /* Десктоп */
-        @media (min-height: 600px) and (min-width: 900px) {
-            .sb-btn { width: 88px; min-height: 76px; font-size: .78rem; gap: 5px; border-radius: 18px; }
-            .sb-btn .sb-icon { font-size: 1.9rem; }
-            #menu-topbar { height: 62px; }
-            .btn-main { height: 62px; padding: 0 50px; font-size: 1.7rem; border-radius: 18px; }
         }
 
         /* Мобильные медиа */
@@ -604,7 +593,6 @@
     <!-- RIGHT SIDEBAR -->
     <div id="menu-sidebar-right">
         <div class="sb-btn" id="mp-btn"><span class="sb-icon">🌐</span>Мультиплеер</div>
-        <div class="sb-btn" id="friends-btn"><span class="sb-icon">👥</span>Друзья</div>
         <div class="sb-btn" id="leaderboard-btn"><span class="sb-icon">🏅</span>Рейтинг</div>
         <div class="sb-btn" id="achievements-btn"><span class="sb-icon">🏆</span>Достижения</div>
     </div>
@@ -801,22 +789,6 @@
         <h2>🏅 ТАБЛИЦА РЕКОРДОВ</h2>
         <div id="leaderboard-list"></div>
         
-    </div>
-</div>
-
-<!-- ДРУЗЬЯ -->
-<div id="friends-modal" class="modal">
-    <div class="modal-content">
-        <div class="modal-close-x" onclick="document.getElementById('friends-modal').style.display='none'">✕</div>
-        <h2>👥 ДРУЗЬЯ</h2>
-        <div style="font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:14px;text-align:center">Добавляй друзей по нику и играй вместе!</div>
-        <div style="display:flex;gap:8px;margin-bottom:16px">
-            <input id="friend-add-input" placeholder="Введи ник друга..." style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 14px;color:white;font-family:'Fredoka',sans-serif;font-size:1rem;outline:none">
-            <button id="friend-add-btn" style="padding:10px 18px;border-radius:12px;border:none;background:linear-gradient(135deg,#00c6ff,#0072ff);color:white;font-family:'Fredoka',sans-serif;font-size:.95rem;cursor:pointer;font-weight:700">➕</button>
-        </div>
-        <div id="friends-list" style="display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto">
-            <div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴</div>
-        </div>
     </div>
 </div>
 
@@ -2140,8 +2112,6 @@ class Game {
         $on('close-skins','onclick',()=>document.getElementById('skins-modal').style.display='none');
         // Режимы
         $on('modes-btn','onclick',()=>{ this._renderModes(); document.getElementById('mode-modal').style.display='flex'; });
-        $on('friends-btn','onclick',()=>{ this._renderFriends(); document.getElementById('friends-modal').style.display='flex'; });
-        $on('friend-add-btn','onclick',()=>this._addFriend());
         $on('close-mode','onclick',()=>document.getElementById('mode-modal').style.display='none');
         // Быстрый МП из меню
         $on('quickmp-btn','onclick',()=>{ if(this.mp){ this.mp.open(); this.mp._openQL(); } });
@@ -2347,42 +2317,6 @@ class Game {
         const bioIn=document.getElementById('profile-bio');
         if(bioIn) bioIn.value=this.profileBio||'';
     }
-    _renderFriends() {
-        const list = document.getElementById('friends-list');
-        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
-        if (!friends.length) {
-            list.innerHTML = '<div style="text-align:center;opacity:.4;padding:20px">Друзей пока нет 😴<br>Добавь друга по нику!</div>';
-            return;
-        }
-        list.innerHTML = '';
-        friends.forEach((f, i) => {
-            const row = document.createElement('div');
-            row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.05);border-radius:14px;border:1px solid rgba(255,255,255,.08)';
-            row.innerHTML = `<div style="font-size:1.8rem">${f.avatar||'🐻'}</div>
-                <div style="flex:1"><div style="color:white;font-weight:600">${f.name}</div><div style="font-size:.8rem;color:rgba(255,255,255,.4)">🏆 ${f.score||0}</div></div>
-                <button onclick="game._removeFriend(${i})" style="padding:5px 10px;border-radius:8px;border:none;background:rgba(255,50,50,.2);color:#ff5252;cursor:pointer;font-family:'Fredoka',sans-serif">✕</button>`;
-            list.appendChild(row);
-        });
-    }
-    _addFriend() {
-        const input = document.getElementById('friend-add-input');
-        const name = input.value.trim();
-        if (!name) return;
-        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
-        if (friends.find(f => f.name === name)) { showToast('⚠️ Уже в друзьях'); return; }
-        friends.push({ name, avatar: '🐻', score: 0 });
-        localStorage.setItem('friends_list', JSON.stringify(friends));
-        input.value = '';
-        showToast('✅ ' + name + ' добавлен!');
-        this._renderFriends();
-    }
-    _removeFriend(i) {
-        const friends = JSON.parse(localStorage.getItem('friends_list') || '[]');
-        friends.splice(i, 1);
-        localStorage.setItem('friends_list', JSON.stringify(friends));
-        this._renderFriends();
-    }
-
     _renderLeaderboard() {
         const list=document.getElementById('leaderboard-list'); list.innerHTML='';
         const lvl=Math.max(1,Math.floor(this.bestScore/30)+1);
@@ -2889,9 +2823,6 @@ window.onload=()=>{ window.game=new Game(); };
 </script>
 
 <!-- Заглушки для совместимости JS -->
-<div id="friends-btn" style="display:none"></div>
-<div id="friend-add-btn" style="display:none"></div>
-<div id="friend-add-input" style="display:none"></div>
 <div id="mp-do-matchmaking" style="display:none"></div>
 <div id="profile-btn" style="display:none"></div>
 <div id="close-achievements" style="display:none"></div>
@@ -2904,28 +2835,11 @@ window.onload=()=>{ window.game=new Game(); };
 <div id="close-skins" style="display:none"></div>
 <div id="m-news-btn" style="display:none"></div>
 <div id="modes-btn" style="display:none"></div>
-
 <script>
 if('serviceWorker' in navigator){
-    const swCode = `
-const CACHE='polar-legend-v2';
-const FILES=['./', './index.html', './icon.png'];
-self.addEventListener('install',e=>{
-    e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));
-    self.skipWaiting();
-});
-self.addEventListener('activate',e=>{
-    e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
-});
-self.addEventListener('fetch',e=>{
-    e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
-});`;
-    const blob = new Blob([swCode], {type:'text/javascript'});
-    const url = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(url).then(()=>{
-        console.log('PWA: Service Worker registered!');
-    }).catch(e=>console.log('SW error:',e));
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 </script>
 </body>
 </html>
+
